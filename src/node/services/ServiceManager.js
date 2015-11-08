@@ -2,6 +2,7 @@
 "use strict";
 import assert from "assert";
 import ipc from "ipc";
+import tagsStorage from "../storage/tags";
 export let tagMethods = {
     "getTags": "getTags"
 };
@@ -19,6 +20,13 @@ export class ServiceManager {
         var name = service.constructor.name;
         assert(name, "service should have .name " + service);
         this.tagService = service;
+        ipc.on(`${name}-storage-get`, ({sender}) => {
+            let tags = tagsStorage.get(`${name}`) || [];
+            sender.send(`${name}-storage-get`, tags);
+        });
+        ipc.on(`${name}-storage-set`, ({sender}, tags = []) => {
+            tagsStorage.set(`${name}`, tags);
+        });
         Object.keys(tagMethods).forEach(key => {
             var ipcName = `${name}-${key}`;
             ipc.on(ipcName, ({sender}, ...args)=> {
@@ -45,7 +53,6 @@ export class ServiceManager {
                 });
             });
         });
-
     }
 
 }
