@@ -12,12 +12,12 @@ export default class ServiceAction extends Action {
     fetchTags(serviceName) {
         const ipcFetchKey = `${serviceName}Service-getTags`;
         const ipcStorageKey = `${serviceName}Service-storage`;
-        ipc.on(`${ipcStorageKey}-get`, (tags) => {
+        ipc.once(`${ipcStorageKey}-get`, (tags) => {
             console.log("strogag", tags);
             this.dispatch(keys.fetchTags, tags);
         });
         ipc.send(`${ipcStorageKey}-get`);
-        ipc.on(ipcFetchKey, (tags) => {
+        ipc.once(ipcFetchKey, (tags) => {
             this.dispatch(keys.fetchTags, tags);
             ipc.send(`${ipcStorageKey}-set`, tags);
         });

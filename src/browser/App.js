@@ -1,5 +1,6 @@
 // LICENSE : MIT
 "use strict";
+import ipc from "ipc";
 import React from "react";
 import {render} from "react-dom";
 import Editor from "./editor/Editor";
@@ -34,5 +35,12 @@ class App extends React.Component {
         </div>;
     }
 }
+// ipc from server event
+ipc.on("updateTitle", (title) => {
+    appContext.ServiceAction.updateTitle(title);
+});
+ipc.on("updateURL", (URL) => {
+    appContext.ServiceAction.updateURL(URL);
+});
 appContext.ServiceAction.fetchTags("Hatena");
 render(<App />, document.getElementById("js-main"));

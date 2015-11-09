@@ -1,14 +1,21 @@
 // LICENSE : MIT
 "use strict";
 import express from "express";
+const ipc = require("ipc");
 export default class APIServer {
     start() {
         let app = express();
         app.get('/', (req, res) => {
-            res.send('Hello World!');
+            let {title,url} = req.query;
+            if (title) {
+                ipc.send("updateTitle", title);
+            }
+            if (url) {
+                ipc.send("updateURL", url);
+            }
         });
-        this.server = app.listen(3000, () => {
-            console.log('Example app listening at http://localhost:3000', host, port);
+        this.server = app.listen(14328, () => {
+            console.log("listening at http://localhost:14328");
         });
     }
 
