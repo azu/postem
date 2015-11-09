@@ -4,4 +4,12 @@
 .URLInput input {
   width: 100%; }
 
+.TitleInput {
+  width: 100%; }
+
+.TitleInput input, .TitleInput label {
+  display: inline-block; }
+.TitleInput input {
+  margin: 0 auto 0 1em; }
+
 /*# sourceMappingURL=index.css.map */

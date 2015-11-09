@@ -4,7 +4,9 @@ import { Action } from "material-flux";
 import ipc from "ipc";
 export var keys = {
     fetchTags: Symbol("fetchTags"),
-    selectTags: Symbol("selectTags")
+    selectTags: Symbol("selectTags"),
+    updateTitle: Symbol("updateTitle"),
+    updateURL: Symbol("updateURL")
 };
 export default class ServiceAction extends Action {
     fetchTags(serviceName) {
@@ -24,5 +26,13 @@ export default class ServiceAction extends Action {
 
     selectTags(tags) {
         this.dispatch(keys.selectTags, tags);
+    }
+
+    updateTitle(title) {
+        this.dispatch(keys.updateTitle, title);
+    }
+
+    updateURL(URL) {
+        this.dispatch(keys.updateURL, URL);
     }
 }
