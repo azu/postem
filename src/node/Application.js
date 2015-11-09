@@ -5,9 +5,6 @@ import BrowserWindow  from 'browser-window';
 import path from "path";
 import APIServer from "./APIServer";
 export default class Application {
-    constructor() {
-    }
-
     launch() {
         //let server = new APIServer();
         //server.start();
