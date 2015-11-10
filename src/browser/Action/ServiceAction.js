@@ -4,9 +4,11 @@ import { Action } from "material-flux";
 import ipc from "ipc";
 export var keys = {
     fetchTags: Symbol("fetchTags"),
+    postLink: Symbol("postLink"),
     selectTags: Symbol("selectTags"),
     updateTitle: Symbol("updateTitle"),
-    updateURL: Symbol("updateURL")
+    updateURL: Symbol("updateURL"),
+    updateComment: Symbol("updateComment")
 };
 export default class ServiceAction extends Action {
     fetchTags(serviceName) {
@@ -24,6 +26,14 @@ export default class ServiceAction extends Action {
         ipc.send(ipcFetchKey);
     }
 
+    postLink(options) {
+        const ipcLinkKey = `HatenaService-postLink`;
+        ipc.once(ipcLinkKey, (res) => {
+            console.log(res);
+        });
+        ipc.send(ipcLinkKey, options);
+    }
+
     selectTags(tags) {
         this.dispatch(keys.selectTags, tags);
     }
@@ -35,4 +45,9 @@ export default class ServiceAction extends Action {
     updateURL(URL) {
         this.dispatch(keys.updateURL, URL);
     }
+
+    updateComment(comment){
+        this.dispatch(keys.updateComment, comment);
+    }
+
 }

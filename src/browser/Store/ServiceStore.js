@@ -8,6 +8,7 @@ export default class ServiceStore extends Store {
         this.state = {
             title: "",
             URL: "",
+            comment: "",
             tags: [],
             selectedTags: []
         };
@@ -29,6 +30,11 @@ export default class ServiceStore extends Store {
         this.register(keys.updateURL, (URL) => {
             this.setState({
                 URL
+            });
+        });
+        this.register(keys.updateComment, (comment) => {
+            this.setState({
+                comment
             });
         })
     }
