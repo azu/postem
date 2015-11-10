@@ -1,6 +1,7 @@
 // LICENSE : MIT
 "use strict";
 import AuthenticationHatena from "electron-authentication-hatena";
+import querystring from "querystring";
 import OAuthRequest from "../../OAuthRequest";
 const Consumer = {
     key: 'elj9OpeplSmpfA==',
@@ -34,18 +35,37 @@ export default class HatenaService {
         });
     }
 
-    getTags() {
+    _hatenaRequest() {
         var credential = this.storage.get("hatena");
-        var hatenaRequest = new OAuthRequest({
+        return new OAuthRequest({
             consumerKey: Consumer.key,
             consumerSecret: Consumer.secret,
             accessKey: credential.accessKey,
             accessSecret: credential.accessSecret
         });
-        return hatenaRequest.get("http://api.b.hatena.ne.jp/1/my/tags").then(function (res) {
+    }
+
+    getTags() {
+        return this._hatenaRequest().get("http://api.b.hatena.ne.jp/1/my/tags").then(function (res) {
             return JSON.parse(res);
         }).then(response=> {
             return response.tags.map(tag => tag.tag);
         });
+    }
+
+    /**
+     *
+     * @param options
+     * @returns {*}
+     * {
+            url,
+            comment,
+            tags = []
+        }
+     */
+    postLink(options = {}) {
+        let query = querystring.stringify(options);
+        console.log(query)
+        return this._hatenaRequest().post("http://api.b.hatena.ne.jp/1/my/bookmark?" + query);
     }
 }

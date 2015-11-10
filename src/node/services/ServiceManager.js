@@ -8,7 +8,8 @@ export let tagMethods = {
 };
 export let serviceMethods = {
     "canAccess": "canAccess",
-    "requireAccess": "requireAccess"
+    "requireAccess": "requireAccess",
+    "postLink" : ""
 };
 export class ServiceManager {
     constructor() {
