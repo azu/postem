@@ -22,7 +22,7 @@ export default class HatenaService {
             secret: Consumer.secret,
             scopes: ["read_public", "write_public", "read_private", "write_private"]
         });
-        return hatena.startRequest().then(function (result) {
+        return hatena.startRequest().then((result) => {
             var accessToken = result.accessToken;
             var accessTokenSecret = result.accessTokenSecret;
             var token = {

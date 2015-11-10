@@ -1,10 +1,12 @@
 // LICENSE : MIT
 "use strict";
+import ipc from "ipc";
 import React from "react";
 import {render} from "react-dom";
 import Editor from "./editor/Editor";
 import TagSelect from "./editor/TagSelect";
 import URLInput from "./editor/URLInput";
+import TitleInput from "./editor/TitleInput";
 import AppContext from "./AppContext";
 const appContext = new AppContext();
 class App extends React.Component {
@@ -23,12 +25,22 @@ class App extends React.Component {
     render() {
         const { ServiceAction } = appContext;
         const selectTags = ServiceAction.selectTags.bind(ServiceAction);
+        const updateTitle = ServiceAction.updateTitle.bind(ServiceAction);
+        const updateURL = ServiceAction.updateURL.bind(ServiceAction);
         return <div className="App">
+            <TitleInput title={this.state.title} updateTitle={updateTitle}/>
+            <URLInput URL={this.state.URL} updateURL={updateURL}/>
             <TagSelect tags={this.state.tags} selectTags={selectTags} selectedTags={this.state.selectedTags}/>
-            <URLInput URL="http://example.com"/>
             <Editor source="Sebastian"/>
         </div>;
     }
 }
+// ipc from server event
+ipc.on("updateTitle", (title) => {
+    appContext.ServiceAction.updateTitle(title);
+});
+ipc.on("updateURL", (URL) => {
+    appContext.ServiceAction.updateURL(URL);
+});
 appContext.ServiceAction.fetchTags("Hatena");
 render(<App />, document.getElementById("js-main"));

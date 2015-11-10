@@ -1,7 +1,7 @@
 {
 "version": 3,
-"mappings": "AAAA,SAAU;EACR,KAAK,EAAE,IAAI;;AAGb,eAAgB;EACd,KAAK,EAAE,IAAI",
-"sources": ["components/_URLInput.scss"],
+"mappings": "AAAA,SAAU;EACR,KAAK,EAAE,IAAI;;AAGb,eAAgB;EACd,KAAK,EAAE,IAAI;;ACLb,WAAY;EACV,KAAK,EAAE,IAAI;;AAIX,oCAAa;EACX,OAAO,EAAE,YAAY;AAEvB,iBAAM;EACJ,MAAM,EAAE,YAAY",
+"sources": ["components/_URLInput.scss","components/_TitleInput.scss"],
 "names": [],
 "file": "index.css"
 }

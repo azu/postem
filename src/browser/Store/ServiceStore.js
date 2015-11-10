@@ -6,6 +6,8 @@ export default class ServiceStore extends Store {
     constructor(...args) {
         super(...args);
         this.state = {
+            title: "",
+            URL: "",
             tags: [],
             selectedTags: []
         };
@@ -19,5 +21,15 @@ export default class ServiceStore extends Store {
                 selectedTags
             });
         });
+        this.register(keys.updateTitle, (title) => {
+            this.setState({
+                title
+            });
+        });
+        this.register(keys.updateURL, (URL) => {
+            this.setState({
+                URL
+            });
+        })
     }
 }
