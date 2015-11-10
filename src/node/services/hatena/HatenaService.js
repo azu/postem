@@ -65,7 +65,6 @@ export default class HatenaService {
      */
     postLink(options = {}) {
         let query = querystring.stringify(options);
-        console.log(query)
         return this._hatenaRequest().post("http://api.b.hatena.ne.jp/1/my/bookmark?" + query);
     }
 }
