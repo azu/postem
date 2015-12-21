@@ -29,17 +29,16 @@ export default class HatenaClient {
     postLink(options = {}) {
         var {url,comment,tags} = options;
         let query = querystring.stringify({
-            url,
-            comment
+            url
         });
-        if (tags.length > 0) {
-            // tags[]=tag0&tags[]=tag1
-            const tagQuery = tags.map(tag => {
-                return `tags=${tag}`;
-            }).join("&");
-            query += "&" + tagQuery;
-        }
-        return this._hatenaRequest().post("http://api.b.hatena.ne.jp/1/my/bookmark.json", options);
+        //if (tags.length > 0) {
+        //    // tags[]=tag0&tags[]=tag1
+        //    const tagQuery = tags.map(tag => {
+        //        return `tags=${tag}`;
+        //    }).join("&");
+        //    query += "&" + tagQuery;
+        //}
+        return this._hatenaRequest().post("http://api.b.hatena.ne.jp/1/my/bookmark", query);
 
     }
 }

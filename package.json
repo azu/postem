@@ -45,6 +45,6 @@
     "request": "^2.63.0"
   },
   "devDependencies": {
-    "electron-prebuilt": "^0.34.3"
+    "electron-prebuilt": "^0.36.1"
   }
 }

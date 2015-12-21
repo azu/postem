@@ -39,12 +39,16 @@ class App extends React.Component {
         const updateTitle = ServiceAction.updateTitle.bind(ServiceAction);
         const updateURL = ServiceAction.updateURL.bind(ServiceAction);
         const updateComment = ServiceAction.updateComment.bind(ServiceAction);
+        const login = () => {
+            ServiceAction.loginHatebu("Hatena");
+        };
         return <div className="App">
             <TitleInput title={this.state.title} updateTitle={updateTitle}/>
             <URLInput URL={this.state.URL} updateURL={updateURL}/>
             <TagSelect tags={this.state.tags} selectTags={selectTags} selectedTags={this.state.selectedTags}/>
             <Editor value={this.state.comment} onChange={updateComment}/>
             <SubmitButton onSubmit={this.postLink.bind(this)}/>
+            <button onClick={login}>ログイン</button>
         </div>;
     }
 }

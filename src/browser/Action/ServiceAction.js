@@ -57,4 +57,10 @@ export default class ServiceAction extends Action {
         this.dispatch(keys.updateComment, comment);
     }
 
+    loginHatebu(){
+        var HatenaService = require("remote").require("./src/services/HatenaService");
+        HatenaService.requireAccess().then(result => {
+            console.log(result);
+        });
+    }
 }

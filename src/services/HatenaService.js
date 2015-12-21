@@ -16,7 +16,7 @@ exports.requireAccess = function requireAccess() {
         secret: Consumer.secret,
         scopes: ["read_public", "write_public", "read_private", "write_private"]
     });
-    return hatena.startRequest().then((result) => {
+    hatena.startRequest().then((result) => {
         var accessToken = result.accessToken;
         var accessTokenSecret = result.accessTokenSecret;
         var credential = {
@@ -24,6 +24,5 @@ exports.requireAccess = function requireAccess() {
             accessSecret: accessTokenSecret
         };
         storage.set("hatena", credential);
-        return credential;
     });
 };

@@ -17,22 +17,19 @@ export default class OAuthRequest {
                 'Authorization': Authorization
             }
         }).then(function (response) {
-            return response.json()
-        })
+            return response.json();
+        });
     }
 
-    post(URL, options = {}) {
-        const Authorization = this.oauthSignature.create("POST", URL, options);
+    post(URL, body) {
+        const Authorization = this.oauthSignature.create("POST", URL);
         return fetch(URL, {
             method: 'post',
             headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                'Authorization': Authorization
+                'Authorization': Authorization,
+                "Content-Type": "application/x-www-form-urlencoded"
             },
-            body: JSON.stringify(options)
-        }).then(function (response) {
-            return response.json()
-        })
+            body: body
+        });
     }
 }

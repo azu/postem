@@ -33,6 +33,7 @@ export default class OAuthSignature {
         const parameters = Object.assign(oathParameters, userParameters);
         const consumerSecret = this.consumer.secret;
         const accessSecret = this.credencial.accessSecret;
+        console.log(this.consumer, this.credencial);
         const encodedSignature = oauthSignature.generate(httpMethod, URL, parameters, consumerSecret, accessSecret);
         const headerParameters = Object.assign({}, oathParameters, {
             oauth_signature: encodedSignature
