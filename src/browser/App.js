@@ -3,11 +3,11 @@
 import ipc from "ipc";
 import React from "react";
 import {render} from "react-dom";
-import Editor from "./editor/Editor";
-import TagSelect from "./editor/TagSelect";
-import URLInput from "./editor/URLInput";
-import TitleInput from "./editor/TitleInput";
-import SubmitButton from "./editor/SubmitButton";
+import Editor from "./component/Editor";
+import TagSelect from "./component/TagSelect";
+import URLInput from "./component/URLInput";
+import TitleInput from "./component/TitleInput";
+import SubmitButton from "./component/SubmitButton";
 import AppContext from "./AppContext";
 const appContext = new AppContext();
 class App extends React.Component {

@@ -17,6 +17,13 @@ export default class HatenaClient {
         return oauth;
     }
 
+    getItem(url) {
+        let query = querystring.stringify({
+            url
+        });
+        return this._hatenaRequest().get("http://api.b.hatena.ne.jp/1/my/bookmark?" + query);
+    }
+
     getTags() {
         return this._hatenaRequest().get("http://api.b.hatena.ne.jp/1/my/tags").then(response=> {
             return response.tags.map(tag => tag.tag);
@@ -36,6 +43,7 @@ export default class HatenaClient {
     postLink(options = {}) {
         let {url,comment,tags} = options;
         if (tags.length > 0) {
+            // [tag][tag] comment
             const tagPrefix = tags.map(tag => {
                 return `[${tag}]`;
             }).join("");

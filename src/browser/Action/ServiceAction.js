@@ -10,19 +10,21 @@ export var keys = {
     updateURL: Symbol("updateURL"),
     updateComment: Symbol("updateComment")
 };
-import HatenaClient from "../../services/HatenaClient";
+import HatenaClient from "../../services/hatebu/HatenaClient";
 export default class ServiceAction extends Action {
     fetchTags(serviceName) {
         const client = new HatenaClient();
         client.getTags().then(tags => {
             this.dispatch(keys.fetchTags, tags);
+        }).catch(error => {
+            console.log(error);
         });
     }
 
-    postLink(options) {
+    postLink(postData) {
         const client = new HatenaClient();
-        client.postLink(options).catch(error => {
-            console.log(error)
+        client.postLink(postData).catch(error => {
+            console.log(error);
         });
     }
 
@@ -42,8 +44,8 @@ export default class ServiceAction extends Action {
         this.dispatch(keys.updateComment, comment);
     }
 
-    loginHatebu(){
-        var HatenaService = require("remote").require("./src/services/HatenaService");
+    loginHatebu() {
+        var HatenaService = require("remote").require("./src/services/hatebu/HatenaService");
         HatenaService.requireAccess().then(result => {
             console.log(result);
         });
