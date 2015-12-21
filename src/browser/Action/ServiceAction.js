@@ -17,21 +17,6 @@ export default class ServiceAction extends Action {
         client.getTags().then(tags => {
             this.dispatch(keys.fetchTags, tags);
         });
-        //const ipcFetchKey = `${serviceName}Service-getTags`;
-        //const ipcStorageKey = `${serviceName}Service-storage`;
-        //ipc.once(`${ipcStorageKey}-get`, (tags) => {
-        //    if (Array.isArray(tags)) {
-        //        this.dispatch(keys.fetchTags, tags);
-        //    }
-        //});
-        //ipc.send(`${ipcStorageKey}-get`);
-        //ipc.once(ipcFetchKey, (tags) => {
-        //    if (Array.isArray(tags)) {
-        //        this.dispatch(keys.fetchTags, tags);
-        //        ipc.send(`${ipcStorageKey}-set`, tags);
-        //    }
-        //});
-        //ipc.send(ipcFetchKey);
     }
 
     postLink(options) {

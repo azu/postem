@@ -3,11 +3,18 @@
 import Consumer from "./HatenaCunsumer";
 import querystring from "querystring"
 import OAuthRequest from "./API/OAuthRequest";
+import { OAuth } from "oauth";
 const HatenaService = require("remote").require("./src/services/HatenaService");
 export default class HatenaClient {
     _hatenaRequest() {
         var credential = HatenaService.getCredential();
-        return new OAuthRequest(Consumer, credential);
+        const oauth = new OAuthRequest({
+            consumerKey: Consumer.key,
+            consumerSecret: Consumer.secret,
+            accessKey: credential.accessKey,
+            accessSecret: credential.accessSecret
+        });
+        return oauth;
     }
 
     getTags() {
@@ -27,18 +34,17 @@ export default class HatenaClient {
         }
      */
     postLink(options = {}) {
-        var {url,comment,tags} = options;
+        let {url,comment,tags} = options;
+        if (tags.length > 0) {
+            const tagPrefix = tags.map(tag => {
+                return `[${tag}]`;
+            }).join("");
+            comment = tagPrefix + comment;
+        }
         let query = querystring.stringify({
-            url
+            url,
+            comment
         });
-        //if (tags.length > 0) {
-        //    // tags[]=tag0&tags[]=tag1
-        //    const tagQuery = tags.map(tag => {
-        //        return `tags=${tag}`;
-        //    }).join("&");
-        //    query += "&" + tagQuery;
-        //}
-        return this._hatenaRequest().post("http://api.b.hatena.ne.jp/1/my/bookmark", query);
-
+        return this._hatenaRequest().post("http://api.b.hatena.ne.jp/1/my/bookmark?" + query);
     }
 }
