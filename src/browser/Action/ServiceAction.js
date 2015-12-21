@@ -8,7 +8,9 @@ export var keys = {
     selectTags: Symbol("selectTags"),
     updateTitle: Symbol("updateTitle"),
     updateURL: Symbol("updateURL"),
-    updateComment: Symbol("updateComment")
+    updateComment: Symbol("updateComment"),
+    enableService: Symbol("enableService"),
+    disableService: Symbol("disableService")
 };
 import HatenaClient from "../../services/hatebu/HatenaClient";
 export default class ServiceAction extends Action {
@@ -49,5 +51,13 @@ export default class ServiceAction extends Action {
         HatenaService.requireAccess().then(result => {
             console.log(result);
         });
+    }
+
+    enableService(service) {
+        this.dispatch(keys.enableService, service);
+    }
+
+    disableService(service) {
+        this.dispatch(keys.disableService, service);
     }
 }

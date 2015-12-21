@@ -2,7 +2,7 @@
 "use strict";
 import AuthenticationHatena from "electron-authentication-hatena";
 import Consumer from "./HatenaCunsumer";
-import storage from "../node/storage/accounts";
+import storage from "../../node/storage/accounts";
 exports.canAccess = function canAccess() {
     return storage.has("hatena");
 };

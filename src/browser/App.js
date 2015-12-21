@@ -8,7 +8,9 @@ import TagSelect from "./component/TagSelect";
 import URLInput from "./component/URLInput";
 import TitleInput from "./component/TitleInput";
 import SubmitButton from "./component/SubmitButton";
+import ServiceList from "./component/ServiceList";
 import AppContext from "./AppContext";
+import serviceManger from "./service-instance";
 const appContext = new AppContext();
 class App extends React.Component {
     constructor(...args) {
@@ -42,7 +44,16 @@ class App extends React.Component {
         const login = () => {
             ServiceAction.loginHatebu("Hatena");
         };
+        const enableService = (service) => {
+            ServiceAction.enableService(service);
+        };
+        const disableService = (service) => {
+            ServiceAction.disableService(service);
+        };
         return <div className="App">
+            <ServiceList services={serviceManger.getServices()} enabledServices={this.state.enableServices}
+                         enableService={enableService}
+                         disableService={disableService}/>
             <TitleInput title={this.state.title} updateTitle={updateTitle}/>
             <URLInput URL={this.state.URL} updateURL={updateURL}/>
             <TagSelect tags={this.state.tags} selectTags={selectTags} selectedTags={this.state.selectedTags}/>

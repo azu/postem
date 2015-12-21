@@ -2,9 +2,9 @@
 "use strict";
 import Consumer from "./HatenaCunsumer";
 import querystring from "querystring"
-import OAuthRequest from "./API/OAuthRequest";
+import OAuthRequest from "../API/OAuthRequest";
 import { OAuth } from "oauth";
-const HatenaService = require("remote").require("./src/services/HatenaService");
+const HatenaService = require("remote").require("./src/services/hatebu/HatenaService");
 export default class HatenaClient {
     _hatenaRequest() {
         var credential = HatenaService.getCredential();
