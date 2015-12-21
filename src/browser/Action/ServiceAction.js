@@ -10,28 +10,35 @@ export var keys = {
     updateURL: Symbol("updateURL"),
     updateComment: Symbol("updateComment")
 };
+import HatenaClient from "../../services/HatenaClient";
 export default class ServiceAction extends Action {
     fetchTags(serviceName) {
-        const ipcFetchKey = `${serviceName}Service-getTags`;
-        const ipcStorageKey = `${serviceName}Service-storage`;
-        ipc.once(`${ipcStorageKey}-get`, (tags) => {
-            console.log("strogag", tags);
+        const client = new HatenaClient();
+        client.getTags().then(tags => {
             this.dispatch(keys.fetchTags, tags);
         });
-        ipc.send(`${ipcStorageKey}-get`);
-        ipc.once(ipcFetchKey, (tags) => {
-            this.dispatch(keys.fetchTags, tags);
-            ipc.send(`${ipcStorageKey}-set`, tags);
-        });
-        ipc.send(ipcFetchKey);
+        //const ipcFetchKey = `${serviceName}Service-getTags`;
+        //const ipcStorageKey = `${serviceName}Service-storage`;
+        //ipc.once(`${ipcStorageKey}-get`, (tags) => {
+        //    if (Array.isArray(tags)) {
+        //        this.dispatch(keys.fetchTags, tags);
+        //    }
+        //});
+        //ipc.send(`${ipcStorageKey}-get`);
+        //ipc.once(ipcFetchKey, (tags) => {
+        //    if (Array.isArray(tags)) {
+        //        this.dispatch(keys.fetchTags, tags);
+        //        ipc.send(`${ipcStorageKey}-set`, tags);
+        //    }
+        //});
+        //ipc.send(ipcFetchKey);
     }
 
     postLink(options) {
-        const ipcLinkKey = `HatenaService-postLink`;
-        ipc.once(ipcLinkKey, (res) => {
-            console.log(res);
+        const client = new HatenaClient();
+        client.postLink(options).catch(error => {
+            console.log(error)
         });
-        ipc.send(ipcLinkKey, options);
     }
 
     selectTags(tags) {
@@ -46,7 +53,7 @@ export default class ServiceAction extends Action {
         this.dispatch(keys.updateURL, URL);
     }
 
-    updateComment(comment){
+    updateComment(comment) {
         this.dispatch(keys.updateComment, comment);
     }
 

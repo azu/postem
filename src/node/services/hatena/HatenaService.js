@@ -64,7 +64,19 @@ export default class HatenaService {
         }
      */
     postLink(options = {}) {
-        let query = querystring.stringify(options);
+        var {url,comment,tags} = options;
+        let query = querystring.stringify({
+            url,
+            comment
+        });
+        if (tags.length > 0) {
+            // tags[]=tag0&tags[]=tag1
+            const tagQuery = tags.map(tag => {
+                return `tags=${tag}`;
+            }).join("&");
+            query += "&" + tagQuery;
+        }
+        console.log(query);
         return this._hatenaRequest().post("http://api.b.hatena.ne.jp/1/my/bookmark?" + query);
     }
 }

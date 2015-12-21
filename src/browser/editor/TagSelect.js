@@ -10,12 +10,13 @@ export default class TagSelect extends React.Component {
                 value: tag
             }
         });
+        // fn
         const selectTags = this.props.selectTags;
-        const selectedTagValue = (this.props.selectedTags || []).join(",");
+        // tags[]
+        const selectedTagValue = this.props.selectedTags.join(",");
 
         function logChange(val) {
             var tags = val.split(",") || [];
-            console.log("Selected: " + val);
             selectTags(tags);
         }
 

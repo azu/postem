@@ -1,15 +1,17 @@
 .URLInput {
-  width: 100%; }
+  width: 100%;
+  margin: 0.1em 0; }
 
 .URLInput input {
-  width: 100%; }
+  padding: 8px 52px 8px 10px; }
 
 .TitleInput {
-  width: 100%; }
+  width: 100%;
+  margin: 0.1em 0; }
 
 .TitleInput input, .TitleInput label {
   display: inline-block; }
 .TitleInput input {
-  margin: 0 auto 0 1em; }
+  padding: 8px 52px 8px 10px; }
 
 /*# sourceMappingURL=index.css.map */

@@ -12,7 +12,7 @@ export default class TitleInput extends React.Component {
             <label>
                 Title:
             </label>
-            <input type="text" value={this.props.title} onInput={this.onChange.bind(this)}/>
+            <input type="text" defaultValue={this.props.title} onInput={this.onChange.bind(this)}/>
         </div>
     }
 }

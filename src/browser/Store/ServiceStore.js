@@ -6,8 +6,8 @@ export default class ServiceStore extends Store {
     constructor(...args) {
         super(...args);
         this.state = {
-            title: "",
-            URL: "",
+            title: "example",
+            URL: "http://example.com/",
             comment: "",
             tags: [],
             selectedTags: []

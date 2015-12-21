@@ -10,8 +10,6 @@ import TitleInput from "./editor/TitleInput";
 import SubmitButton from "./editor/SubmitButton";
 import AppContext from "./AppContext";
 const appContext = new AppContext();
-
-
 class App extends React.Component {
     constructor(...args) {
         super(...args);
@@ -32,7 +30,6 @@ class App extends React.Component {
             comment: this.state.comment,
             tags: this.state.selectedTags
         };
-        console.log(postData);
         ServiceAction.postLink(postData);
     }
 
