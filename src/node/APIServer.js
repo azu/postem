@@ -1,7 +1,7 @@
 // LICENSE : MIT
 "use strict";
 import express from "express";
-const ipc = require("ipc");
+const ipc = require("electron").ipcMain;
 export default class APIServer {
     constructor(webContent){
         this.webContent = webContent;

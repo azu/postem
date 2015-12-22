@@ -10,7 +10,7 @@ export default class Application {
         var index = {
             html: path.join(__dirname, "..", "browser", "index.html")
         };
-        this.mainWindow.loadUrl('file://' + index.html);
+        this.mainWindow.loadURL('file://' + index.html);
         this.mainWindow.webContents.on('did-finish-load', () => {
             //let server = new APIServer(this.mainWindow.webContents);
             //server.start();
