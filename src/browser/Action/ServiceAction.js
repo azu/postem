@@ -1,7 +1,6 @@
 // LICENSE : MIT
 "use strict";
 import { Action } from "material-flux";
-import ipc from "ipc";
 export var keys = {
     fetchTags: Symbol("fetchTags"),
     postLink: Symbol("postLink"),

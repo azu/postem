@@ -1,6 +1,6 @@
 // LICENSE : MIT
 "use strict";
-import ipc from "ipc";
+import {ipcRenderer} from "electron";
 import React from "react";
 import {render} from "react-dom";
 import Editor from "./component/Editor";
@@ -64,10 +64,10 @@ class App extends React.Component {
     }
 }
 // ipc from server event
-ipc.on("updateTitle", (title) => {
+ipcRenderer.on("updateTitle", (event, title) => {
     appContext.ServiceAction.updateTitle(title);
 });
-ipc.on("updateURL", (URL) => {
+ipcRenderer.on("updateURL", (event, URL) => {
     appContext.ServiceAction.updateURL(URL);
 });
 appContext.ServiceAction.fetchTags("Hatena");

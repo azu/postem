@@ -2,3 +2,7 @@
 @import "./components/URLInput";
 @import "./components/TitleInput";
 @import "./components/ServiceList";
+
+* {
+  box-sizing: border-box;
+}

@@ -2,9 +2,26 @@
 "use strict";
 import React from "react"
 export default class TitleInput extends React.Component {
+    constructor(...args) {
+        super(...args);
+        this.state = {
+            value: this.props.title
+        }
+    }
+
+    componentWillReceiveProps(nextProps) {
+        if (this.state.value === nextProps.title) {
+            return;
+        }
+        this.setState({
+            value: nextProps.title
+        });
+    }
+
     onChange({target}) {
         let value = target.value;
         this.props.updateTitle(value);
+        this.setState({value})
     }
 
     render() {
@@ -12,7 +29,7 @@ export default class TitleInput extends React.Component {
             <label>
                 Title:
             </label>
-            <input type="text" defaultValue={this.props.title} onInput={this.onChange.bind(this)}/>
+            <input type="text" placeholder="title" value={this.state.value} onChange={this.onChange.bind(this)}/>
         </div>
     }
 }
