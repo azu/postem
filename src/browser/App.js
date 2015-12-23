@@ -23,6 +23,8 @@ class App extends React.Component {
             let newState = Object.assign({}, this.state, appContext.ServiceStore.state);
             this.setState(newState);
         });
+        const service = serviceManger.getService("api.b.hatena.ne.jp");
+        appContext.ServiceAction.fetchTags(service);
     }
 
     postLink() {
@@ -32,7 +34,8 @@ class App extends React.Component {
             comment: this.state.comment,
             tags: this.state.selectedTags
         };
-        ServiceAction.postLink(postData);
+        var services = serviceManger.selectServices(this.state.enabledServiceIDs);
+        ServiceAction.postLink(services, postData);
     }
 
     render() {
@@ -42,7 +45,7 @@ class App extends React.Component {
         const updateURL = ServiceAction.updateURL.bind(ServiceAction);
         const updateComment = ServiceAction.updateComment.bind(ServiceAction);
         const login = () => {
-            ServiceAction.loginHatebu("Hatena");
+            ServiceAction.loginHatebu();
         };
         const enableService = (service) => {
             ServiceAction.enableService(service);
@@ -51,7 +54,7 @@ class App extends React.Component {
             ServiceAction.disableService(service);
         };
         return <div className="App">
-            <ServiceList services={serviceManger.getServices()} enabledServices={this.state.enableServices}
+            <ServiceList services={serviceManger.getServices()} enabledServices={this.state.enabledServiceIDs}
                          enableService={enableService}
                          disableService={disableService}/>
             <TitleInput title={this.state.title} updateTitle={updateTitle}/>
@@ -70,5 +73,4 @@ ipcRenderer.on("updateTitle", (event, title) => {
 ipcRenderer.on("updateURL", (event, URL) => {
     appContext.ServiceAction.updateURL(URL);
 });
-appContext.ServiceAction.fetchTags("Hatena");
 render(<App />, document.getElementById("js-main"));

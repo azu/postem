@@ -11,7 +11,7 @@ export default class ServiceStore extends Store {
             comment: "",
             tags: [],
             selectedTags: [],
-            enableServices: ["api.b.hatena.ne.jp"]
+            enabledServiceIDs: ["api.b.hatena.ne.jp"]
         };
         this.register(keys.fetchTags, (tags) => {
             this.setState({
@@ -40,20 +40,20 @@ export default class ServiceStore extends Store {
         });
 
         this.register(keys.enableService, (service) => {
-            let enableServices = this.state.enableServices.slice();
-            if (this.state.enableServices.indexOf(service.id) === -1) {
-                enableServices.push(service.id);
+            let enabledServiceIDs = this.state.enabledServiceIDs.slice();
+            if (this.state.enabledServiceIDs.indexOf(service.id) === -1) {
+                enabledServiceIDs.push(service.id);
             }
             this.setState({
-                enableServices
+                enabledServiceIDs
             });
         });
         this.register(keys.disableService, (service) => {
-            const enableServices = this.state.enableServices.filter(serviceId => {
+            const enabledServiceIDs = this.state.enabledServiceIDs.filter(serviceId => {
                 return service.id !== serviceId;
             });
             this.setState({
-                enableServices
+                enabledServiceIDs
             });
         });
     }

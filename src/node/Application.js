@@ -19,7 +19,7 @@ export default class Application {
                 messenger.updateTitle(argv.title);
             }
             if(argv.url) {
-                messenger.updateTitle(argv.url);
+                messenger.updateURL(argv.url);
             }
             //let server = new APIServer(this.mainWindow.webContents);
             //server.start();

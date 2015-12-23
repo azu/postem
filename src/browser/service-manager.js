@@ -2,19 +2,39 @@
 "use strict";
 export default class ServiceManager {
     constructor() {
-        this.services = [];
+        this.services = new Map();
     }
 
-    addService(service) {
-        this.services.push(service);
+    addService(service, client) {
+        this.services.set(service, client);
     }
 
     removeService(service) {
-        const index = this.services.indexOf(service);
-        this.services.splice(index, 1);
+        this.services.remove(service);
+    }
+
+    getService(serviceID) {
+        var services = this.selectServices([serviceID]);
+        if (services.length > 0) {
+            return services[0];
+        }
+        return undefined;
     }
 
     getServices() {
-        return this.services;
+        return [...this.services.keys()];
     }
+
+    selectServices(serviceIDs) {
+        return this.getServices().filter(service => {
+            return serviceIDs.some(serviceID => {
+                return serviceID === service.id;
+            });
+        });
+    }
+
+    getClient(service) {
+        return this.services.get(service);
+    }
+
 }

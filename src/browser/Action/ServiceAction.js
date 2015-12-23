@@ -11,10 +11,10 @@ export var keys = {
     enableService: Symbol("enableService"),
     disableService: Symbol("disableService")
 };
-import HatenaClient from "../../services/hatebu/HatenaClient";
+import serviceInstance from "../service-instance";
 export default class ServiceAction extends Action {
-    fetchTags(serviceName) {
-        const client = new HatenaClient();
+    fetchTags(service) {
+        const client = serviceInstance.getClient(service);
         client.getTags().then(tags => {
             this.dispatch(keys.fetchTags, tags);
         }).catch(error => {
@@ -22,9 +22,12 @@ export default class ServiceAction extends Action {
         });
     }
 
-    postLink(postData) {
-        const client = new HatenaClient();
-        client.postLink(postData).catch(error => {
+    postLink(services, postData) {
+        var servicePromises = services.map(service => {
+            const client = serviceInstance.getClient(service);
+            return client.postLink(postData);
+        });
+        Promise.all(servicePromises).catch(error => {
             console.log(error);
         });
     }
