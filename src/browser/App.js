@@ -8,6 +8,7 @@ import TagSelect from "./component/TagSelect";
 import URLInput from "./component/URLInput";
 import TitleInput from "./component/TitleInput";
 import SubmitButton from "./component/SubmitButton";
+import RelatedListBox from "./component/RelatedListBox";
 import ServiceList from "./component/ServiceList";
 import AppContext from "./AppContext";
 import serviceManger from "./service-instance";
@@ -56,6 +57,15 @@ class App extends React.Component {
         const login = (service) => {
             ServiceAction.login(service);
         };
+        const editItem = (relatedItem) => {
+            ServiceAction.editRelatedItem(relatedItem);
+        };
+        const finishEditing = (relatedItem, value) => {
+            ServiceAction.finishEditingRelatedItem(relatedItem, value);
+        };
+        const addItem = () => {
+            ServiceAction.addRelatedItem();
+        };
         return <div className="App">
             <ServiceList services={serviceManger.getServices()} enabledServices={this.state.enabledServiceIDs}
                          enableService={enableService}
@@ -65,6 +75,10 @@ class App extends React.Component {
             <URLInput URL={this.state.URL} updateURL={updateURL}/>
             <TagSelect tags={this.state.tags} selectTags={selectTags} selectedTags={this.state.selectedTags}/>
             <Editor value={this.state.comment} onChange={updateComment}/>
+            <RelatedListBox relatedItems={this.state.relatedItems}
+                            editItem={editItem}
+                            finishEditing={finishEditing}
+                            addItem={addItem}/>
             <SubmitButton onSubmit={this.postLink.bind(this)}/>
         </div>;
     }

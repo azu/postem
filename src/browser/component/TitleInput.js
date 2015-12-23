@@ -26,9 +26,7 @@ export default class TitleInput extends React.Component {
 
     render() {
         return <div className="TitleInput">
-            <label>
-                Title:
-            </label>
+            <h2 className="l-header">Title & URL</h2>
             <input type="text" placeholder="title" value={this.state.value} onChange={this.onChange.bind(this)}/>
         </div>
     }

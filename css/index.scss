@@ -1,9 +1,25 @@
 @charset "UTF-8";
+@import "./components/App";
 @import "./components/URLInput";
 @import "./components/TitleInput";
 @import "./components/ServiceList";
 @import "./components/Editor";
+@import "./components/RelatedListBox";
+@import "./components/SubmitButton";
 
 * {
   box-sizing: border-box;
+}
+
+.l-header {
+  margin: 0.5em 0 0.2em 0;
+  font-size: 18px;
+}
+
+.flat-button {
+  font-size: 14px;
+  color: #fff;
+  background-color: #6496c8;
+  text-shadow: -1px 1px #417cb8;
+  border: none;
 }

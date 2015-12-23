@@ -11,6 +11,7 @@ export default class ServiceStore extends Store {
             comment: "",
             tags: [],
             selectedTags: [],
+            relatedItems: [],
             enabledServiceIDs: ["api.b.hatena.ne.jp"]
         };
         this.register(keys.fetchTags, (tags) => {
@@ -56,5 +57,25 @@ export default class ServiceStore extends Store {
                 enabledServiceIDs
             });
         });
+
+        this.register(keys.addRelatedItem, (relatedItem) => {
+            const relatedItems = this.state.relatedItems.slice();
+            relatedItems.push(relatedItem);
+            this.setState({relatedItems});
+        });
+        this.register(keys.removeRelatedItem, (relatedItem) => {
+            var relatedItems = this.state.relatedItems;
+            const index = relatedItems.indexOf(relatedItem);
+            relatedItems.splice(index, 1);
+            this.setState({relatedItems});
+        });
+        const updateRelatedItem = (relatedItem) => {
+            var relatedItems = this.state.relatedItems;
+            const index = relatedItems.indexOf(relatedItem);
+            relatedItems[index] = relatedItem;
+            this.setState({relatedItems});
+        };
+        this.register(keys.editRelatedItem, updateRelatedItem);
+        this.register(keys.finishEditingRelatedItem, updateRelatedItem);
     }
 }

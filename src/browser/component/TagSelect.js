@@ -21,13 +21,14 @@ export default class TagSelect extends React.Component {
         }
 
         return <div className="EditorToolbar">
+            <h2 className="l-header">Tags</h2>
             <Select
                 name="form-field-name"
                 value={selectedTagValue}
                 options={options}
                 multi={true}
                 allowCreate={true}
-                placeholder="Select your favourite(s)"
+                placeholder="Select Tag(s)"
                 onChange={logChange}
             />
         </div>

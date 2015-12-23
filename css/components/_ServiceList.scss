@@ -1,16 +1,17 @@
 .ServiceList {
+  height: 48px;
   ul {
     list-style: none;
     margin: 0;
-    padding: 0.5em;
+    padding: 1rem 0;
   }
   li {
-    margin: 0.5em;
+    margin: 0 0.5em;
     display: inline-block;
   }
   .Service-icon {
-    width: 24px;
-    height: 24px;
+    max-width: 24px;
+    max-height: 24px;
   }
   .Service--disable .Service-icon {
     -webkit-filter: grayscale(100%);

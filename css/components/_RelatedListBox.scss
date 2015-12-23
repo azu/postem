@@ -1,0 +1,19 @@
+.RelatedListBox {
+  .RelatedList {
+    padding-left: 1em;
+    margin: 0.1em 0;
+  }
+}
+
+.RelatedItem {
+  .hidden {
+    display: none;
+  }
+  .RelatedItem-edit {
+    width: 100%;
+  }
+}
+
+.RelatedListBox-Add {
+  margin-top: 0.5rem;
+}

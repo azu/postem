@@ -19,6 +19,7 @@ export default class Editor extends React.Component {
             mode: "gfm"
         };
         return <div className="Editor">
+            <h2 className="l-header">Body</h2>
             <ReactCodeMirror value={this.props.value} onChange={this.props.onChange} options={options}/>
         </div>
     }

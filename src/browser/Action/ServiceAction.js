@@ -8,9 +8,14 @@ export var keys = {
     updateTitle: Symbol("updateTitle"),
     updateURL: Symbol("updateURL"),
     updateComment: Symbol("updateComment"),
+    editRelatedItem: Symbol("editRelatedItem"),
+    addRelatedItem: Symbol("addRelatedItem"),
+    removeRelatedItem: Symbol("removeRelatedItem"),
+    finishEditingRelatedItem: Symbol("finishEditingRelatedItem"),
     enableService: Symbol("enableService"),
     disableService: Symbol("disableService")
 };
+import RelatedItemModel from "../models/RelatedItemModel";
 import serviceInstance from "../service-instance";
 export default class ServiceAction extends Action {
     fetchTags(service) {
@@ -81,5 +86,28 @@ export default class ServiceAction extends Action {
 
     disableService(service) {
         this.dispatch(keys.disableService, service);
+    }
+
+    editRelatedItem(item) {
+        if (!item.isEditing) {
+            item.startEditing();
+            this.dispatch(keys.editRelatedItem, item);
+        }
+    }
+
+    addRelatedItem() {
+        this.dispatch(keys.addRelatedItem, new RelatedItemModel({
+            title: "Dummy",
+            URL: "http://example.com/"
+        }));
+    }
+
+    finishEditingRelatedItem(item, value) {
+        if (!value) {
+            return this.dispatch(keys.removeRelatedItem, item)
+        }
+        item.updateWithValue(value);
+        item.finishEditing();
+        this.dispatch(keys.finishEditingRelatedItem, item);
     }
 }
