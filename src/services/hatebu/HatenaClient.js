@@ -4,10 +4,18 @@ import Consumer from "./HatenaCunsumer";
 import querystring from "querystring"
 import OAuthRequest from "../API/OAuthRequest";
 import { OAuth } from "oauth";
-const HatenaService = require("remote").require("./src/services/hatebu/HatenaService");
+const Authentication = require("remote").require("./src/services/hatebu/HatenaAuthentication");
 export default class HatenaClient {
+    isLogin() {
+        return Authentication.canAccess();
+    }
+
+    loginAsync() {
+        return Authentication.requireAccess();
+    }
+
     _hatenaRequest() {
-        var credential = HatenaService.getCredential();
+        var credential = Authentication.getCredential();
         const oauth = new OAuthRequest({
             consumerKey: Consumer.key,
             consumerSecret: Consumer.secret,

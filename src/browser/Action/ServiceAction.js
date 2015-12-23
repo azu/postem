@@ -15,6 +15,10 @@ import serviceInstance from "../service-instance";
 export default class ServiceAction extends Action {
     fetchTags(service) {
         const client = serviceInstance.getClient(service);
+        if (!client.isLogin()) {
+            console.log(service.id + " is not login");
+            return;
+        }
         console.log("fetchTags: " + service.id);
         client.getTags().then(tags => {
             this.dispatch(keys.fetchTags, tags);
@@ -24,9 +28,16 @@ export default class ServiceAction extends Action {
     }
 
     postLink(services, postData) {
-        var servicePromises = services.map(service => {
+        var mapCS = services.map(service => {
             const client = serviceInstance.getClient(service);
-            console.log("postLint: " + service.id);
+            return {
+                service,
+                client
+            }
+        });
+        var enabledCS = mapCS.filter(({client}) => client.isLogin());
+        var servicePromises = enabledCS.map(({service, client}) => {
+            console.log("postLink: " + service.id);
             return client.postLink(postData);
         });
         Promise.all(servicePromises).catch(error => {
@@ -50,15 +61,22 @@ export default class ServiceAction extends Action {
         this.dispatch(keys.updateComment, comment);
     }
 
-    loginHatebu() {
-        var HatenaService = require("remote").require("./src/services/hatebu/HatenaService");
-        HatenaService.requireAccess().then(result => {
-            console.log(result);
+    login(service) {
+        const client = serviceInstance.getClient(service);
+        client.loginAsync().then(result => {
+            console.log("login: " + service.id);
         });
     }
 
     enableService(service) {
-        this.dispatch(keys.enableService, service);
+        const client = serviceInstance.getClient(service);
+        if (client.isLogin()) {
+            this.dispatch(keys.enableService, service);
+        } else {
+            client.loginAsync().then(result => {
+                this.dispatch(keys.enableService, service);
+            });
+        }
     }
 
     disableService(service) {
