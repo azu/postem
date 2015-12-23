@@ -6,7 +6,6 @@ export default class ServiceList extends React.Component {
         const enabledServices = this.props.enabledServices;
         const {enableService, disableService, login} = this.props;
         const onEnable = (service, event) => {
-            console.log(event.shiftKey);
             if (event.shiftKey) {
                 login(service);
             } else {

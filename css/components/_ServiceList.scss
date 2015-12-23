@@ -1,4 +1,13 @@
 .ServiceList {
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0.5em;
+  }
+  li {
+    margin: 0.5em;
+    display: inline-block;
+  }
   .Service-icon {
     width: 24px;
     height: 24px;
