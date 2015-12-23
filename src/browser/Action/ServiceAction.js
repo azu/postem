@@ -68,7 +68,10 @@ export default class ServiceAction extends Action {
 
     login(service) {
         const client = serviceInstance.getClient(service);
-        client.loginAsync().then(result => {
+        client.loginAsync(error => {
+            if (error) {
+                return console.error(error);
+            }
             console.log("login: " + service.id);
         });
     }
@@ -78,7 +81,10 @@ export default class ServiceAction extends Action {
         if (client.isLogin()) {
             this.dispatch(keys.enableService, service);
         } else {
-            client.loginAsync().then(result => {
+            client.loginAsync(error => {
+                if (error) {
+                    return console.error(error);
+                }
                 this.dispatch(keys.enableService, service);
             });
         }

@@ -12,7 +12,7 @@ exports.canAccess = function canAccess() {
 exports.getCredential = function getCredential() {
     return storage.get("hatena");
 };
-exports.requireAccess = function requireAccess() {
+exports.requireAccess = function requireAccess(callback) {
     // http://developer.hatena.com/ja/documents/auth/apis/oauth/consumer
     var hatena = new AuthenticationHatena({
         key: Consumer.key,
@@ -27,5 +27,6 @@ exports.requireAccess = function requireAccess() {
             accessSecret: accessTokenSecret
         };
         storage.set("hatena", credential);
+        callback(null, credential);
     });
 };

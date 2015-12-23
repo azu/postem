@@ -8,16 +8,8 @@ export default class HatenaClient {
         return Authentication.canAccess();
     }
 
-    loginAsync() {
-        return new Promise((resolve, reject) => {
-            Authentication.requireAccess(function (error, response) {
-                if (error) {
-                    reject(error);
-                } else {
-                    resolve(response);
-                }
-            });
-        });
+    loginAsync(callback) {
+        Authentication.requireAccess(callback);
     }
 
     /**

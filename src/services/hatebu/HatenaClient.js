@@ -10,8 +10,8 @@ export default class HatenaClient {
         return Authentication.canAccess();
     }
 
-    loginAsync() {
-        return Authentication.requireAccess();
+    loginAsync(callback) {
+        return Authentication.requireAccess(callback);
     }
 
     _hatenaRequest() {
