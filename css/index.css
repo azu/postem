@@ -46,6 +46,9 @@
   cursor: default;
   outline: none; }
 
+.Editor .ReactCodeMirror {
+  margin: 0 -10px; }
+
 .Editor .CodeMirror, .Editor .CodeMirror-scroll {
   min-height: 5em; }
 

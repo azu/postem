@@ -28,6 +28,7 @@
   "dependencies": {
     "babel-core": "^5.8.33",
     "codemirror": "^5.7.0",
+    "codemirror-textlint": "^1.0.1",
     "electron-authentication-hatena": "^1.0.3",
     "electron-template-menu": "^1.0.3",
     "express": "^4.13.3",
@@ -43,7 +44,8 @@
     "react-codemirror": "^0.2.0",
     "react-dom": "^0.14.2",
     "react-select": "^0.9.1",
-    "request": "^2.63.0"
+    "request": "^2.63.0",
+    "textlint-rule-preset-japanese": "^1.0.1"
   },
   "devDependencies": {
     "electron-prebuilt": "^0.36.1"
