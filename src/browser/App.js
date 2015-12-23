@@ -36,7 +36,8 @@ class App extends React.Component {
             title: this.state.title,
             url: this.state.URL,
             comment: this.state.comment,
-            tags: this.state.selectedTags
+            tags: this.state.selectedTags,
+            relatedItems: this.state.relatedItems
         };
         var services = serviceManger.selectServices(this.state.enabledServiceIDs);
         ServiceAction.postLink(services, postData);

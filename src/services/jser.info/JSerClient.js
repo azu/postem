@@ -31,12 +31,13 @@ export default class HatenaClient {
         }
      */
     postLink(options = {}) {
-        let {title, url,comment,tags} = options;
+        let {title, url,comment,tags,relatedItems} = options;
         let serializedObject = JSON.stringify({
             title,
             url,
             content: comment,
-            tags: tags
+            tags: tags,
+            relatedLinks: relatedItems
         });
         Committer.savePost(serializedObject);
     }
