@@ -1,6 +1,11 @@
-# Project Name
+# Postem
 
-- [ ] Write a project description
+TomblooとかTombfixみたいなElectronアプリ。
+
+## Feature
+
+- はてなブックマークとかへのクロスポスト
+- [textlint](https://github.com/textlint/textlint "textlint")でのリアルタイムLint
 
 ## Installation
 
@@ -9,11 +14,6 @@
 ## Usage
 
     npm start
-    # login -> 送信
-
-## Tests
-
-- [ ] Write How to Tests
 
 ## Contributing
 
