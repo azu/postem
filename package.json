@@ -14,6 +14,9 @@
   "version": "1.0.0",
   "description": "electron app that like tombloo.",
   "main": "index.js",
+  "bin": {
+    "postem": "bin/cmd.js"
+  },
   "directories": {
     "test": "test"
   },
