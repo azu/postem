@@ -1,7 +1,25 @@
 // LICENSE : MIT
 "use strict";
 import querystring from "querystring"
+const Authentication = require("remote").require(__dirname + "/JSerAuthentication");
+const Committer = require("remote").require(__dirname + "/JSerCommitter");
 export default class HatenaClient {
+    isLogin() {
+        return Authentication.canAccess();
+    }
+
+    loginAsync() {
+        return new Promise((resolve, reject) => {
+            Authentication.requireAccess(function (error, response) {
+                if (error) {
+                    reject(error);
+                } else {
+                    resolve(response);
+                }
+            });
+        });
+    }
+
     /**
      *
      * @param options
@@ -13,18 +31,13 @@ export default class HatenaClient {
         }
      */
     postLink(options = {}) {
-        let {url,comment,tags} = options;
-        if (tags.length > 0) {
-            // [tag][tag] comment
-            const tagPrefix = tags.map(tag => {
-                return `[${tag}]`;
-            }).join("");
-            comment = tagPrefix + comment;
-        }
-        let query = querystring.stringify({
+        let {title, url,comment,tags} = options;
+        let serializedObject = JSON.stringify({
+            title,
             url,
-            comment
+            content: comment,
+            tags: tags
         });
-        return this._hatenaRequest().post("http://api.b.hatena.ne.jp/1/my/bookmark?" + query);
+        Committer.savePost(serializedObject);
     }
 }

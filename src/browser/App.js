@@ -32,6 +32,7 @@ class App extends React.Component {
     postLink() {
         const { ServiceAction } = appContext;
         let postData = {
+            title: this.state.title,
             url: this.state.URL,
             comment: this.state.comment,
             tags: this.state.selectedTags
@@ -52,10 +53,14 @@ class App extends React.Component {
         const disableService = (service) => {
             ServiceAction.disableService(service);
         };
+        const login = (service) => {
+            ServiceAction.login(service);
+        };
         return <div className="App">
             <ServiceList services={serviceManger.getServices()} enabledServices={this.state.enabledServiceIDs}
                          enableService={enableService}
-                         disableService={disableService}/>
+                         disableService={disableService}
+                         login={login}/>
             <TitleInput title={this.state.title} updateTitle={updateTitle}/>
             <URLInput URL={this.state.URL} updateURL={updateURL}/>
             <TagSelect tags={this.state.tags} selectTags={selectTags} selectedTags={this.state.selectedTags}/>
