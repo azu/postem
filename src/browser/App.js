@@ -24,7 +24,9 @@ class App extends React.Component {
             this.setState(newState);
         });
         const service = serviceManger.getService("api.b.hatena.ne.jp");
-        appContext.ServiceAction.fetchTags(service);
+        if (service) {
+            appContext.ServiceAction.fetchTags(service);
+        }
     }
 
     postLink() {

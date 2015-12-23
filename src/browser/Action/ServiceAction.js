@@ -15,6 +15,7 @@ import serviceInstance from "../service-instance";
 export default class ServiceAction extends Action {
     fetchTags(service) {
         const client = serviceInstance.getClient(service);
+        console.log("fetchTags: " + service.id);
         client.getTags().then(tags => {
             this.dispatch(keys.fetchTags, tags);
         }).catch(error => {
@@ -25,6 +26,7 @@ export default class ServiceAction extends Action {
     postLink(services, postData) {
         var servicePromises = services.map(service => {
             const client = serviceInstance.getClient(service);
+            console.log("postLint: " + service.id);
             return client.postLink(postData);
         });
         Promise.all(servicePromises).catch(error => {
