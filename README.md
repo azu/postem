@@ -4,7 +4,7 @@ TomblooとかTombfixみたいなElectronアプリ。
 
 ## Feature
 
-- はてなブックマークとかへのクロスポスト
+- Twitter、はてなブックマークとかへのクロスポスト
 - [textlint](https://github.com/textlint/textlint "textlint")でのリアルタイムLint
 
 ## Installation
