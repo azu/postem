@@ -15,6 +15,7 @@ export var keys = {
     enableService: Symbol("enableService"),
     disableService: Symbol("disableService")
 };
+import notie from "notie"
 import RelatedItemModel from "../models/RelatedItemModel";
 import serviceInstance from "../service-instance";
 export default class ServiceAction extends Action {
@@ -45,7 +46,11 @@ export default class ServiceAction extends Action {
             console.log("postLink: " + service.id);
             return client.postLink(postData);
         });
-        Promise.all(servicePromises).catch(error => {
+        Promise.all(servicePromises).then(() => {
+            notie.alert(1, 'Post Success!', 1.5);
+            this.dispatch(keys.postLink);
+        }).catch(error => {
+            notie.alert(3, 'Post Error.', 2.5);
             console.log(error);
         });
     }

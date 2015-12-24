@@ -23,5 +23,6 @@ export default class HatenaClient {
      */
     postLink(options = {}) {
         console.log("debug", options);
+        return Promise.resolve();
     }
 }

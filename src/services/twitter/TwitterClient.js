@@ -2,6 +2,7 @@
 "use strict";
 import Consumer from "./TwitterConsumer";
 import Twitter from "twitter"
+import {truncate} from "tweet-truncator";
 const Authentication = require("remote").require(__dirname + "/TwitterAuthentication");
 export default class TwitterClient {
     isLogin() {
@@ -34,11 +35,20 @@ export default class TwitterClient {
      */
     postLink(options = {}) {
         let {title, url,comment,tags} = options;
-        const status = `${comment} "${title}" ${url}`;
-        this._getClient().post('statuses/update', {status: status}, function (error, tweet, response) {
-            if (error) {
-                return console.error(error, response);
-            }
+        // make contents object
+        var contents = {title, url, desc: comment, tags};
+        const status = truncate(contents, {
+            template: `%desc% "%title%" %url% %tags%`
+        });
+        return new Promise((resolve, reject) => {
+            this._getClient().post('statuses/update', {status: status}, function (error, tweet, response) {
+                if (error) {
+                    console.error(error, response);
+                    reject(error);
+                    return;
+                }
+                resolve();
+            });
         });
     }
 }

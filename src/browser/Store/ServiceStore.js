@@ -40,6 +40,17 @@ export default class ServiceStore extends Store {
             });
         });
 
+        const resetState = () => {
+            this.setState({
+                title: "",
+                URL: "",
+                comment: "",
+                tags: [],
+                selectedTags: [],
+                relatedItems: []
+            })
+        };
+        this.register(keys.postLink, resetState);
         this.register(keys.enableService, (service) => {
             let enabledServiceIDs = this.state.enabledServiceIDs.slice();
             if (this.state.enabledServiceIDs.indexOf(service.id) === -1) {
