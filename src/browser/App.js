@@ -39,6 +39,9 @@ class App extends React.Component {
             tags: this.state.selectedTags,
             relatedItems: this.state.relatedItems
         };
+        if (!postData.title || !postData.url) {
+            return;
+        }
         var services = serviceManger.selectServices(this.state.enabledServiceIDs);
         ServiceAction.postLink(services, postData);
     }
@@ -67,6 +70,7 @@ class App extends React.Component {
         const addItem = () => {
             ServiceAction.addRelatedItem();
         };
+        const submitPostLink = this.postLink.bind(this);
         return <div className="App">
             <ServiceList services={serviceManger.getServices()} enabledServices={this.state.enabledServiceIDs}
                          enableService={enableService}
@@ -75,12 +79,12 @@ class App extends React.Component {
             <TitleInput title={this.state.title} updateTitle={updateTitle}/>
             <URLInput URL={this.state.URL} updateURL={updateURL}/>
             <TagSelect tags={this.state.tags} selectTags={selectTags} selectedTags={this.state.selectedTags}/>
-            <Editor value={this.state.comment} onChange={updateComment}/>
+            <Editor value={this.state.comment} onChange={updateComment} onSubmit={submitPostLink}/>
             <RelatedListBox relatedItems={this.state.relatedItems}
                             editItem={editItem}
                             finishEditing={finishEditing}
                             addItem={addItem}/>
-            <SubmitButton onSubmit={this.postLink.bind(this)}/>
+            <SubmitButton onSubmit={submitPostLink}/>
         </div>;
     }
 }

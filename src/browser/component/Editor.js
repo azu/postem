@@ -18,6 +18,11 @@ const preset = require("textlint-rule-preset-japanese");
 const validator = createValidator(preset);
 export default class Editor extends React.Component {
     render() {
+        var extraKeys = {
+            "Cmd-Enter": (cm) => {
+                this.props.onSubmit();
+            }
+        };
         var options = {
             lineWrapping: true,
             mode: "gfm",
@@ -25,7 +30,8 @@ export default class Editor extends React.Component {
             lint: {
                 "getAnnotations": validator,
                 "async": true
-            }
+            },
+            extraKeys: extraKeys
         };
         return <div className="Editor">
             <h2 className="l-header">Body</h2>
