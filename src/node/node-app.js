@@ -1,9 +1,21 @@
 // LICENSE : MIT
 "use strict";
 import app from "app";
+import Application from "./Application";
+let application = null;
 function startRenderApp() {
-    var Application = require("./Application");
-    var application = new Application();
+    // singleton application instance
+    var shouldQuit = app.makeSingleInstance(function (commandLine, workingDirectory) {
+        // focus existing running instance window
+        application.restoreWindow();
+        return true;
+    });
+
+    if (shouldQuit) {
+        return app.quit();
+    }
+
+    application = new Application();
     application.launch();
 }
 

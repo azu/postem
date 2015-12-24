@@ -6,13 +6,31 @@ import path from "path";
 import APIServer from "./APIServer";
 import WebMessenger from "./WebMessenger";
 import {getDictionary, save} from "./textlint/dictionary-store";
+import windowStateKeeper from 'electron-window-state';
 const argv = require('minimist')(process.argv.slice(2));
 export default class Application {
+    // focus existing running instance window
+    restoreWindow(){
+        var window = this.mainWindow;
+        if (window) {
+            if (window.isMinimized()) {
+                window.restore();
+            }
+            window.show();
+        }
+    }
     launch() {
+        let mainWindowState = windowStateKeeper({
+            defaultWidth: 500,
+            defaultHeight: 500
+        });
         this.mainWindow = new BrowserWindow({
             title: require("../../package.json").name,
-            width: 500,
-            height: 500
+            frame: false,
+            x: mainWindowState.x,
+            y: mainWindowState.y,
+            width: mainWindowState.width,
+            height: mainWindowState.height
         });
         var index = {
             html: path.join(__dirname, "..", "browser", "index.html")
@@ -37,5 +55,12 @@ export default class Application {
             console.log("Update: dictionary");
             save(result);
         });
+
+        // Let us register listeners on the window, so we can update the state
+        // automatically (the listeners will be removed when the window is closed)
+        // and restore the maximized or full screen state
+        mainWindowState.manage(this.mainWindow);
+        // set top
+        this.mainWindow.setAlwaysOnTop(true);
     }
 }
