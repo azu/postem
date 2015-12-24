@@ -55,8 +55,20 @@ class App extends React.Component {
         const enableService = (service) => {
             ServiceAction.enableService(service);
         };
+        const enableServiceAtIndex = (index) => {
+            const service = serviceManger.getServices()[index];
+            if (service) {
+                enableService(service);
+            }
+        };
         const disableService = (service) => {
             ServiceAction.disableService(service);
+        };
+        const disableServiceAtIndex = (index) => {
+            const service = serviceManger.getServices()[index];
+            if (service) {
+                disableService(service);
+            }
         };
         const login = (service) => {
             ServiceAction.login(service);
@@ -79,7 +91,10 @@ class App extends React.Component {
             <TitleInput title={this.state.title} updateTitle={updateTitle}/>
             <URLInput URL={this.state.URL} updateURL={updateURL}/>
             <TagSelect tags={this.state.tags} selectTags={selectTags} selectedTags={this.state.selectedTags}/>
-            <Editor value={this.state.comment} onChange={updateComment} onSubmit={submitPostLink}/>
+            <Editor value={this.state.comment} onChange={updateComment}
+                    onSubmit={submitPostLink}
+                    enableServiceAtIndex={enableServiceAtIndex}
+                    disableServiceAtIndex={disableServiceAtIndex}/>
             <RelatedListBox relatedItems={this.state.relatedItems}
                             editItem={editItem}
                             finishEditing={finishEditing}

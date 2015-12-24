@@ -19,10 +19,21 @@ const validator = createValidator(preset);
 export default class Editor extends React.Component {
     render() {
         var extraKeys = {
-            "Cmd-Enter": (cm) => {
+            "Cmd-Enter": () => {
                 this.props.onSubmit();
             }
         };
+        [1, 2, 3, 4, 5, 6, 7, 8, 9].forEach((key, index) => {
+            extraKeys[`Cmd-${key}`] = () => {
+                this.props.enableServiceAtIndex(index);
+            };
+            extraKeys[`Cmd-Ctrl-${key}`] = () => {
+                this.props.disableServiceAtIndex(index);
+            };
+            extraKeys[`Shift-Cmd-${key}`] = () => {
+                this.props.disableServiceAtIndex(index);
+            }
+        });
         var options = {
             lineWrapping: true,
             mode: "gfm",
