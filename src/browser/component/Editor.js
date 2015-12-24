@@ -16,7 +16,22 @@ require("codemirror/addon/lint/lint.js");
 const createValidator = require("codemirror-textlint");
 const preset = require("textlint-rule-preset-japanese");
 const validator = createValidator(preset);
+import Mousetrap from "mousetrap";
 export default class Editor extends React.Component {
+    componentDidMount() {
+        [1, 2, 3, 4, 5, 6, 7, 8, 9].forEach((key, index) => {
+            Mousetrap.bind(`command+${key}`, () => {
+                this.props.enableServiceAtIndex(index)
+            });
+            Mousetrap.bind(`command+shift+${key}`, () => {
+                this.props.disableServiceAtIndex(index);
+            });
+            Mousetrap.bind(`command+ctrl+${key}`, () => {
+                this.props.disableServiceAtIndex(index);
+            });
+        });
+    }
+
     render() {
         var extraKeys = {
             "Cmd-Enter": () => {
