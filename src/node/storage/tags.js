@@ -1,5 +1,14 @@
 // LICENSE : MIT
 "use strict";
 import Storage from "./Storage";
-var accounts = new Storage("tags");
-export default accounts;
+class TagStorage extends Storage {
+    updateTags(tags) {
+        this.set("tags", tags);
+    }
+
+    loadTags() {
+        return this.get("tags") || [];
+    }
+}
+var tags = new TagStorage("tags");
+export default tags;

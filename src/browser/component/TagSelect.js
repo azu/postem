@@ -3,6 +3,9 @@
 import React from "react"
 import Select from "react-select";
 export default class TagSelect extends React.Component {
+    componentDidMount () {
+        this.refs.select.focus();
+    }
     render() {
         var options = this.props.tags.map(tag => {
             return {
@@ -23,6 +26,7 @@ export default class TagSelect extends React.Component {
         return <div className="EditorToolbar">
             <h2 className="l-header">Tags</h2>
             <Select
+                ref="select"
                 name="form-field-name"
                 value={selectedTagValue}
                 options={options}

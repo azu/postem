@@ -10,7 +10,7 @@ import windowStateKeeper from 'electron-window-state';
 const argv = require('minimist')(process.argv.slice(2));
 export default class Application {
     // focus existing running instance window
-    restoreWindow(){
+    restoreWindow() {
         var window = this.mainWindow;
         if (window) {
             if (window.isMinimized()) {
@@ -19,6 +19,7 @@ export default class Application {
             window.show();
         }
     }
+
     launch() {
         let mainWindowState = windowStateKeeper({
             defaultWidth: 500,

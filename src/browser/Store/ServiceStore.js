@@ -2,19 +2,24 @@
 "use strict";
 import { Store } from "material-flux";
 import { keys } from "../Action/ServiceAction";
+import Storage from "../storage/Storage";
 export default class ServiceStore extends Store {
     constructor(...args) {
         super(...args);
+        const ServiceStorage = new Storage("ServiceStorage");
         this.state = {
             title: "example",
             URL: "http://example.com/",
             comment: "",
-            tags: [],
+            tags: ServiceStorage.get("tags") || [],
             selectedTags: [],
             relatedItems: [],
             enabledServiceIDs: ["api.b.hatena.ne.jp"]
         };
         this.register(keys.fetchTags, (tags) => {
+            if (tags.length > 0) {
+                ServiceStorage.set("tags", tags);
+            }
             this.setState({
                 tags
             });
