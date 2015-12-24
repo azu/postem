@@ -7,20 +7,30 @@ import APIServer from "./APIServer";
 import WebMessenger from "./WebMessenger";
 import {getDictionary, save} from "./textlint/dictionary-store";
 import windowStateKeeper from 'electron-window-state';
-const argv = require('minimist')(process.argv.slice(2));
 export default class Application {
     // focus existing running instance window
-    restoreWindow() {
+    restoreWindow(newArgv) {
         var window = this.mainWindow;
         if (window) {
             if (window.isMinimized()) {
                 window.restore();
             }
             window.show();
+            // restore with command line
+            const argv = require('minimist')(newArgv.slice(2));
+            const messenger = new WebMessenger(this.mainWindow.webContents);
+            if (argv.title) {
+                messenger.updateTitle(argv.title);
+            }
+            if (argv.url) {
+                messenger.updateURL(argv.url);
+            }
         }
     }
 
     launch() {
+        // command line
+        const argv = require('minimist')(process.argv.slice(2));
         let mainWindowState = windowStateKeeper({
             defaultWidth: 500,
             defaultHeight: 500

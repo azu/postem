@@ -5,9 +5,9 @@ import Application from "./Application";
 let application = null;
 function startRenderApp() {
     // singleton application instance
-    var shouldQuit = app.makeSingleInstance(function (commandLine, workingDirectory) {
+    var shouldQuit = app.makeSingleInstance(function (argv, workingDirectory) {
         // focus existing running instance window
-        application.restoreWindow();
+        application.restoreWindow(argv);
         return true;
     });
 
