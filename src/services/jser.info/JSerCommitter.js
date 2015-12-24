@@ -5,6 +5,7 @@
 const path = require("path");
 const fs = require("fs");
 import storage from "../../node/storage/accounts";
+import {exec} from "child_process"
 function format0(str, len) {
     return ('_' + Math.pow(10, len) + str).slice(-len);
 }
@@ -32,6 +33,11 @@ export function savePost(serializedObject) {
     var date = new Date();
     var filePath = findIndexWithDate(date);
     var posts = getPosts(filePath);
-    posts.list.push(JSON.parse(serializedObject));
+    var item = JSON.parse(serializedObject);
+    posts.list.push(item);
     fs.writeFileSync(filePath, JSON.stringify(posts, null, 4), "utf-8");
+    // sync script
+    var title = item.title;
+    var syncScript = path.join(storage.get("jser.info-dir"), "./tools/git-sync.sh");
+    exec(`bash ${syncScript} "${title}"`);
 }

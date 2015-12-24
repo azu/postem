@@ -55,7 +55,7 @@ export default class ServiceStore extends Store {
                 relatedItems: []
             })
         };
-        this.register(keys.postLink, resetState);
+        //this.register(keys.postLink, resetState);
         this.register(keys.enableService, (service) => {
             let enabledServiceIDs = this.state.enabledServiceIDs.slice();
             if (this.state.enabledServiceIDs.indexOf(service.id) === -1) {
