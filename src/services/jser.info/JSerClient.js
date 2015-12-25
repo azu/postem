@@ -25,6 +25,7 @@ export default class HatenaClient {
     postLink(options = {}) {
         let {title, url,comment,tags,relatedItems} = options;
         let serializedObject = JSON.stringify({
+            date: new Date(),
             title,
             url,
             content: comment,
