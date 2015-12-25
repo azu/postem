@@ -5,10 +5,17 @@ import {Client as HatenaClient, Model as HatenaModel} from "../services/hatebu/i
 import {Client as JSerClient, Model as JSerModel} from "../services/jser.info";
 import {Client as DebugClient, Model as DebugModel} from "../services/debug";
 import {Client as TwitterClient, Model as TwitterModel} from "../services/twitter";
+import {Client as ESDailyClient, Model as ESDailyModel} from "../services/ecmascript-daily";
 import ServiceManger from "./service-manager";
 const manager = new ServiceManger();
-manager.addService(new TwitterModel(), new TwitterClient());
-manager.addService(new HatenaModel(), new HatenaClient());
-manager.addService(new JSerModel(), new JSerClient());
-manager.addService(new DebugModel(), new DebugClient());
+const services = [
+    [TwitterModel, TwitterClient],
+    [HatenaModel, HatenaClient],
+    [JSerModel, JSerClient],
+    [ESDailyModel, ESDailyClient],
+    [DebugModel, DebugClient]
+];
+services.forEach(([Model, Client]) => {
+    manager.addService(new Model(), new Client());
+});
 export default manager;
