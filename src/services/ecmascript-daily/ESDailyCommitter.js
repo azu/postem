@@ -41,7 +41,12 @@ function pickFromMatter(item) {
     }
 
     if (item.relatedLinks && item.relatedLinks.length > 0) {
-        object.related = item.relatedLinks;
+        object.related = item.relatedLinks.map(link => {
+            return {
+                title: link.title,
+                url: link.URL
+            };
+        });
     }
     return object;
 }
