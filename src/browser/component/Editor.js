@@ -33,11 +33,6 @@ export default class Editor extends React.Component {
                 this.props.onSubmit();
             }
         };
-        [1, 2, 3, 4, 5, 6, 7, 8, 9].forEach((key, index) => {
-            extraKeys[`Cmd-${key}`] = () => {
-                this.props.toggleServiceAtIndex(index);
-            };
-        });
         var options = {
             lineWrapping: true,
             mode: "gfm",
