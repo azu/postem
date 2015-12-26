@@ -111,4 +111,7 @@ ipcRenderer.on("updateTitle", (event, title) => {
 ipcRenderer.on("updateURL", (event, URL) => {
     appContext.ServiceAction.updateURL(URL);
 });
+ipcRenderer.on("resetField", (event) => {
+    appContext.ServiceAction.resetField();
+});
 render(<App />, document.getElementById("js-main"));

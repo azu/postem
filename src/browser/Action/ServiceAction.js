@@ -2,6 +2,7 @@
 "use strict";
 import { Action } from "material-flux";
 export var keys = {
+    resetField: Symbol("resetField"),
     fetchTags: Symbol("fetchTags"),
     postLink: Symbol("postLink"),
     selectTags: Symbol("selectTags"),
@@ -120,5 +121,9 @@ export default class ServiceAction extends Action {
         item.updateWithValue(value);
         item.finishEditing();
         this.dispatch(keys.finishEditingRelatedItem, item);
+    }
+
+    resetField(){
+        this.dispatch(keys.resetField);
     }
 }

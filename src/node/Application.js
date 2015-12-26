@@ -19,6 +19,9 @@ export default class Application {
             // restore with command line
             const argv = require('minimist')(newArgv.slice(2));
             const messenger = new WebMessenger(this.mainWindow.webContents);
+            if(argv.title || argv.url) {
+                messenger.resetField();
+            }
             if (argv.title) {
                 messenger.updateTitle(argv.title);
             }

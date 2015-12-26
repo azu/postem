@@ -50,11 +50,11 @@ export default class ServiceStore extends Store {
                 title: "",
                 URL: "",
                 comment: "",
-                tags: [],
                 selectedTags: [],
                 relatedItems: []
             })
         };
+        this.register(keys.resetField, resetState);
         //this.register(keys.postLink, resetState);
         this.register(keys.enableService, (service) => {
             let enabledServiceIDs = this.state.enabledServiceIDs.slice();
