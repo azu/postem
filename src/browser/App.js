@@ -69,20 +69,8 @@ class App extends React.Component {
         const enableService = (service) => {
             ServiceAction.enableService(service);
         };
-        const enableServiceAtIndex = (index) => {
-            const service = serviceManger.getServices()[index];
-            if (service) {
-                enableService(service);
-            }
-        };
         const disableService = (service) => {
             ServiceAction.disableService(service);
-        };
-        const disableServiceAtIndex = (index) => {
-            const service = serviceManger.getServices()[index];
-            if (service) {
-                disableService(service);
-            }
         };
         const login = (service) => {
             ServiceAction.login(service);
