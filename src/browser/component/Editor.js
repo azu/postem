@@ -21,13 +21,7 @@ export default class Editor extends React.Component {
     componentDidMount() {
         [1, 2, 3, 4, 5, 6, 7, 8, 9].forEach((key, index) => {
             Mousetrap.bind(`command+${key}`, () => {
-                this.props.enableServiceAtIndex(index)
-            });
-            Mousetrap.bind(`command+shift+${key}`, () => {
-                this.props.disableServiceAtIndex(index);
-            });
-            Mousetrap.bind(`command+ctrl+${key}`, () => {
-                this.props.disableServiceAtIndex(index);
+                this.props.toggleServiceAtIndex(index)
             });
         });
     }
@@ -40,14 +34,8 @@ export default class Editor extends React.Component {
         };
         [1, 2, 3, 4, 5, 6, 7, 8, 9].forEach((key, index) => {
             extraKeys[`Cmd-${key}`] = () => {
-                this.props.enableServiceAtIndex(index);
+                this.props.toggleServiceAtIndex(index);
             };
-            extraKeys[`Cmd-Ctrl-${key}`] = () => {
-                this.props.disableServiceAtIndex(index);
-            };
-            extraKeys[`Shift-Cmd-${key}`] = () => {
-                this.props.disableServiceAtIndex(index);
-            }
         });
         var options = {
             lineWrapping: true,

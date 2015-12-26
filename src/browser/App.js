@@ -52,6 +52,20 @@ class App extends React.Component {
         const updateTitle = ServiceAction.updateTitle.bind(ServiceAction);
         const updateURL = ServiceAction.updateURL.bind(ServiceAction);
         const updateComment = ServiceAction.updateComment.bind(ServiceAction);
+        const toggleServiceAtIndex = (index) => {
+            const service = serviceManger.getServices()[index];
+            if (service) {
+                toggleService(service);
+            }
+        };
+        const toggleService = (service) => {
+            const isEnabled = this.state.enabledServiceIDs.some(serviceID => service.id === serviceID);
+            if (isEnabled) {
+                disableService(service);
+            } else {
+                enableService(service);
+            }
+        };
         const enableService = (service) => {
             ServiceAction.enableService(service);
         };
@@ -93,8 +107,7 @@ class App extends React.Component {
             <TagSelect tags={this.state.tags} selectTags={selectTags} selectedTags={this.state.selectedTags}/>
             <Editor value={this.state.comment} onChange={updateComment}
                     onSubmit={submitPostLink}
-                    enableServiceAtIndex={enableServiceAtIndex}
-                    disableServiceAtIndex={disableServiceAtIndex}/>
+                    toggleServiceAtIndex={toggleServiceAtIndex}/>
             <RelatedListBox relatedItems={this.state.relatedItems}
                             editItem={editItem}
                             finishEditing={finishEditing}
