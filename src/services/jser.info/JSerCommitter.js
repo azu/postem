@@ -26,9 +26,9 @@ function getPosts(filePath) {
         return {list: []};
     }
 }
-export function savePost(serializedObject) {
+export function savePost(serializedObject, callback) {
     if (!serializedObject) {
-        throw new Error("no data for saving");
+        return callback(new Error("no data for saving"));
     }
     var date = new Date();
     var filePath = findIndexWithDate(date);
@@ -39,5 +39,5 @@ export function savePost(serializedObject) {
     // sync script
     var title = item.title;
     var syncScript = path.join(storage.get("jser.info-dir"), "./tools/git-sync.sh");
-    exec(`bash ${syncScript} "${title}"`);
+    exec(`bash ${syncScript} "${title}"`, callback);
 }

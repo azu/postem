@@ -68,12 +68,19 @@ function creteSafeSlug(item) {
     }
     return slugForItem;
 }
-function createPostFrom(item) {
-    var date = moment.utc(item.date);
-    var postDir = path.join(storage.get("ecmascript-daily-dir"), "_posts", date.format("YYYY"));
+function createPostFrom(item, callback) {
+    const date = moment.utc(item.date);
+    const repositoryDirectory = storage.get("ecmascript-daily-dir");
+    const postDir = path.join(repositoryDirectory, "_posts", date.format("YYYY"));
     // if no dir, create dir
     mkdirp.sync(postDir);
-    var fileName = date.format("YYYY-MM-DD") + "-" + creteSafeSlug(item) + ".md";
-    var filePath = path.join(postDir, fileName);
+    const fileName = date.format("YYYY-MM-DD") + "-" + creteSafeSlug(item) + ".md";
+    const filePath = path.join(postDir, fileName);
     fs.writeFileSync(filePath, createPost(item), "utf8");
+    // sync
+    const title = item.title;
+    var syncScript = path.join(__dirname, "git-sync.sh");
+    exec(`bash ${syncScript} "${title}"`, {
+        cwd: repositoryDirectory
+    }, callback);
 }

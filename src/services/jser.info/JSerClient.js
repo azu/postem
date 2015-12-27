@@ -32,6 +32,17 @@ export default class HatenaClient {
             tags: tags,
             relatedLinks: relatedItems
         });
-        Committer.savePost(serializedObject);
+        let resolve, reject;
+        const promise = new Promise((_resolve, _reject) => {
+            resolve = _resolve;
+            reject = _reject;
+        });
+        Committer.savePost(serializedObject, function (error) {
+            if (error) {
+                return reject(error);
+            }
+            resolve();
+        });
+        return promise;
     }
 }
