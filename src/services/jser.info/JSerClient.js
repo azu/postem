@@ -30,7 +30,12 @@ export default class HatenaClient {
             url,
             content: comment,
             tags: tags,
-            relatedLinks: relatedItems
+            relatedLinks: relatedItems.map(item => {
+                return {
+                    title: item.title,
+                    url: item.URL
+                };
+            })
         });
         let resolve, reject;
         const promise = new Promise((_resolve, _reject) => {
