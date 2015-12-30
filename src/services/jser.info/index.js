@@ -1,7 +1,8 @@
 // LICENSE : MIT
 "use strict";
-// interface
-module.exports = {
-    Model: require("./JSerModel"),
-    Client: require("./JSerClient")
+import Model from "./JSerModel";
+import Client from "./JSerClient";
+export default {
+    Model,
+    Client
 };

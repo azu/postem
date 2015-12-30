@@ -1,7 +1,8 @@
 // LICENSE : MIT
 "use strict";
-// interface
-module.exports = {
-    Model: require("./DebugModel"),
-    Client: require("./DebugClient")
+import Model from "./DebugModel";
+import Client from "./DebugClient";
+export default {
+    Model,
+    Client
 };

@@ -1,7 +1,8 @@
 // LICENSE : MIT
 "use strict";
-// interface
-module.exports = {
-    Model: require("./ESDailyModel"),
-    Client: require("./ESDailyClient")
+import Model from "./ESDailyModel";
+import Client from "./ESDailyClient";
+export default {
+    Model,
+    Client
 };

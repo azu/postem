@@ -1,20 +1,22 @@
 // LICENSE : MIT
 "use strict";
 // service
-import {Client as HatenaClient, Model as HatenaModel} from "../services/hatebu/index";
-import {Client as JSerClient, Model as JSerModel} from "../services/jser.info";
-import {Client as DebugClient, Model as DebugModel} from "../services/debug";
-import {Client as TwitterClient, Model as TwitterModel} from "../services/twitter";
-import {Client as ESDailyClient, Model as ESDailyModel} from "../services/ecmascript-daily";
 import ServiceManger from "./service-manager";
+import path from "path";
+import interopRequire from "interop-require";
 const manager = new ServiceManger();
-const services = [
-    [TwitterModel, TwitterClient],
-    [HatenaModel, HatenaClient],
-    [JSerModel, JSerClient],
-    [ESDailyModel, ESDailyClient],
-    [DebugModel, DebugClient]
+const serviceNameList = [
+    "twitter",
+    "hatebu",
+    "jser.info",
+    "ecmascript-daily",
+    "debug"
 ];
+
+const services = serviceNameList.map(name => {
+    const service = interopRequire(path.join(__dirname, "../services/", name, "index.js"));
+    return [service.Model, service.Client];
+});
 services.forEach(([Model, Client]) => {
     manager.addService(new Model(), new Client());
 });

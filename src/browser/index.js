@@ -1,6 +1,6 @@
 // LICENSE : MIT
 "use strict";
-require("babel-core/register");
+require("babel-register");
 window.addEventListener("DOMContentLoaded", function () {
     require("./App");
 });

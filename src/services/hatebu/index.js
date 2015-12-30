@@ -1,7 +1,8 @@
 // LICENSE : MIT
 "use strict";
-// interface
-module.exports = {
-    Model: require("./HatenaModel"),
-    Client: require("./HatenaClient")
+import Model from "./HatenaModel";
+import Client from "./HatenaClient";
+export default {
+    Model,
+    Client
 };
