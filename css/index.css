@@ -20,6 +20,7 @@
   width: 100%; }
 
 .ServiceList {
+  -webkit-app-region: drag;
   height: 48px; }
   .ServiceList ul {
     list-style: none;
