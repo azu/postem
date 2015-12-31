@@ -67,6 +67,9 @@
     "twitter-text": "^1.13.2"
   },
   "devDependencies": {
-    "electron-prebuilt": "^0.36.1"
+    "electron-prebuilt": "^0.36.1",
+    "gulp": "^3.9.0",
+    "gulp-babel": "^6.1.1",
+    "gulp-if": "^2.0.0"
   }
 }

@@ -25,6 +25,7 @@ app.on('window-all-closed', function () {
     //}
 });
 app.on('ready', function () {
+    require("../share/profile").start();
     require("electron-template-menu")();
     startRenderApp();
 });
