@@ -8,7 +8,6 @@ if (electron) {
 
 if (!electron) {
     if (os === 'Windows_NT' && process.argv[2] === 'init' && process.versions.node[0] < 4 && process.versions.node[1] < 1) {
-        require('babel/register');
         require('../')
     } else {
         process.title = 'Postem';

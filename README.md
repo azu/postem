@@ -14,6 +14,13 @@ TomblooとかTombfixみたいなElectronアプリ。
 ## Usage
 
     npm start
+    # develop
+
+### production
+
+    npm run build
+    ./bin/cmd.js
+    # production
 
 ## Contributing
 
