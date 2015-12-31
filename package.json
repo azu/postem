@@ -22,7 +22,7 @@
   },
   "scripts": {
     "build": "gulp build",
-    "start": "NODEV_ENV=development electron ."
+    "start": "NODE_ENV=development electron ."
   },
   "keywords": [
     "electron",
