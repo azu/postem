@@ -54,7 +54,8 @@
   min-height: 5em; }
 
 .Editor .CodeMirror {
-  height: auto; }
+  height: auto;
+  font-family: Monaco, 'Andale Mono', 'Lucida Console', 'Bitstream Vera Sans Mono', 'Courier New', Courier, monospace; }
 
 .RelatedListBox .RelatedList {
   padding-left: 1em;
