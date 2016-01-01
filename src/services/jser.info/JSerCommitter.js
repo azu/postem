@@ -4,6 +4,7 @@
  */
 const path = require("path");
 const fs = require("fs");
+const mkdirp = require('mkdirp');
 import storage from "../../node/storage/accounts";
 import {exec} from "child_process"
 function format0(str, len) {
@@ -14,9 +15,10 @@ function format0(str, len) {
  * @param {Date} date
  * @returns {string}
  */
-function findIndexWithDate(date) {
+function findDirectoryWithDate(date) {
     var fileDirPath = "data/" + date.getFullYear() + '/' + format0((date.getMonth() + 1), 2);
-    return path.join(storage.get("jser.info-dir"), fileDirPath, "index.json");
+    // 2016のディレクトリがない
+    return path.join(storage.get("jser.info-dir"), fileDirPath);
 }
 function getPosts(filePath) {
     try {
@@ -31,11 +33,13 @@ export function savePost(serializedObject, callback) {
         return callback(new Error("no data for saving"));
     }
     var date = new Date();
-    var filePath = findIndexWithDate(date);
-    var posts = getPosts(filePath);
+    var dataDir = findDirectoryWithDate(date);
+    mkdirp.sync(dataDir);
+    var indexDataFilePath = path.join(dataDir, "index.json");
+    var posts = getPosts(indexDataFilePath);
     var item = JSON.parse(serializedObject);
     posts.list.push(item);
-    fs.writeFileSync(filePath, JSON.stringify(posts, null, 4), "utf-8");
+    fs.writeFileSync(indexDataFilePath, JSON.stringify(posts, null, 4), "utf-8");
     // sync script
     var title = item.title;
     var syncScript = path.join(storage.get("jser.info-dir"), "./tools/git-sync.sh");
