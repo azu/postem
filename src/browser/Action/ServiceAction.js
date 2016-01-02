@@ -17,6 +17,7 @@ export var keys = {
     disableService: Symbol("disableService")
 };
 import notie from "notie"
+import {show as LoadingShow ,dismiss as LoadingDismiss} from "../view-util/Loading"
 import RelatedItemModel from "../models/RelatedItemModel";
 import serviceInstance from "../service-instance";
 export default class ServiceAction extends Action {
@@ -47,12 +48,17 @@ export default class ServiceAction extends Action {
             console.log("postLink: " + service.id);
             return client.postLink(postData);
         });
+        if (servicePromises.length) {
+            LoadingShow();
+        }
         Promise.all(servicePromises).then(() => {
             notie.alert(1, 'Post Success!', 1.5);
             this.dispatch(keys.postLink);
         }).catch(error => {
             notie.alert(3, 'Post Error.', 2.5);
             console.log(error);
+        }).then(function finish() {
+            LoadingDismiss(100);
         });
     }
 
@@ -123,7 +129,7 @@ export default class ServiceAction extends Action {
         this.dispatch(keys.finishEditingRelatedItem, item);
     }
 
-    resetField(){
+    resetField() {
         this.dispatch(keys.resetField);
     }
 }
