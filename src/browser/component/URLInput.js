@@ -24,7 +24,9 @@ export default class URLInput extends React.Component {
 
     render() {
         return <div className="URLInput">
-            <input type="text" placeholder="URL" value={this.state.value} onChange={this.onChange.bind(this)}/>
+            <input type="text" placeholder="URL" value={this.state.value}
+                   pattern="^(?!.*#.*).+$"
+                   onChange={this.onChange.bind(this)}/>
         </div>
     }
 }
