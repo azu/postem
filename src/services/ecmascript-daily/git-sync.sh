@@ -22,6 +22,8 @@ fi
 
 if [[ -z $(git status --porcelain) ]];then
   type /usr/local/bin/terminal-notifier >/dev/null 2>&1 && /usr/local/bin/terminal-notifier -message "Sync!!" -title "es-daily"
+  exit 0;
 else
   type /usr/local/bin/terminal-notifier >/dev/null 2>&1 && /usr/local/bin/terminal-notifier -message "Error!!" -title "es-daily"
+  exit 1;
 fi
