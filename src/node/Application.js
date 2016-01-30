@@ -1,12 +1,12 @@
 // LICENSE : MIT
 "use strict";
-import app from 'app';
 import BrowserWindow  from 'browser-window';
 import path from "path";
-import APIServer from "./APIServer";
 import WebMessenger from "./WebMessenger";
 import {getDictionary, save} from "./textlint/dictionary-store";
 import windowStateKeeper from 'electron-window-state';
+const ipcMain = require('electron').ipcMain;
+import keys from "../browser/Action/ServiceActionConst";
 export default class Application {
     // focus existing running instance window
     restoreWindow(newArgv) {
@@ -58,7 +58,7 @@ export default class Application {
             //let server = new APIServer(this.mainWindow.webContents);
             //server.start();
         });
-        // 辞書の更新
+        // fetch new dictionary and update
         getDictionary(function (error, result) {
             if (error) {
                 return console.error(error);
@@ -73,5 +73,19 @@ export default class Application {
         mainWindowState.manage(this.mainWindow);
         // set top
         this.mainWindow.setAlwaysOnTop(true);
+        this.registerIpcHandling();
+    }
+
+    registerIpcHandling() {
+        const postLinkSym = String(keys.postLink);
+        // Automatically close window after posting is success.
+        const closeWindow = () => {
+            if (!this.mainWindow.isFocused()) {
+                this.mainWindow.close();
+            }
+        };
+        ipcMain.on(postLinkSym, () => {
+            closeWindow();
+        });
     }
 }

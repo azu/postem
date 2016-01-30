@@ -31,7 +31,7 @@ class App extends React.Component {
     }
 
     postLink() {
-        const { ServiceAction } = appContext;
+        const {ServiceAction} = appContext;
         let postData = {
             title: this.state.title,
             url: this.state.URL,
@@ -47,7 +47,7 @@ class App extends React.Component {
     }
 
     render() {
-        const { ServiceAction } = appContext;
+        const {ServiceAction} = appContext;
         const selectTags = ServiceAction.selectTags.bind(ServiceAction);
         const updateTitle = ServiceAction.updateTitle.bind(ServiceAction);
         const updateURL = ServiceAction.updateURL.bind(ServiceAction);
@@ -104,6 +104,9 @@ class App extends React.Component {
         </div>;
     }
 }
+appContext.on("dispatch", ({eventKey}) => {
+    ipcRenderer.send(String(eventKey));
+});
 // ipc from server event
 ipcRenderer.on("updateTitle", (event, title) => {
     appContext.ServiceAction.updateTitle(title);

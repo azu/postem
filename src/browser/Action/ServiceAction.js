@@ -1,23 +1,10 @@
 // LICENSE : MIT
 "use strict";
-import { Action } from "material-flux";
-export var keys = {
-    resetField: Symbol("resetField"),
-    fetchTags: Symbol("fetchTags"),
-    postLink: Symbol("postLink"),
-    selectTags: Symbol("selectTags"),
-    updateTitle: Symbol("updateTitle"),
-    updateURL: Symbol("updateURL"),
-    updateComment: Symbol("updateComment"),
-    editRelatedItem: Symbol("editRelatedItem"),
-    addRelatedItem: Symbol("addRelatedItem"),
-    removeRelatedItem: Symbol("removeRelatedItem"),
-    finishEditingRelatedItem: Symbol("finishEditingRelatedItem"),
-    enableService: Symbol("enableService"),
-    disableService: Symbol("disableService")
-};
+import {Action} from "material-flux";
+import keys from "./ServiceActionConst";
+export {keys};
 import notie from "notie"
-import {show as LoadingShow ,dismiss as LoadingDismiss} from "../view-util/Loading"
+import {show as LoadingShow, dismiss as LoadingDismiss} from "../view-util/Loading"
 import RelatedItemModel from "../models/RelatedItemModel";
 import serviceInstance from "../service-instance";
 export default class ServiceAction extends Action {
