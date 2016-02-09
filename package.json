@@ -38,6 +38,7 @@
     "codemirror": "^5.7.0",
     "codemirror-textlint": "^1.0.1",
     "electron-authentication-hatena": "^2.0.0",
+    "electron-positioner": "^2.0.3",
     "electron-template-menu": "^1.0.3",
     "electron-window-state": "^2.0.0",
     "express": "^4.13.3",

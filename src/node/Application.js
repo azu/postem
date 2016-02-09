@@ -5,6 +5,7 @@ import path from "path";
 import WebMessenger from "./WebMessenger";
 import {getDictionary, save} from "./textlint/dictionary-store";
 import windowStateKeeper from 'electron-window-state';
+import Positioner from "electron-positioner";
 const ipcMain = require('electron').ipcMain;
 import keys from "../browser/Action/ServiceActionConst";
 export default class Application {
@@ -32,8 +33,8 @@ export default class Application {
         // command line
         const argv = require('minimist')(process.argv.slice(2));
         let mainWindowState = windowStateKeeper({
-            defaultWidth: 500,
-            defaultHeight: 500
+            defaultWidth: 320,
+            defaultHeight: 480
         });
         this.mainWindow = new BrowserWindow({
             title: require("../../package.json").name,
@@ -43,6 +44,10 @@ export default class Application {
             width: mainWindowState.width,
             height: mainWindowState.height
         });
+        const positioner = new Positioner(this.mainWindow);
+        if(mainWindowState.y === undefined || mainWindowState.x === undefined) {
+            positioner.move('topRight');
+        }
         var index = {
             html: path.join(__dirname, "..", "browser", "index.html")
         };
