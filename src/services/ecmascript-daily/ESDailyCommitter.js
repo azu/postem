@@ -19,12 +19,12 @@ function getPostFileDir(date) {
     var fileDirPath = "posts/" + date.getFullYear();
     return path.join(storage.get("ecmascript-daily-dir"), fileDirPath);
 }
-export function savePost(serializedObject) {
+export function savePost(serializedObject, callback) {
     if (!serializedObject) {
         throw new Error("no data for saving");
     }
     var item = JSON.parse(serializedObject);
-    createPostFrom(item);
+    createPostFrom(item, callback);
 }
 
 function pickFromMatter(item) {
