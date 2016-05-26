@@ -1,8 +1,23 @@
 {
-    "presets": ["react"],
-    "plugins": [
+  "presets": [
+    "react"
+  ],
+  "plugins": [
+    "transform-es2015-destructuring",
+    "transform-es2015-parameters",
+    "transform-es2015-modules-commonjs"
+  ],
+  "env": {
+    "production": {
+      "plugins": [
         "transform-es2015-destructuring",
         "transform-es2015-parameters",
         "transform-es2015-modules-commonjs"
-    ]
+      ],
+      "presets": [
+        "react",
+        "react-optimize"
+      ]
+    }
+  }
 }

@@ -25,6 +25,7 @@ class RelatedItem extends React.Component {
         </form>
     }
 }
+
 export default class RelatedListBox extends React.Component {
     render() {
         const items = this.props.relatedItems.map(item => {

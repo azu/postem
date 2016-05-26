@@ -21,7 +21,7 @@
     "test": "test"
   },
   "scripts": {
-    "build": "gulp build",
+    "build": "NODE_ENV=production gulp build",
     "start": "NODE_ENV=development electron ."
   },
   "keywords": [
@@ -36,7 +36,7 @@
     "babel-preset-react": "^6.3.13",
     "babel-register": "^6.3.13",
     "codemirror": "^5.7.0",
-    "codemirror-textlint": "^1.0.1",
+    "codemirror-textlint": "^1.1.0",
     "electron-authentication-hatena": "^2.0.0",
     "electron-positioner": "^2.0.3",
     "electron-template-menu": "^1.0.3",
@@ -57,9 +57,9 @@
     "oauth": "^0.9.14",
     "oauth-signature": "^1.3.1",
     "qs": "^6.0.1",
-    "react": "^0.14.2",
+    "react": "^0.14.8",
     "react-codemirror": "^0.2.0",
-    "react-dom": "^0.14.2",
+    "react-dom": "^0.14.8",
     "react-select": "^0.9.1",
     "request": "^2.63.0",
     "slugg": "^0.1.2",
@@ -70,6 +70,7 @@
     "twitter-text": "^1.13.2"
   },
   "devDependencies": {
+    "babel-preset-react-optimize": "^1.0.1",
     "electron-prebuilt": "^0.36.1",
     "gulp": "^3.9.0",
     "gulp-babel": "^6.1.1",
