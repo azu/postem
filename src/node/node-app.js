@@ -1,6 +1,6 @@
 // LICENSE : MIT
 "use strict";
-import app from "app";
+import {app} from "electron";
 import Application from "./Application";
 let application = null;
 function startRenderApp() {
@@ -26,6 +26,5 @@ app.on('window-all-closed', function () {
 });
 app.on('ready', function () {
     require("../share/profile").start();
-    require("electron-template-menu")();
     startRenderApp();
 });

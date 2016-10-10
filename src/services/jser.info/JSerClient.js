@@ -1,8 +1,8 @@
 // LICENSE : MIT
 "use strict";
 import querystring from "querystring"
-const Authentication = require("remote").require(__dirname + "/JSerAuthentication");
-const Committer = require("remote").require(__dirname + "/JSerCommitter");
+const Authentication = require('electron').remote.require(__dirname + "/JSerAuthentication");
+const Committer = require('electron').remote.require(__dirname + "/JSerCommitter");
 export default class HatenaClient {
     isLogin() {
         return Authentication.canAccess();
