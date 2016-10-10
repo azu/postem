@@ -9,7 +9,7 @@ function isJS(file) {
     return fileExt === ".js";
 }
 gulp.task("build", function () {
-    var babelOptions = JSON.parse(fs.readFileSync("./.babelrc", "utf-8"));
+    const babelOptions = JSON.parse(fs.readFileSync("./.babelrc", "utf-8"));
     const babelify = babel(babelOptions);
     gulp.src("src/**/*", {base: 'src'})
         .pipe(gulpif(isJS, babelify))
