@@ -43,7 +43,11 @@ export function savePost(serializedObject, callback) {
     // sync script
     var title = item.title;
     if (item.viaURL) {
-        title += "\n\nvia " + item.viaURL;
+        if(/^https:\/\/github.com\/jser\/ping/.test(item.viaURL)){
+            title += "\n\nclose " + item.viaURL;
+        }else{
+            title += "\n\nvia " + item.viaURL;
+        }
     }
     var syncScript = path.join(storage.get("jser.info-dir"), "./tools/git-sync.sh");
     exec(`bash ${syncScript} "${title}"`, callback);
