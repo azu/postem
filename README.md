@@ -7,6 +7,8 @@ TomblooとかTombfixみたいなElectronアプリ。
 - Twitter、はてなブックマークとかへのクロスポスト
 - [textlint](https://github.com/textlint/textlint "textlint")でのリアルタイムLint
 
+![screenshot](https://monosnap.com/file/9WtShAGiCilmCOLtuGEWnfphfpKndf.png)
+
 ## Installation
 
     npm install
