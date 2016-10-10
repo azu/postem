@@ -3,7 +3,7 @@
 import Consumer from "./TwitterConsumer";
 import Twitter from "twitter"
 import {truncate} from "tweet-truncator";
-const Authentication = require("remote").require(__dirname + "/TwitterAuthentication");
+const Authentication = require('electron').remote.require(__dirname + "/TwitterAuthentication");
 export default class TwitterClient {
     isLogin() {
         return Authentication.canAccess();

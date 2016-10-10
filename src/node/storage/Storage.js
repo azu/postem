@@ -1,6 +1,6 @@
 // LICENSE : MIT
 "use strict";
-import app from "app";
+import {app} from "electron";
 import path from "path";
 import assert from "assert";
 import jetpack from "fs-jetpack";

@@ -1,6 +1,6 @@
 // LICENSE : MIT
 "use strict";
-import BrowserWindow  from 'browser-window';
+import {BrowserWindow} from 'electron';
 import path from "path";
 import WebMessenger from "./WebMessenger";
 import {getDictionary, save} from "./textlint/dictionary-store";
