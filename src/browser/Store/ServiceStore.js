@@ -10,6 +10,7 @@ export default class ServiceStore extends Store {
         this.state = {
             title: "example",
             URL: "http://example.com/",
+            viaURL: "",
             comment: "",
             tags: ServiceStorage.get("tags") || [],
             selectedTags: [],
@@ -37,6 +38,12 @@ export default class ServiceStore extends Store {
         this.register(keys.updateURL, (URL) => {
             this.setState({
                 URL
+            });
+        });
+
+        this.register(keys.updateViaURL, (viaURL) => {
+            this.setState({
+                viaURL
             });
         });
         this.register(keys.updateComment, (comment) => {

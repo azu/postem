@@ -61,6 +61,9 @@ export default class ServiceAction extends Action {
         this.dispatch(keys.updateURL, URL);
     }
 
+    updateViaURL(URL) {
+        this.dispatch(keys.updateViaURL, URL);
+    }
     updateComment(comment) {
         this.dispatch(keys.updateComment, comment);
     }

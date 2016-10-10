@@ -6,6 +6,7 @@ import {render} from "react-dom";
 import Editor from "./component/Editor";
 import TagSelect from "./component/TagSelect";
 import URLInput from "./component/URLInput";
+import ViaURLInput from "./component/ViaURLInput";
 import TitleInput from "./component/TitleInput";
 import SubmitButton from "./component/SubmitButton";
 import RelatedListBox from "./component/RelatedListBox";
@@ -35,6 +36,7 @@ class App extends React.Component {
         let postData = {
             title: this.state.title,
             url: this.state.URL,
+            viaURL: this.state.viaURL.length > 0 ? this.state.viaURL : null,
             comment: this.state.comment,
             tags: this.state.selectedTags,
             relatedItems: this.state.relatedItems
@@ -51,6 +53,7 @@ class App extends React.Component {
         const selectTags = ServiceAction.selectTags.bind(ServiceAction);
         const updateTitle = ServiceAction.updateTitle.bind(ServiceAction);
         const updateURL = ServiceAction.updateURL.bind(ServiceAction);
+        const updateViaURL = ServiceAction.updateViaURL.bind(ServiceAction);
         const updateComment = ServiceAction.updateComment.bind(ServiceAction);
         const toggleServiceAtIndex = (index) => {
             const service = serviceManger.getServices()[index];
@@ -92,6 +95,7 @@ class App extends React.Component {
                          login={login}/>
             <TitleInput title={this.state.title} updateTitle={updateTitle}/>
             <URLInput URL={this.state.URL} updateURL={updateURL}/>
+            <ViaURLInput URL={this.state.viaURL} updateURL={updateViaURL}/>
             <TagSelect tags={this.state.tags} selectTags={selectTags} selectedTags={this.state.selectedTags}/>
             <Editor value={this.state.comment} onChange={updateComment}
                     onSubmit={submitPostLink}

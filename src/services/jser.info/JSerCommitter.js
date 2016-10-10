@@ -42,6 +42,9 @@ export function savePost(serializedObject, callback) {
     fs.writeFileSync(indexDataFilePath, JSON.stringify(posts, null, 4), "utf-8");
     // sync script
     var title = item.title;
+    if (item.viaURL) {
+        title += "\n\nvia " + item.viaURL;
+    }
     var syncScript = path.join(storage.get("jser.info-dir"), "./tools/git-sync.sh");
     exec(`bash ${syncScript} "${title}"`, callback);
 }

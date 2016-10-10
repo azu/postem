@@ -12,6 +12,17 @@
 .URLInput input:invalid {
   border: 1px solid red; }
 
+.ViaURLInput {
+  width: 100%;
+  margin: 0.1em 0; }
+
+.ViaURLInput input {
+  padding: 8px 0 8px 0.5em;
+  width: 100%; }
+
+.ViaURLInput input:invalid {
+  border: 1px solid red; }
+
 .TitleInput {
   width: 100%;
   margin: 0.1em 0; }

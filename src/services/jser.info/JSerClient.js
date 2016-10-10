@@ -23,11 +23,12 @@ export default class HatenaClient {
         }
      */
     postLink(options = {}) {
-        let {title, url,comment,tags,relatedItems} = options;
+        let {title, url, viaURL, comment, tags, relatedItems} = options;
         let serializedObject = JSON.stringify({
             date: new Date(),
             title,
             url,
+            viaURL,
             content: comment,
             tags: tags,
             relatedLinks: relatedItems.map(item => {
@@ -42,7 +43,7 @@ export default class HatenaClient {
             resolve = _resolve;
             reject = _reject;
         });
-        Committer.savePost(serializedObject, function (error) {
+        Committer.savePost(serializedObject, function(error) {
             if (error) {
                 return reject(error);
             }
