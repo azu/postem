@@ -16,12 +16,13 @@ require("codemirror/addon/lint/lint.js");
 const createValidator = require("codemirror-textlint");
 const preset = require("textlint-rule-preset-japanese");
 const validator = createValidator(preset);
-import Mousetrap from "mousetrap";
-import "mousetrap/plugins/global-bind/mousetrap-global-bind";
+const Combokeys = require("combokeys");
+const combokeys = new Combokeys(document.documentElement);
+require('combokeys/plugins/global-bind')(combokeys);
 export default class Editor extends React.Component {
     componentDidMount() {
         [1, 2, 3, 4, 5, 6, 7, 8, 9].forEach((key, index) => {
-            Mousetrap.bindGlobal(`command+${key}`, () => {
+            combokeys.bindGlobal(`command+${key}`, () => {
                 this.props.toggleServiceAtIndex(index)
             });
         });
