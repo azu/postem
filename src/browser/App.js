@@ -47,7 +47,7 @@ class App extends React.Component {
         if (!postData.title || !postData.url) {
             return;
         }
-        var services = serviceManger.selectServices(this.state.enabledServiceIDs);
+        const services = serviceManger.selectServices(this.state.enabledServiceIDs);
         ServiceAction.postLink(services, postData);
     }
 
@@ -58,6 +58,7 @@ class App extends React.Component {
         const updateURL = ServiceAction.updateURL.bind(ServiceAction);
         const updateViaURL = ServiceAction.updateViaURL.bind(ServiceAction);
         const updateComment = ServiceAction.updateComment.bind(ServiceAction);
+        const services = serviceManger.getServices();
         const toggleServiceAtIndex = (index) => {
             const service = serviceManger.getServices()[index];
             if (service) {
@@ -102,6 +103,7 @@ class App extends React.Component {
             <TagSelect tags={this.state.tags} selectTags={selectTags} selectedTags={this.state.selectedTags}/>
             <Editor value={this.state.comment} onChange={updateComment}
                     onSubmit={submitPostLink}
+                    services={services}
                     toggleServiceAtIndex={toggleServiceAtIndex}/>
             <RelatedListBox relatedItems={this.state.relatedItems}
                             editItem={editItem}

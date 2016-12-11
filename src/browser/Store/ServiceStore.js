@@ -1,7 +1,7 @@
 // LICENSE : MIT
 "use strict";
-import { Store } from "material-flux";
-import { keys } from "../Action/ServiceAction";
+import {Store} from "material-flux";
+import {keys} from "../Action/ServiceAction";
 import Storage from "../storage/Storage";
 export default class ServiceStore extends Store {
     constructor(...args) {
@@ -58,7 +58,8 @@ export default class ServiceStore extends Store {
                 URL: "",
                 comment: "",
                 selectedTags: [],
-                relatedItems: []
+                relatedItems: [],
+                enabledServiceIDs: ["api.b.hatena.ne.jp"]
             });
         };
         this.register(keys.resetField, resetState);

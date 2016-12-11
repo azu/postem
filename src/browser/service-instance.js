@@ -10,8 +10,11 @@ const serviceNameList = [
     "hatebu",
     "jser.info",
     "ecmascript-daily",
-    "debug"
+    "jser.info-ping"
 ];
+if (process.env.NODE_ENV === 'development') {
+    serviceNameList.push("debug");
+}
 
 const services = serviceNameList.map(name => {
     const service = interopRequire(path.join(__dirname, "../services/", name, "index.js"));

@@ -26,6 +26,10 @@ export default class Editor extends React.Component {
                 this.props.toggleServiceAtIndex(index)
             });
         });
+        // last
+        combokeys.bindGlobal(`command+0`, () => {
+            this.props.toggleServiceAtIndex(this.props.services.length - 1);
+        });
     }
 
     render() {
