@@ -17,6 +17,7 @@ const appContext = new AppContext();
 class App extends React.Component {
     constructor(...args) {
         super(...args);
+        this._TagSelect = null;
         this.state = Object.assign({}, appContext.ServiceStore.state);
     }
 
@@ -48,7 +49,12 @@ class App extends React.Component {
             return;
         }
         const services = serviceManger.selectServices(this.state.enabledServiceIDs);
-        ServiceAction.postLink(services, postData);
+        ServiceAction.postLink(services, postData).then(() => {
+            ServiceAction.resetField();
+            if (this._TagSelect) {
+                this._TagSelect.focus();
+            }
+        });
     }
 
     render() {
@@ -100,7 +106,11 @@ class App extends React.Component {
             <TitleInput title={this.state.title} updateTitle={updateTitle}/>
             <URLInput URL={this.state.URL} updateURL={updateURL}/>
             <ViaURLInput URL={this.state.viaURL} updateURL={updateViaURL}/>
-            <TagSelect tags={this.state.tags} selectTags={selectTags} selectedTags={this.state.selectedTags}/>
+            <TagSelect
+                ref={(c) => this._TagSelect = c }
+                tags={this.state.tags}
+                selectTags={selectTags}
+                selectedTags={this.state.selectedTags}/>
             <Editor value={this.state.comment} onChange={updateComment}
                     onSubmit={submitPostLink}
                     services={services}
@@ -124,7 +134,6 @@ ipcRenderer.on("updateURL", (event, URL) => {
     appContext.ServiceAction.updateURL(URL);
     const service = serviceManger.getService("api.b.hatena.ne.jp");
     const state = appContext.ServiceStore.state;
-    console.log(state);
     if (service && state.selectedTags.length === 0 && state.comment.length === 0) {
         appContext.ServiceAction.fetchContent(service, URL).then(({comment, tags}) => {
             appContext.ServiceAction.updateComment(comment);

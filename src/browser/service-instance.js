@@ -12,10 +12,10 @@ const serviceNameList = [
     "ecmascript-daily",
     "jser.info-ping"
 ];
+console.log(process.env.NODE_ENV);
 if (process.env.NODE_ENV === 'development') {
     serviceNameList.push("debug");
 }
-
 const services = serviceNameList.map(name => {
     const service = interopRequire(path.join(__dirname, "../services/", name, "index.js"));
     return [service.Model, service.Client];

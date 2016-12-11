@@ -3,9 +3,16 @@
 import React from "react"
 import Select from "react-select";
 export default class TagSelect extends React.Component {
-    componentDidMount () {
-        this.refs.select.focus();
+    focus() {
+        if (this.refs.select) {
+            this.refs.select.focus();
+        }
     }
+
+    componentDidMount() {
+        this.focus();
+    }
+
     render() {
         var options = this.props.tags.map(tag => {
             return {

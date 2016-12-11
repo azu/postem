@@ -47,7 +47,7 @@ export default class ServiceAction extends Action {
         if (servicePromises.length) {
             LoadingShow();
         }
-        Promise.all(servicePromises).then(() => {
+        return Promise.all(servicePromises).then(() => {
             notie.alert(1, 'Post Success!', 1.5);
             this.dispatch(keys.postLink);
         }).catch(error => {
