@@ -1,16 +1,15 @@
 // LICENSE : MIT
 "use strict";
 import express from "express";
-const ipc = require("electron").ipcMain;
 export default class APIServer {
-    constructor(webContent){
+    constructor(webContent) {
         this.webContent = webContent;
     }
 
     start() {
         let app = express();
         app.get('/', (req, res) => {
-            let {title,url} = req.query;
+            let {title, url} = req.query;
             if (title) {
                 this.webContent.send("updateTitle", title);
             }

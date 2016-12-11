@@ -127,13 +127,19 @@ appContext.on("dispatch", ({eventKey}) => {
     ipcRenderer.send(String(eventKey));
 });
 // ipc from server event
+ipcRenderer.on("beforeUpdate", (event, {title, url}) => {
+    const state = appContext.ServiceStore.state;
+    if (title !== state.title || url !== state.URL) {
+        appContext.ServiceAction.resetField();
+    }
+});
 ipcRenderer.on("updateTitle", (event, title) => {
     appContext.ServiceAction.updateTitle(title);
 });
 ipcRenderer.on("updateURL", (event, URL) => {
     appContext.ServiceAction.updateURL(URL);
-    const service = serviceManger.getService("api.b.hatena.ne.jp");
     const state = appContext.ServiceStore.state;
+    const service = serviceManger.getService("api.b.hatena.ne.jp");
     if (service && state.selectedTags.length === 0 && state.comment.length === 0) {
         appContext.ServiceAction.fetchContent(service, URL).then(({comment, tags}) => {
             appContext.ServiceAction.updateComment(comment);

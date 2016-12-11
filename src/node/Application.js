@@ -20,7 +20,7 @@ export default class Application {
 
     // focus existing running instance window
     restoreWindow(newArgv) {
-        var window = this.mainWindow;
+        const window = this.mainWindow;
         if (window) {
             if (window.isMinimized()) {
                 window.restore();
@@ -29,12 +29,14 @@ export default class Application {
             // restore with command line
             const argv = require('minimist')(newArgv.slice(2));
             const messenger = new WebMessenger(this.mainWindow.webContents);
+            messenger.beforeUpdate(argv);
             if (argv.title) {
                 messenger.updateTitle(argv.title);
             }
             if (argv.url) {
                 messenger.updateURL(argv.url);
             }
+            messenger.afterUpdate(argv);
         }
     }
 
@@ -59,7 +61,7 @@ export default class Application {
         if (mainWindowState.y === undefined || mainWindowState.x === undefined) {
             positioner.move('topRight');
         }
-        var index = {
+        const index = {
             html: path.join(__dirname, "..", "browser", "index.html")
         };
         this.mainWindow.loadURL('file://' + index.html);

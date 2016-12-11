@@ -9,6 +9,14 @@ export default class WebMessenger {
         this.webContent.send("resetField");
     }
 
+    beforeUpdate(argv) {
+        this.webContent.send("beforeUpdate", argv);
+    }
+
+    afterUpdate(argv) {
+        this.webContent.send("afterUpdate", argv);
+    }
+
     updateTitle(title) {
         if (title) {
             this.webContent.send("updateTitle", title);
