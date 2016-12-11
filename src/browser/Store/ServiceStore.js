@@ -59,7 +59,7 @@ export default class ServiceStore extends Store {
                 comment: "",
                 selectedTags: [],
                 relatedItems: []
-            })
+            });
         };
         this.register(keys.resetField, resetState);
         //this.register(keys.postLink, resetState);

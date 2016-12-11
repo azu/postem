@@ -38,17 +38,20 @@ export function savePost(serializedObject, callback) {
     var indexDataFilePath = path.join(dataDir, "index.json");
     var posts = getPosts(indexDataFilePath);
     var item = JSON.parse(serializedObject);
-    posts.list.push(item);
-    fs.writeFileSync(indexDataFilePath, JSON.stringify(posts, null, 4), "utf-8");
     // sync script
     var title = item.title;
     if (item.viaURL) {
-        if(/^https:\/\/github.com\/jser\/ping/.test(item.viaURL)){
+        if (/^https:\/\/github.com\/jser\/ping/.test(item.viaURL)) {
             title += "\n\nclose " + item.viaURL;
-        }else{
+        } else {
             title += "\n\nvia " + item.viaURL;
         }
+    } else {
+        // delete null
+        delete item.viaURL;
     }
+    posts.list.push(item);
+    fs.writeFileSync(indexDataFilePath, JSON.stringify(posts, null, 4), "utf-8");
     var syncScript = path.join(storage.get("jser.info-dir"), "./tools/git-sync.sh");
     exec(`bash ${syncScript} "${title}"`, callback);
 }

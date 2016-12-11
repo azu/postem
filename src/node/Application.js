@@ -1,5 +1,6 @@
 // LICENSE : MIT
 "use strict";
+import {app} from "electron";
 import {BrowserWindow} from 'electron';
 import path from "path";
 import WebMessenger from "./WebMessenger";
@@ -9,6 +10,14 @@ import Positioner from "electron-positioner";
 const ipcMain = require('electron').ipcMain;
 import keys from "../browser/Action/ServiceActionConst";
 export default class Application {
+    get isDeactived() {
+        return this.mainWindow == null;
+    }
+
+    constructor() {
+        this.mainWindow = null;
+    }
+
     // focus existing running instance window
     restoreWindow(newArgv) {
         var window = this.mainWindow;
@@ -20,6 +29,7 @@ export default class Application {
             // restore with command line
             const argv = require('minimist')(newArgv.slice(2));
             const messenger = new WebMessenger(this.mainWindow.webContents);
+            messenger.resetField();
             if (argv.title) {
                 messenger.updateTitle(argv.title);
             }
@@ -36,8 +46,10 @@ export default class Application {
             defaultWidth: 320,
             defaultHeight: 480
         });
+        const title = require("../../package.json").name;
+        process.title = title;
         this.mainWindow = new BrowserWindow({
-            title: require("../../package.json").name,
+            title: title,
             frame: false,
             x: mainWindowState.x,
             y: mainWindowState.y,
@@ -45,7 +57,7 @@ export default class Application {
             height: mainWindowState.height
         });
         const positioner = new Positioner(this.mainWindow);
-        if(mainWindowState.y === undefined || mainWindowState.x === undefined) {
+        if (mainWindowState.y === undefined || mainWindowState.x === undefined) {
             positioner.move('topRight');
         }
         var index = {
@@ -64,14 +76,27 @@ export default class Application {
             //server.start();
         });
         // fetch new dictionary and update
-        getDictionary(function (error, result) {
+        getDictionary(function(error, result) {
             if (error) {
                 return console.error(error);
             }
             console.log("Update: dictionary");
             save(result);
         });
+        let force_quit = false;
+        app.on('before-quit', function(e) {
+            force_quit = true;
+        });
 
+        this.mainWindow.on('close', (event) => {
+            if (!force_quit) {
+                event.preventDefault();
+                this.hide();
+            }
+        });
+        this.mainWindow.on('closed', () => {
+            this.mainWindow = null;
+        });
         // Let us register listeners on the window, so we can update the state
         // automatically (the listeners will be removed when the window is closed)
         // and restore the maximized or full screen state
@@ -81,12 +106,20 @@ export default class Application {
         this.registerIpcHandling();
     }
 
+    show() {
+        this.mainWindow.show();
+    }
+
+    hide() {
+        this.mainWindow.hide();
+    }
+
     registerIpcHandling() {
         const postLinkSym = String(keys.postLink);
         // Automatically close window after posting is success.
         const closeWindow = () => {
-            if (!this.mainWindow.isFocused()) {
-                this.mainWindow.close();
+            if (this.mainWindow && !this.mainWindow.isFocused()) {
+                this.hide();
             }
         };
         ipcMain.on(postLinkSym, () => {

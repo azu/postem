@@ -1,5 +1,5 @@
 var fs = require("fs");
-var http = require('http');
+var http = require('https');
 var path = require("path");
 exports.load = function () {
     return require("technical-word-rules");
@@ -10,7 +10,7 @@ exports.save = function (newDict) {
     fs.writeFileSync(allJSONPath, serialized, "utf-8");
 };
 exports.getDictionary = function (callback) {
-    var url = 'http://azu.github.io/technical-word-rules/all.json';
+    var url = 'https://azu.github.io/technical-word-rules/all.json';
     http.get(url, function (res) {
         var body = '';
         res.setEncoding('utf8');
