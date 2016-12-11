@@ -1,6 +1,7 @@
 export default {
     resetField: Symbol("resetField"),
     fetchTags: Symbol("fetchTags"),
+    fetchContent: Symbol("fetchContent"),
     postLink: Symbol("postLink"),
     selectTags: Symbol("selectTags"),
     updateTitle: Symbol("updateTitle"),

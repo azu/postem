@@ -35,7 +35,7 @@ class App extends React.Component {
     }
 
     postLink() {
-        const { ServiceAction } = appContext;
+        const {ServiceAction} = appContext;
         let postData = {
             title: this.state.title,
             url: this.state.URL,
@@ -52,7 +52,7 @@ class App extends React.Component {
     }
 
     render() {
-        const { ServiceAction } = appContext;
+        const {ServiceAction} = appContext;
         const selectTags = ServiceAction.selectTags.bind(ServiceAction);
         const updateTitle = ServiceAction.updateTitle.bind(ServiceAction);
         const updateURL = ServiceAction.updateURL.bind(ServiceAction);
@@ -111,7 +111,7 @@ class App extends React.Component {
         </div>;
     }
 }
-appContext.on("dispatch", ({ eventKey }) => {
+appContext.on("dispatch", ({eventKey}) => {
     ipcRenderer.send(String(eventKey));
 });
 // ipc from server event
@@ -120,6 +120,17 @@ ipcRenderer.on("updateTitle", (event, title) => {
 });
 ipcRenderer.on("updateURL", (event, URL) => {
     appContext.ServiceAction.updateURL(URL);
+    const service = serviceManger.getService("api.b.hatena.ne.jp");
+    const state = appContext.ServiceStore.state;
+    console.log(state);
+    if (service && state.selectedTags.length === 0 && state.comment.length === 0) {
+        appContext.ServiceAction.fetchContent(service, URL).then(({comment, tags}) => {
+            appContext.ServiceAction.updateComment(comment);
+            appContext.ServiceAction.selectTags(tags);
+        }).catch(error => {
+            console.log("fetchContent:error", error);
+        });
+    }
 });
 ipcRenderer.on("resetField", (event) => {
     appContext.ServiceAction.resetField();

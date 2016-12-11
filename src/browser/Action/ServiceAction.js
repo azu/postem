@@ -15,11 +15,20 @@ export default class ServiceAction extends Action {
             return;
         }
         console.log("fetchTags: " + service.id);
-        client.getTags().then(tags => {
+        return client.getTags().then(tags => {
             this.dispatch(keys.fetchTags, tags);
         }).catch(error => {
             console.log(error);
         });
+    }
+
+    fetchContent(service, url) {
+        const client = serviceInstance.getClient(service);
+        if (!client.isLogin()) {
+            return Promise.reject(new Error(service.id + " is not login"));
+        }
+        console.log("fetchContent: " + service.id);
+        return client.getContent(url);
     }
 
     postLink(services, postData) {
@@ -64,6 +73,7 @@ export default class ServiceAction extends Action {
     updateViaURL(URL) {
         this.dispatch(keys.updateViaURL, URL);
     }
+
     updateComment(comment) {
         this.dispatch(keys.updateComment, comment);
     }

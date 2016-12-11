@@ -3,7 +3,7 @@
 import Consumer from "./HatenaCunsumer";
 import querystring from "querystring"
 import OAuthRequest from "../API/OAuthRequest";
-import { OAuth } from "oauth";
+import {OAuth} from "oauth";
 const Authentication = require('electron').remote.require(__dirname + "/HatenaAuthentication");
 export default class HatenaClient {
     isLogin() {
@@ -25,15 +25,21 @@ export default class HatenaClient {
         return oauth;
     }
 
-    getItem(url) {
+    getContent(url) {
         let query = querystring.stringify({
             url
         });
-        return this._hatenaRequest().get("http://api.b.hatena.ne.jp/1/my/bookmark?" + query);
+        return this._hatenaRequest().get("http://api.b.hatena.ne.jp/1/my/bookmark?" + query).then(response => {
+            if (response.statusCode === 403) {
+                const data = JSON.parse(response["data"]);
+                return Promise.reject(new Error(data["messsage"]));
+            }
+            return response;
+        });
     }
 
     getTags() {
-        return this._hatenaRequest().get("http://api.b.hatena.ne.jp/1/my/tags").then(response=> {
+        return this._hatenaRequest().get("http://api.b.hatena.ne.jp/1/my/tags").then(response => {
             return response.tags.map(tag => tag.tag);
         });
     }
@@ -49,7 +55,7 @@ export default class HatenaClient {
         }
      */
     postLink(options = {}) {
-        let {url,comment,tags} = options;
+        let {url, comment, tags} = options;
         if (tags.length > 0) {
             // [tag][tag] comment
             const tagPrefix = tags.map(tag => {
