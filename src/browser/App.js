@@ -18,7 +18,9 @@ class App extends React.Component {
     constructor(...args) {
         super(...args);
         this._TagSelect = null;
-        this.state = Object.assign({}, appContext.ServiceStore.state);
+        this.state = Object.assign({
+            initialized: false
+        }, appContext.ServiceStore.state);
     }
 
     componentWillMount() {
@@ -29,6 +31,42 @@ class App extends React.Component {
     }
 
     componentDidMount() {
+        let isInitialized = false;
+        // ipc from server event
+        ipcRenderer.on("beforeUpdate", (event, {title, url}) => {
+            const state = this.state;
+            if (title !== state.title || url !== state.URL) {
+                appContext.ServiceAction.resetField();
+                isInitialized = true;
+            }
+        });
+        ipcRenderer.on("updateTitle", (event, title) => {
+            appContext.ServiceAction.updateTitle(title);
+        });
+        ipcRenderer.on("updateURL", (event, URL) => {
+            appContext.ServiceAction.updateURL(URL);
+            const state = appContext.ServiceStore.state;
+            const service = serviceManger.getService("api.b.hatena.ne.jp");
+            if (service && state.selectedTags.length === 0 && state.comment.length === 0) {
+                appContext.ServiceAction.fetchContent(service, URL).then(({comment, tags}) => {
+                    appContext.ServiceAction.updateComment(comment);
+                    appContext.ServiceAction.selectTags(tags);
+                }).catch(error => {
+                    console.log("fetchContent:error", error);
+                });
+            }
+        });
+        ipcRenderer.on("afterUpdate", (event, {title, url}) => {
+            if (isInitialized) {
+                if (this._TagSelect) {
+                    this._TagSelect.focus();
+                }
+                isInitialized = false;
+            }
+        });
+        ipcRenderer.on("resetField", (event) => {
+            appContext.ServiceAction.resetField();
+        });
         const service = serviceManger.getService("api.b.hatena.ne.jp");
         if (service) {
             appContext.ServiceAction.fetchTags(service);
@@ -49,12 +87,7 @@ class App extends React.Component {
             return;
         }
         const services = serviceManger.selectServices(this.state.enabledServiceIDs);
-        ServiceAction.postLink(services, postData).then(() => {
-            ServiceAction.resetField();
-            if (this._TagSelect) {
-                this._TagSelect.focus();
-            }
-        });
+        ServiceAction.postLink(services, postData);
     }
 
     render() {
@@ -125,31 +158,5 @@ class App extends React.Component {
 }
 appContext.on("dispatch", ({eventKey}) => {
     ipcRenderer.send(String(eventKey));
-});
-// ipc from server event
-ipcRenderer.on("beforeUpdate", (event, {title, url}) => {
-    const state = appContext.ServiceStore.state;
-    if (title !== state.title || url !== state.URL) {
-        appContext.ServiceAction.resetField();
-    }
-});
-ipcRenderer.on("updateTitle", (event, title) => {
-    appContext.ServiceAction.updateTitle(title);
-});
-ipcRenderer.on("updateURL", (event, URL) => {
-    appContext.ServiceAction.updateURL(URL);
-    const state = appContext.ServiceStore.state;
-    const service = serviceManger.getService("api.b.hatena.ne.jp");
-    if (service && state.selectedTags.length === 0 && state.comment.length === 0) {
-        appContext.ServiceAction.fetchContent(service, URL).then(({comment, tags}) => {
-            appContext.ServiceAction.updateComment(comment);
-            appContext.ServiceAction.selectTags(tags);
-        }).catch(error => {
-            console.log("fetchContent:error", error);
-        });
-    }
-});
-ipcRenderer.on("resetField", (event) => {
-    appContext.ServiceAction.resetField();
 });
 render(<App />, document.getElementById("js-main"));
