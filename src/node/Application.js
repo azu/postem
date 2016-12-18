@@ -118,13 +118,11 @@ export default class Application {
     registerIpcHandling() {
         const postLinkSym = String(keys.postLink);
         // Automatically close window after posting is success.
-        const closeWindow = () => {
-            if (this.mainWindow && !this.mainWindow.isFocused()) {
-                this.hide();
-            }
+        const hideWindow = () => {
+            this.hide();
         };
         ipcMain.on(postLinkSym, () => {
-            closeWindow();
+            hideWindow();
         });
     }
 }
