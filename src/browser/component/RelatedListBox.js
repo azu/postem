@@ -1,7 +1,7 @@
 // LICENSE : MIT
 "use strict";
 import React from "react"
-class RelatedItem extends React.Component {
+export class RelatedItem extends React.Component {
     componentDidMount() {
         if(this.props.isEditing) {
             this.refs.input.focus();
@@ -48,6 +48,6 @@ export default class RelatedListBox extends React.Component {
                 {items}
             </ul>
             <button className="RelatedListBox-Add flat-button" onClick={this.props.addItem} value="Add">Add</button>
-        </div>
+        </div>;
     }
 }

@@ -1,6 +1,6 @@
 "use strict";
 /*
-    This module work on Node.js
+ This module work on Node.js
  */
 const path = require("path");
 const fs = require("fs");
@@ -50,7 +50,18 @@ export function savePost(serializedObject, callback) {
         // delete null
         delete item.viaURL;
     }
-    posts.list.push(item);
+    // if duplicated item, overwrite
+    const foundSameItem = posts.list.some(listedItem => {
+        return item.url === listedItem.url
+    });
+    if (foundSameItem) {
+        const itemIndex = posts.list.findIndex(listedItem => {
+            return item.url === listedItem.url
+        });
+        posts.list[itemIndex] = item;
+    } else {
+        posts.list.push(item);
+    }
     fs.writeFileSync(indexDataFilePath, JSON.stringify(posts, null, 4), "utf-8");
     var syncScript = path.join(storage.get("jser.info-dir"), "./tools/git-sync.sh");
     exec(`bash ${syncScript} "${title}"`, callback);
