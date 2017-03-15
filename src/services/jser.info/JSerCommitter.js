@@ -6,7 +6,7 @@ const path = require("path");
 const fs = require("fs");
 const mkdirp = require('mkdirp');
 import storage from "../../node/storage/accounts";
-import {exec} from "child_process"
+import { exec } from "child_process"
 function format0(str, len) {
     return ('_' + Math.pow(10, len) + str).slice(-len);
 }
@@ -22,10 +22,10 @@ function findDirectoryWithDate(date) {
 }
 function getPosts(filePath) {
     try {
-        return require(filePath);
+        return JSON.parse(fs.readFileSync(filePath, "utf-8"));
     } catch (e) {
         // default list
-        return {list: []};
+        return { list: [] };
     }
 }
 export function savePost(serializedObject, callback) {
