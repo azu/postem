@@ -12,8 +12,15 @@ function startRenderApp() {
         const argvParsed = minimist(argv.slice(2));
         const isTwitter = argvParsed.twitter !== undefined;
         // focus existing running instance window
+        const mode = isTwitter ? WindowMode.twitter : WindowMode.default;
+        // difference mode, exit and launch
+        if (mode !== application.mode) {
+            application = new Application(mode);
+            application.launch();
+            return;
+        }
         if (application.isDeactived) {
-            application.launch(isTwitter ? WindowMode.twitter : WindowMode.default);
+            application.launch();
         } else {
             application.restoreWindow(argv);
         }

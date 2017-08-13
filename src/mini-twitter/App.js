@@ -28,6 +28,11 @@ class App extends React.Component {
                 isInitialized = true;
             }
         });
+        ipcRenderer.on("afterUpdate", (event, { title, url }) => {
+            if (this.editor) {
+                this.editor.focus();
+            }
+        });
         ipcRenderer.on("updateTitle", (event, title) => {
             appContext.ServiceAction.updateTitle(title);
         });
@@ -55,6 +60,7 @@ class App extends React.Component {
             this.setState(newState);
         });
     }
+
     postLink() {
         const { ServiceAction } = appContext;
         const postData = {
