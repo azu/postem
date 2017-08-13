@@ -21,7 +21,7 @@ function startRenderApp() {
             return;
         }
         if (application.isDeactived) {
-            application.launch();
+            application.launch(argvParsed);
         } else {
             application.restoreWindow(argvParsed);
         }
