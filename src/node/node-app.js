@@ -1,14 +1,19 @@
 // LICENSE : MIT
 "use strict";
-import {app} from "electron";
-import Application from "./Application";
+import { app } from "electron";
+import Application, { WindowMode } from "./Application";
+
+const minimist = require('minimist');
 let application = null;
+
 function startRenderApp() {
-    // singleton application instance
     const shouldQuit = app.makeSingleInstance(function(argv, workingDirectory) {
+        // singleton application instance
+        const argvParsed = minimist(argv.slice(2));
+        const isTwitter = argvParsed.twitter !== undefined;
         // focus existing running instance window
         if (application.isDeactived) {
-            application.launch();
+            application.launch(isTwitter ? WindowMode.twitter : WindowMode.default);
         } else {
             application.restoreWindow(argv);
         }
@@ -19,7 +24,9 @@ function startRenderApp() {
         return app.quit();
     }
 
-    application = new Application();
+    const argvParsed = minimist(process.argv.slice(2));
+    const isTwitter = argvParsed.twitter !== undefined;
+    application = new Application(isTwitter ? WindowMode.twitter : WindowMode.default);
     application.launch();
 }
 

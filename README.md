@@ -18,6 +18,12 @@ TomblooとかTombfixみたいなElectronアプリ。
     npm start
     # develop
 
+### Command Line
+
+- `--title`: default title
+- `--url`: default url
+- `--twitter`: open twitter mode
+
 ### production
 
     npm run build
