@@ -69,10 +69,10 @@ class App extends React.Component {
         ipcRenderer.on("resetField", (event) => {
             appContext.ServiceAction.resetField();
         });
-        // Enable hatena by default
-        appContext.ServiceAction.enableService("api.b.hatena.ne.jp");
-        // Fetch tags using hatena
+        // Fetch tags using
         const service = serviceManger.getService("api.b.hatena.ne.jp");
+        // Enable hatena by default
+        appContext.ServiceAction.enableService(service);
         if (service) {
             appContext.ServiceAction.fetchTags(service);
         }
