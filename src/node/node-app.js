@@ -15,14 +15,15 @@ function startRenderApp() {
         const mode = isTwitter ? WindowMode.twitter : WindowMode.default;
         // difference mode, exit and launch
         if (mode !== application.mode) {
+            application.close();
             application = new Application(mode);
-            application.launch();
+            application.launch(argvParsed);
             return;
         }
         if (application.isDeactived) {
             application.launch();
         } else {
-            application.restoreWindow(argv);
+            application.restoreWindow(argvParsed);
         }
         return true;
     });
@@ -34,7 +35,7 @@ function startRenderApp() {
     const argvParsed = minimist(process.argv.slice(2));
     const isTwitter = argvParsed.twitter !== undefined;
     application = new Application(isTwitter ? WindowMode.twitter : WindowMode.default);
-    application.launch();
+    application.launch(argvParsed);
 }
 
 

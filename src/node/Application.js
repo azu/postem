@@ -76,7 +76,7 @@ export default class Application {
     }
 
     // focus existing running instance window
-    restoreWindow(newArgv) {
+    restoreWindow(argvParsed) {
         const window = this.mainWindow;
         if (window) {
             if (window.isMinimized()) {
@@ -84,7 +84,7 @@ export default class Application {
             }
             window.show();
             // restore with command line
-            const argv = require('minimist')(newArgv.slice(2));
+            const argv = argvParsed;
             const messenger = new WebMessenger(this.mainWindow.webContents);
             messenger.beforeUpdate(argv);
             if (argv.title) {
@@ -97,9 +97,9 @@ export default class Application {
         }
     }
 
-    launch() {
+    launch(argvParsed) {
         // command line
-        const argv = require('minimist')(process.argv.slice(2));
+        const argv = argvParsed;
         this.mainWindow = this._createBrowserWindow();
         this.mainWindow.webContents.on('did-finish-load', () => {
             const messenger = new WebMessenger(this.mainWindow.webContents);
@@ -150,6 +150,10 @@ export default class Application {
 
     hide() {
         this.mainWindow.hide();
+    }
+
+    close() {
+        this.mainWindow.close();
     }
 
     registerIpcHandling() {
