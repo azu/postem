@@ -15,7 +15,7 @@ export default class ServiceStore extends Store {
             tags: ServiceStorage.get("tags") || [],
             selectedTags: [],
             relatedItems: [],
-            enabledServiceIDs: ["api.b.hatena.ne.jp"]
+            enabledServiceIDs: []
         };
         this.register(keys.fetchTags, (tags) => {
             if (tags.length > 0) {

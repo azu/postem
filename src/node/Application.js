@@ -1,21 +1,78 @@
 // LICENSE : MIT
 "use strict";
-import {app} from "electron";
-import {BrowserWindow} from 'electron';
+import { app, screen } from "electron";
+import { BrowserWindow } from 'electron';
 import path from "path";
 import WebMessenger from "./WebMessenger";
-import {getDictionary, save} from "./textlint/dictionary-store";
+import { getDictionary, save } from "./textlint/dictionary-store";
 import windowStateKeeper from 'electron-window-state';
 import Positioner from "electron-positioner";
+
 const ipcMain = require('electron').ipcMain;
 import keys from "../browser/Action/ServiceActionConst";
+
+export const WindowMode = {
+    default: "default",
+    twitter: "twitter"
+};
 export default class Application {
     get isDeactived() {
-        return this.mainWindow == null;
+        return this.mainWindow === null;
     }
 
-    constructor() {
+    constructor(mode = WindowMode.default) {
+        this.mode = mode;
         this.mainWindow = null;
+    }
+
+    _createBrowserWindow() {
+        const title = require("../../package.json").name;
+        if (this.mode === WindowMode.default) {
+            const mainWindowState = windowStateKeeper({
+                defaultWidth: 320,
+                defaultHeight: 480
+            });
+            process.title = title;
+            const browserWindow = new BrowserWindow({
+                title: title,
+                frame: false,
+                x: mainWindowState.x,
+                y: mainWindowState.y,
+                width: mainWindowState.width,
+                height: mainWindowState.height
+            });
+            const positioner = new Positioner(browserWindow);
+            if (mainWindowState.y === undefined || mainWindowState.x === undefined) {
+                positioner.move('topRight');
+            }
+            const index = {
+                html: path.join(__dirname, "..", "browser", "index.html")
+            };
+            browserWindow.loadURL('file://' + index.html);
+            // Let us register listeners on the window, so we can update the state
+            // automatically (the listeners will be removed when the window is closed)
+            // and restore the maximized or full screen state
+            mainWindowState.manage(browserWindow);
+            return browserWindow;
+        } else {
+            process.title = title;
+            const mainScreen = screen.getPrimaryDisplay();
+            const dimensions = mainScreen.size;
+            const browserWindow = new BrowserWindow({
+                title: title,
+                frame: false,
+                width: dimensions.width - 80,
+                height: 150,
+                transparent: true
+            });
+            const positioner = new Positioner(browserWindow);
+            positioner.move('bottomCenter');
+            const index = {
+                html: path.join(__dirname, "..", "mini-twitter", "index.html")
+            };
+            browserWindow.loadURL('file://' + index.html);
+            return browserWindow;
+        }
     }
 
     // focus existing running instance window
@@ -43,28 +100,7 @@ export default class Application {
     launch() {
         // command line
         const argv = require('minimist')(process.argv.slice(2));
-        let mainWindowState = windowStateKeeper({
-            defaultWidth: 320,
-            defaultHeight: 480
-        });
-        const title = require("../../package.json").name;
-        process.title = title;
-        this.mainWindow = new BrowserWindow({
-            title: title,
-            frame: false,
-            x: mainWindowState.x,
-            y: mainWindowState.y,
-            width: mainWindowState.width,
-            height: mainWindowState.height
-        });
-        const positioner = new Positioner(this.mainWindow);
-        if (mainWindowState.y === undefined || mainWindowState.x === undefined) {
-            positioner.move('topRight');
-        }
-        const index = {
-            html: path.join(__dirname, "..", "browser", "index.html")
-        };
-        this.mainWindow.loadURL('file://' + index.html);
+        this.mainWindow = this._createBrowserWindow();
         this.mainWindow.webContents.on('did-finish-load', () => {
             const messenger = new WebMessenger(this.mainWindow.webContents);
             if (argv.title) {
@@ -76,20 +112,25 @@ export default class Application {
             //let server = new APIServer(this.mainWindow.webContents);
             //server.start();
         });
-        // fetch new dictionary and update
-        getDictionary(function(error, result) {
-            if (error) {
-                return console.error(error);
-            }
-            console.log("Update: dictionary");
-            save(result);
-        });
+        if (this.mode === WindowMode.default) {
+            // fetch new dictionary and update
+            getDictionary(function(error, result) {
+                if (error) {
+                    return console.error(error);
+                }
+                console.log("Update: dictionary");
+                save(result);
+            });
+        }
         let force_quit = false;
         app.on('before-quit', function(e) {
             force_quit = true;
         });
 
         this.mainWindow.on('close', (event) => {
+            if (this.mode === WindowMode.twitter) {
+                return;
+            }
             if (!force_quit) {
                 event.preventDefault();
                 this.hide();
@@ -98,10 +139,6 @@ export default class Application {
         this.mainWindow.on('closed', () => {
             this.mainWindow = null;
         });
-        // Let us register listeners on the window, so we can update the state
-        // automatically (the listeners will be removed when the window is closed)
-        // and restore the maximized or full screen state
-        mainWindowState.manage(this.mainWindow);
         // set top
         this.mainWindow.setAlwaysOnTop(true);
         this.registerIpcHandling();

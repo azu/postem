@@ -1,8 +1,8 @@
 // LICENSE : MIT
 "use strict";
-import {ipcRenderer} from "electron";
+import { ipcRenderer } from "electron";
 import React from "react";
-import {render} from "react-dom";
+import { render } from "react-dom";
 import Editor from "./component/Editor";
 import TagSelect from "./component/TagSelect";
 import URLInput from "./component/URLInput";
@@ -13,7 +13,9 @@ import RelatedListBox from "./component/RelatedListBox";
 import ServiceList from "./component/ServiceList";
 import AppContext from "./AppContext";
 import serviceManger from "./service-instance";
+
 const appContext = new AppContext();
+
 class App extends React.Component {
     constructor(...args) {
         super(...args);
@@ -33,7 +35,7 @@ class App extends React.Component {
     componentDidMount() {
         let isInitialized = false;
         // ipc from server event
-        ipcRenderer.on("beforeUpdate", (event, {title, url}) => {
+        ipcRenderer.on("beforeUpdate", (event, { title, url }) => {
             const state = this.state;
             if (title !== state.title || url !== state.URL) {
                 appContext.ServiceAction.resetField();
@@ -48,7 +50,7 @@ class App extends React.Component {
             const state = appContext.ServiceStore.state;
             const service = serviceManger.getService("api.b.hatena.ne.jp");
             if (service && state.selectedTags.length === 0 && state.comment.length === 0) {
-                appContext.ServiceAction.fetchContent(service, URL).then(({comment, tags}) => {
+                appContext.ServiceAction.fetchContent(service, URL).then(({ comment, tags }) => {
                     appContext.ServiceAction.updateComment(comment);
                     appContext.ServiceAction.selectTags(tags);
                 }).catch(error => {
@@ -56,7 +58,7 @@ class App extends React.Component {
                 });
             }
         });
-        ipcRenderer.on("afterUpdate", (event, {title, url}) => {
+        ipcRenderer.on("afterUpdate", (event, { title, url }) => {
             if (isInitialized) {
                 if (this._TagSelect) {
                     this._TagSelect.focus();
@@ -67,6 +69,9 @@ class App extends React.Component {
         ipcRenderer.on("resetField", (event) => {
             appContext.ServiceAction.resetField();
         });
+        // Enable hatena by default
+        appContext.ServiceAction.enableService("api.b.hatena.ne.jp");
+        // Fetch tags using hatena
         const service = serviceManger.getService("api.b.hatena.ne.jp");
         if (service) {
             appContext.ServiceAction.fetchTags(service);
@@ -74,7 +79,7 @@ class App extends React.Component {
     }
 
     postLink() {
-        const {ServiceAction} = appContext;
+        const { ServiceAction } = appContext;
         let postData = {
             title: this.state.title,
             url: this.state.URL,
@@ -91,7 +96,7 @@ class App extends React.Component {
     }
 
     render() {
-        const {ServiceAction} = appContext;
+        const { ServiceAction } = appContext;
         const selectTags = ServiceAction.selectTags.bind(ServiceAction);
         const updateTitle = ServiceAction.updateTitle.bind(ServiceAction);
         const updateURL = ServiceAction.updateURL.bind(ServiceAction);
@@ -140,7 +145,7 @@ class App extends React.Component {
             <URLInput URL={this.state.URL} updateURL={updateURL}/>
             <ViaURLInput URL={this.state.viaURL} updateURL={updateViaURL}/>
             <TagSelect
-                ref={(c) => this._TagSelect = c }
+                ref={(c) => this._TagSelect = c}
                 tags={this.state.tags}
                 selectTags={selectTags}
                 selectedTags={this.state.selectedTags}/>
@@ -156,7 +161,8 @@ class App extends React.Component {
         </div>;
     }
 }
-appContext.on("dispatch", ({eventKey}) => {
+
+appContext.on("dispatch", ({ eventKey }) => {
     ipcRenderer.send(String(eventKey));
 });
-render(<App />, document.getElementById("js-main"));
+render(<App/>, document.getElementById("js-main"));

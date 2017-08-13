@@ -1,12 +1,14 @@
 // LICENSE : MIT
 "use strict";
-import {Action} from "material-flux";
+import { Action } from "material-flux";
 import keys from "./ServiceActionConst";
-export {keys};
+
+export { keys };
 import notie from "notie"
-import {show as LoadingShow, dismiss as LoadingDismiss} from "../view-util/Loading"
+import { show as LoadingShow, dismiss as LoadingDismiss } from "../view-util/Loading"
 import RelatedItemModel from "../models/RelatedItemModel";
 import serviceInstance from "../service-instance";
+
 export default class ServiceAction extends Action {
     fetchTags(service) {
         const client = serviceInstance.getClient(service);
@@ -39,8 +41,8 @@ export default class ServiceAction extends Action {
                 client
             }
         });
-        var enabledCS = mapCS.filter(({client}) => client.isLogin());
-        var servicePromises = enabledCS.map(({service, client}) => {
+        var enabledCS = mapCS.filter(({ client }) => client.isLogin());
+        var servicePromises = enabledCS.map(({ service, client }) => {
             console.log("postLink: " + service.id);
             return client.postLink(postData);
         });
@@ -89,7 +91,12 @@ export default class ServiceAction extends Action {
     }
 
     enableService(service) {
+        console.log(service);
+        if (typeof service === "string") {
+            throw new Error("Not ServiceId, It should be service instance")
+        }
         const client = serviceInstance.getClient(service);
+        console.log(client);
         if (client.isLogin()) {
             this.dispatch(keys.enableService, service);
         } else {
