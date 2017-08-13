@@ -48,7 +48,6 @@ class App extends React.Component {
         const service = serviceManger.getService("com.twitter");
         appContext.ServiceAction.enableService(service);
         // default comment
-        appContext.ServiceAction.updateComment("見てる:");
         if (this.editor) {
             this.editor.focus();
         }
@@ -67,7 +66,7 @@ class App extends React.Component {
             title: this.state.title,
             url: this.state.URL,
             viaURL: this.state.viaURL.length > 0 ? this.state.viaURL : null,
-            comment: this.state.comment,
+            comment: this.state.comment || "見てる:",
             tags: this.state.selectedTags,
             relatedItems: this.state.relatedItems
         };
@@ -85,7 +84,9 @@ class App extends React.Component {
         return <div className="App">
             <Editor
                 ref={(c) => this.editor = c}
-                onSubmit={submitPostLink} onChange={updateComment}/>
+                value={this.state.comment}
+                onSubmit={submitPostLink}
+                onChange={updateComment}/>
             <TweetLengthCounter title={this.state.title} url={this.state.URL} comment={this.state.comment}/>
         </div>;
     }

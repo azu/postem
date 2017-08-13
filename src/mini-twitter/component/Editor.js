@@ -21,7 +21,9 @@ export default class Editor extends React.Component {
         return <div className="Editor">
             <ReactCodeMirror
                 ref={(c) => this.editor = c}
-                value={this.props.value} onChange={this.props.onChange} options={options}/>
+                value={this.props.value}
+                onChange={this.props.onChange}
+                options={options}/>
         </div>
     }
 }
