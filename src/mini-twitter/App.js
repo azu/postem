@@ -87,7 +87,10 @@ class App extends React.Component {
                 value={this.state.comment}
                 onSubmit={submitPostLink}
                 onChange={updateComment}/>
-            <TweetLengthCounter title={this.state.title} url={this.state.URL} comment={this.state.comment}/>
+            <TweetLengthCounter
+                title={this.state.title}
+                url={this.state.URL}
+                comment={this.state.comment}/>
         </div>;
     }
 }
