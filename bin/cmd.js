@@ -13,7 +13,7 @@ if (!electron) {
         process.title = 'Postem';
         var spawn = require('child_process').spawn;
         spawn(
-            require('electron-prebuilt'),
+            require('electron'),
             [__filename].concat(process.argv.slice(2)),
             {
                 stdio: [0, 1, 2]

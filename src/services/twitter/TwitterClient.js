@@ -2,7 +2,8 @@
 "use strict";
 import Consumer from "./TwitterConsumer";
 import Twitter from "twitter"
-import {truncate} from "tweet-truncator";
+import { truncate } from "tweet-truncator";
+
 const Authentication = require('electron').remote.require(__dirname + "/TwitterAuthentication");
 export default class TwitterClient {
     isLogin() {
@@ -34,14 +35,14 @@ export default class TwitterClient {
         }
      */
     postLink(options = {}) {
-        let {title, url,comment,tags} = options;
+        const { title, url, comment, tags, quote } = options;
         // make contents object
-        var contents = {title, url, desc: comment, tags};
+        const contents = { title, url, desc: comment, tags, quote: quote || "" };
         const status = truncate(contents, {
-            template: `%desc% "%title%" %url% %tags%`
+            template: `%desc% %quote% "%title%" %url% %tags%`
         });
         return new Promise((resolve, reject) => {
-            this._getClient().post('statuses/update', {status: status}, function (error, tweet, response) {
+            this._getClient().post('statuses/update', { status: status }, function(error, tweet, response) {
                 if (error) {
                     console.error(error, response);
                     reject(error);

@@ -36,6 +36,9 @@ class App extends React.Component {
         ipcRenderer.on("updateTitle", (event, title) => {
             appContext.ServiceAction.updateTitle(title);
         });
+        ipcRenderer.on("updateQuote", (event, text) => {
+            appContext.ServiceAction.updateQuote(text);
+        });
         ipcRenderer.on("updateURL", (event, URL) => {
             appContext.ServiceAction.updateURL(URL);
         });
@@ -66,6 +69,7 @@ class App extends React.Component {
             title: this.state.title,
             url: this.state.URL,
             viaURL: this.state.viaURL.length > 0 ? this.state.viaURL : null,
+            quote: this.state.quote,
             comment: this.state.comment || "見てる:",
             tags: this.state.selectedTags,
             relatedItems: this.state.relatedItems
@@ -90,6 +94,7 @@ class App extends React.Component {
             <TweetLengthCounter
                 title={this.state.title}
                 url={this.state.URL}
+                quote={this.state.quote}
                 comment={this.state.comment}/>
         </div>;
     }

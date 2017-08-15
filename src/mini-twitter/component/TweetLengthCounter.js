@@ -5,10 +5,10 @@ import { truncate } from "tweet-truncator";
 
 export default class TweetLengthCounter extends React.Component {
     render() {
-        const { title, url, comment } = this.props;
-        const contents = { title, url, desc: comment };
+        const { title, url, comment, quote } = this.props;
+        const contents = { title, url, desc: comment, quote };
         const status = truncate(contents, {
-            template: `%desc% "%title%" %url%`,
+            template: `%desc% %quote% "%title%" %url%`,
             maxLength: 140
         });
         const style = {

@@ -93,6 +93,9 @@ export default class Application {
             if (argv.url) {
                 messenger.updateURL(argv.url);
             }
+            if (argv.quote) {
+                messenger.updateQuote(argv.quote);
+            }
             messenger.afterUpdate(argv);
         }
     }
@@ -108,6 +111,9 @@ export default class Application {
             }
             if (argv.url) {
                 messenger.updateURL(argv.url);
+            }
+            if (argv.quote) {
+                messenger.updateQuote(argv.quote);
             }
             //let server = new APIServer(this.mainWindow.webContents);
             //server.start();
@@ -145,15 +151,22 @@ export default class Application {
     }
 
     show() {
-        this.mainWindow.show();
+        if (this.mainWindow) {
+            this.mainWindow.show();
+        }
     }
 
     hide() {
-        this.mainWindow.hide();
+        if (this.mainWindow) {
+            this.mainWindow.hide();
+        }
     }
 
     close() {
-        this.mainWindow.close();
+        if (this.mainWindow) {
+            this.mainWindow.destroy();
+        }
+        this.mainWindow = null;
     }
 
     registerIpcHandling() {

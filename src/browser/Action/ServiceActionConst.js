@@ -6,6 +6,7 @@ export default {
     selectTags: Symbol("selectTags"),
     updateTitle: Symbol("updateTitle"),
     updateURL: Symbol("updateURL"),
+    updateQuote: Symbol("updateQuote"),
     updateViaURL: Symbol("updateViaURL"),
     updateComment: Symbol("updateComment"),
     editRelatedItem: Symbol("editRelatedItem"),

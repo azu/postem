@@ -28,4 +28,10 @@ export default class WebMessenger {
             this.webContent.send("updateURL", URL);
         }
     }
+
+    updateQuote(text) {
+        if (text) {
+            this.webContent.send("updateQuote", text);
+        }
+    }
 }
