@@ -4,7 +4,6 @@ import { app, screen } from "electron";
 import { BrowserWindow } from 'electron';
 import path from "path";
 import WebMessenger from "./WebMessenger";
-import { getDictionary, save } from "./textlint/dictionary-store";
 import windowStateKeeper from 'electron-window-state';
 import Positioner from "electron-positioner";
 
@@ -118,16 +117,6 @@ export default class Application {
             //let server = new APIServer(this.mainWindow.webContents);
             //server.start();
         });
-        if (this.mode === WindowMode.default) {
-            // fetch new dictionary and update
-            getDictionary(function(error, result) {
-                if (error) {
-                    return console.error(error);
-                }
-                console.log("Update: dictionary");
-                save(result);
-            });
-        }
         let force_quit = false;
         app.on('before-quit', function(e) {
             force_quit = true;
