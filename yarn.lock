@@ -2153,7 +2153,7 @@ kuromoji@^0.1.1:
     doublearray "0.0.2"
     zlibjs "^0.2.0"
 
-kuromojin@^1.1.0, kuromojin@^1.2.1:
+kuromojin@^1.0.2, kuromojin@^1.1.0, kuromojin@^1.2.1:
   version "1.3.2"
   resolved "https://registry.yarnpkg.com/kuromojin/-/kuromojin-1.3.2.tgz#342bb5cfbee69c9bb31d3fc439a8ad69fd281b11"
   dependencies:
@@ -3540,6 +3540,15 @@ textlint-rule-helper@^2.0.0:
   resolved "https://registry.yarnpkg.com/textlint-rule-helper/-/textlint-rule-helper-2.0.0.tgz#95cb4696c95c4258d2e3389e9e64b849f9721382"
   dependencies:
     unist-util-visit "^1.1.0"
+
+textlint-rule-max-ten@^2.0.3:
+  version "2.0.3"
+  resolved "https://registry.yarnpkg.com/textlint-rule-max-ten/-/textlint-rule-max-ten-2.0.3.tgz#dccbc0d0157ee86a7572ca00a47ab1fa577f0645"
+  dependencies:
+    kuromojin "^1.0.2"
+    sentence-splitter "^2.0.0"
+    structured-source "^3.0.2"
+    textlint-rule-helper "^2.0.0"
 
 textlint-rule-no-double-negative-ja@^1.0.5:
   version "1.0.5"

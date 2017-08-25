@@ -65,6 +65,7 @@
     "request": "^2.81.0",
     "slugg": "^1.2.1",
     "spin.js": "^2.3.2",
+    "textlint-rule-max-ten": "^2.0.3",
     "textlint-rule-no-double-negative-ja": "^1.0.5",
     "textlint-rule-no-doubled-conjunction": "^1.0.2",
     "textlint-rule-no-doubled-conjunctive-particle-ga": "^1.0.2",
