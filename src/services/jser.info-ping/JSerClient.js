@@ -34,7 +34,7 @@ export default class JSerInfoPintClient {
                 callback(new Error(xhr.responseText));
             };
             xhr.withCredentials = true;
-            xhr.open("POST", "https://d6qujk40a3.execute-api.ap-northeast-1.amazonaws.com/prod/ping/create");
+            xhr.open("POST", "https://rihxwdqmx9.execute-api.ap-northeast-1.amazonaws.com/prod/ping/create");
             xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
             xhr.send(JSON.stringify(issueData));
         }
