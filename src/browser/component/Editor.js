@@ -61,7 +61,7 @@ const config = {
         // のような、Mac OS XでPDFやFinderからのコピペで発生する濁点のチェック
         "no-nfd": true,
         "proofdict": {
-            "autoUpdate": true
+            "dictURL": "https://azu.github.io/proof-dictionary/"
         }
     }
 };

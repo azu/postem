@@ -16,6 +16,10 @@
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/@textlint/ast-node-types/-/ast-node-types-1.1.2.tgz#58bc95a6826b84eb1f1671be5921aa243409fb31"
 
+"@textlint/ast-node-types@^3.0.0":
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/@textlint/ast-node-types/-/ast-node-types-3.0.1.tgz#cf35e913aef798f0efac797144e167744a7857e8"
+
 "@textlint/feature-flag@^1.0.1":
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/@textlint/feature-flag/-/feature-flag-1.0.1.tgz#fe1e6699293b44305e90ab1eba79404d9edd581a"
@@ -42,6 +46,10 @@
 "@types/node@^7.0.18":
   version "7.0.31"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-7.0.31.tgz#80ea4d175599b2a00149c29a10a4eb2dff592e86"
+
+"@types/url-join@^0.8.2":
+  version "0.8.2"
+  resolved "https://registry.yarnpkg.com/@types/url-join/-/url-join-0.8.2.tgz#1181ecbe1d97b7034e0ea1e35e62e86cc26b422d"
 
 accepts@~1.3.3:
   version "1.3.3"
@@ -972,6 +980,12 @@ debug@2.6.7, debug@^2.1.0, debug@^2.1.1, debug@^2.1.3, debug@^2.2.0, debug@^2.6.
   dependencies:
     ms "2.0.0"
 
+debug@^3.1.0:
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/debug/-/debug-3.1.0.tgz#5bb5a0672628b64149566ba16819e61518c67261"
+  dependencies:
+    ms "2.0.0"
+
 decamelize@^1.1.2:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/decamelize/-/decamelize-1.2.0.tgz#f6534d15148269b20352e7bee26f501f9a191290"
@@ -1163,6 +1177,16 @@ es-abstract@^1.4.3:
     is-callable "^1.1.3"
     is-regex "^1.0.3"
 
+es-abstract@^1.6.1:
+  version "1.10.0"
+  resolved "https://registry.yarnpkg.com/es-abstract/-/es-abstract-1.10.0.tgz#1ecb36c197842a00d8ee4c2dfd8646bb97d60864"
+  dependencies:
+    es-to-primitive "^1.1.1"
+    function-bind "^1.1.1"
+    has "^1.0.1"
+    is-callable "^1.1.3"
+    is-regex "^1.0.4"
+
 es-to-primitive@^1.1.1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/es-to-primitive/-/es-to-primitive-1.1.1.tgz#45355248a88979034b6792e19bb81f2b7975dd0d"
@@ -1322,6 +1346,12 @@ fetch-ponyfill@^4.1.0:
   dependencies:
     node-fetch "~1.7.1"
 
+fetch-ponyfill@^5.0.1:
+  version "5.0.1"
+  resolved "https://registry.yarnpkg.com/fetch-ponyfill/-/fetch-ponyfill-5.0.1.tgz#2789ec179c1de357f60f9fd49e154a8b3fd8cd1b"
+  dependencies:
+    node-fetch "~2.0.0"
+
 file-entry-cache@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/file-entry-cache/-/file-entry-cache-2.0.0.tgz#c392990c3e684783d838b8c84a45d8a048458361"
@@ -1480,6 +1510,10 @@ fs.realpath@^1.0.0:
 function-bind@^1.0.2, function-bind@^1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/function-bind/-/function-bind-1.1.0.tgz#16176714c801798e4e8f2cf7f7529467bb4a5771"
+
+function-bind@^1.1.1:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/function-bind/-/function-bind-1.1.1.tgz#a56899d3ea3c9bab874bb9773b7c5ede92f4895d"
 
 gaze@^0.5.1:
   version "0.5.2"
@@ -1988,6 +2022,12 @@ is-regex@^1.0.3:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/is-regex/-/is-regex-1.0.3.tgz#0d55182bddf9f2fde278220aec3a75642c908637"
 
+is-regex@^1.0.4:
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/is-regex/-/is-regex-1.0.4.tgz#5517489b547091b0930e095654ced25ee97e9491"
+  dependencies:
+    has "^1.0.1"
+
 is-relative@^0.2.1:
   version "0.2.1"
   resolved "https://registry.yarnpkg.com/is-relative/-/is-relative-0.2.1.tgz#d27f4c7d516d175fb610db84bbeef23c3bc97aa5"
@@ -2407,10 +2447,6 @@ mdast-util-compact@^1.0.0:
     unist-util-modify-children "^1.0.0"
     unist-util-visit "^1.1.0"
 
-mdast-util-to-string@^1.0.0:
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/mdast-util-to-string/-/mdast-util-to-string-1.0.2.tgz#dc996a24d2b521178d3fac3993680c03a683e1dd"
-
 media-typer@0.3.0:
   version "0.3.0"
   resolved "https://registry.yarnpkg.com/media-typer/-/media-typer-0.3.0.tgz#8710d7af0aa626f8fffa1ce00168545263255748"
@@ -2561,6 +2597,10 @@ node-fetch@~1.7.1:
     encoding "^0.1.11"
     is-stream "^1.0.1"
 
+node-fetch@~2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/node-fetch/-/node-fetch-2.0.0.tgz#982bba43ecd4f2922a29cc186a6bbb0bb73fcba6"
+
 node-localstorage@^1.3.0:
   version "1.3.0"
   resolved "https://registry.yarnpkg.com/node-localstorage/-/node-localstorage-1.3.0.tgz#2e436aae8dcc9ace97b43c65c16c0d577be0a55c"
@@ -2660,6 +2700,15 @@ object.omit@^2.0.0:
   dependencies:
     for-own "^0.1.4"
     is-extendable "^0.1.1"
+
+object.values@^1.0.4:
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/object.values/-/object.values-1.0.4.tgz#e524da09b4f66ff05df457546ec72ac99f13069a"
+  dependencies:
+    define-properties "^1.1.2"
+    es-abstract "^1.6.1"
+    function-bind "^1.1.0"
+    has "^1.0.1"
 
 on-finished@~2.3.0:
   version "2.3.0"
@@ -2838,9 +2887,9 @@ pretty-hrtime@^1.0.0:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/pretty-hrtime/-/pretty-hrtime-1.0.3.tgz#b7e3ea42435a4c9b2759d99e0f201eb195802ee1"
 
-prh@5.3.0:
-  version "5.3.0"
-  resolved "https://registry.yarnpkg.com/prh/-/prh-5.3.0.tgz#d9b97467188623d3d3084aca8b076004251485b0"
+prh@5.4.3:
+  version "5.4.3"
+  resolved "https://registry.yarnpkg.com/prh/-/prh-5.4.3.tgz#d3864a6de2f35c6603e33c700106dce01c22876d"
   dependencies:
     commandpost "^1.2.1"
     diff "^3.3.0"
@@ -2867,11 +2916,11 @@ promise@^7.0.3, promise@^7.1.1:
   dependencies:
     asap "~2.0.3"
 
-proofdict-tester@^0.3.1:
-  version "0.3.1"
-  resolved "https://registry.yarnpkg.com/proofdict-tester/-/proofdict-tester-0.3.1.tgz#f3119ee5b73ffdda445d3d55545d9373183991b6"
+proofdict-tester@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/proofdict-tester/-/proofdict-tester-1.0.0.tgz#3c2270f6a421c938e3bdaf66da0ccb0211954f45"
   dependencies:
-    prh "5.3.0"
+    prh "5.4.3"
 
 proofdict@^1.2.1:
   version "1.2.1"
@@ -3259,6 +3308,15 @@ sentence-splitter@^2.0.0, sentence-splitter@^2.2.0:
     concat-stream "^1.5.2"
     structured-source "^3.0.2"
 
+sentence-splitter@^3.0.8:
+  version "3.0.8"
+  resolved "https://registry.yarnpkg.com/sentence-splitter/-/sentence-splitter-3.0.8.tgz#45fad70c65b097eb63e86d793080d84cc43d677a"
+  dependencies:
+    "@textlint/ast-node-types" "^3.0.0"
+    concat-stream "^1.5.2"
+    object.values "^1.0.4"
+    structured-source "^3.0.2"
+
 sequencify@~0.0.7:
   version "0.0.7"
   resolved "https://registry.yarnpkg.com/sequencify/-/sequencify-0.0.7.tgz#90cff19d02e07027fd767f5ead3e7b95d1e7380c"
@@ -3599,26 +3657,37 @@ textlint-rule-no-nfd@^1.0.1:
     textlint-rule-helper "^1.1.5"
     unorm "^1.4.1"
 
-textlint-rule-proofdict@1.0.2:
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/textlint-rule-proofdict/-/textlint-rule-proofdict-1.0.2.tgz#1fe8f78824aa4e60e7e9cd750a59929cede44517"
+textlint-rule-proofdict@2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/textlint-rule-proofdict/-/textlint-rule-proofdict-2.0.0.tgz#aaf32a6931ad8e6cd295d7de52811db8d9c560bb"
   dependencies:
+    "@types/url-join" "^0.8.2"
+    debug "^3.1.0"
+    fetch-ponyfill "^5.0.1"
     localstorage-ponyfill "^1.0.1"
     proofdict "^1.2.1"
-    proofdict-tester "^0.3.1"
+    proofdict-tester "^1.0.0"
     textlint-rule-helper "^2.0.0"
+    url-join "^4.0.0"
 
-textlint-rule-sentence-length@^1.1.0:
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/textlint-rule-sentence-length/-/textlint-rule-sentence-length-1.1.0.tgz#8da78fd80a7e432fa3caf0c94b6379151fec6c06"
+textlint-rule-sentence-length@^2.0.2:
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/textlint-rule-sentence-length/-/textlint-rule-sentence-length-2.0.2.tgz#a3bf761625fb609fe6abb16012c672bafddcf77f"
   dependencies:
-    mdast-util-to-string "^1.0.0"
-    sentence-splitter "^2.0.0"
+    sentence-splitter "^3.0.8"
     textlint-rule-helper "^2.0.0"
+    textlint-util-to-string "^2.1.1"
 
 textlint-util-to-string@^1.1.0, textlint-util-to-string@^1.2.0:
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/textlint-util-to-string/-/textlint-util-to-string-1.2.1.tgz#1cf89956d27555a55e9588c06b35a50f0d1d46f9"
+  dependencies:
+    object-assign "^4.0.1"
+    structured-source "^3.0.2"
+
+textlint-util-to-string@^2.1.1:
+  version "2.1.1"
+  resolved "https://registry.yarnpkg.com/textlint-util-to-string/-/textlint-util-to-string-2.1.1.tgz#7e456f16a2abc07e473cb9591acf19f110def2d1"
   dependencies:
     object-assign "^4.0.1"
     structured-source "^3.0.2"
@@ -3856,6 +3925,10 @@ unpipe@~1.0.0:
 uri-js@^2.1.1:
   version "2.1.1"
   resolved "https://registry.yarnpkg.com/uri-js/-/uri-js-2.1.1.tgz#eb3f8505f468969bf92cb79ce8ceaac2ed667661"
+
+url-join@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/url-join/-/url-join-4.0.0.tgz#4d3340e807d3773bda9991f8305acdcc2a665d2a"
 
 user-home@^1.1.1:
   version "1.1.1"
