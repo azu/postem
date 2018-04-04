@@ -25,7 +25,7 @@ export default class Application {
     }
 
     _createBrowserWindow() {
-        const title = require("../../package.json").name;
+        const title = "postem";
         if (this.mode === WindowMode.default) {
             const mainWindowState = windowStateKeeper({
                 defaultWidth: 320,

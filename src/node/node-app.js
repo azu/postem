@@ -1,12 +1,40 @@
 // LICENSE : MIT
 "use strict";
-import { app } from "electron";
+const url = require("url");
+const defaultMenu = require('electron-default-menu');
+const { Menu, app, shell } = require("electron");
 import Application, { WindowMode } from "./Application";
 
+app.setAsDefaultProtocolClient("postem");
 const minimist = require('minimist');
 let application = null;
+let startupArgParsed;
 
-function startRenderApp() {
+function queryToArgs(urlString) {
+    if (!urlString) {return;}
+    const { query } = url.parse(urlString, true);
+    return {
+        title: query.title,
+        url: query.url,
+        quote: query.quote
+    }
+}
+
+function openFromProtocol(urlString) {
+    const argvParsed = queryToArgs(urlString);
+    if (!application) {
+        application = new Application(WindowMode.default);
+        application.launch(argvParsed);
+        return;
+    }
+    if (application.isDeactived) {
+        application.launch(argvParsed);
+    } else {
+        application.restoreWindow(argvParsed);
+    }
+}
+
+function startRenderApp(argv) {
     const shouldQuit = app.makeSingleInstance(function(argv, workingDirectory) {
         // singleton application instance
         const argvParsed = minimist(argv.slice(2));
@@ -32,7 +60,7 @@ function startRenderApp() {
         return app.quit();
     }
 
-    const argvParsed = minimist(process.argv.slice(2));
+    const argvParsed = argv || minimist(process.argv.slice(2));
     const isTwitter = argvParsed.twitter !== undefined;
     application = new Application(isTwitter ? WindowMode.twitter : WindowMode.default);
     application.launch(argvParsed);
@@ -49,6 +77,9 @@ app.on('window-all-closed', function() {
 });
 
 app.on('activate', function() {
+    if (!app.isReady()) {
+        return;
+    }
     // On OS X it's common to re-create a window in the app when the
     // dock icon is clicked and there are no other windows open.
     if (application.isDeactived) {
@@ -57,7 +88,23 @@ app.on('activate', function() {
         application.show();
     }
 });
+
+app.on("open-url", function(event, url) {
+    event.preventDefault();
+    if (!app.isReady()) {
+        startupArgParsed = queryToArgs(url);
+    } else {
+        openFromProtocol(url);
+    }
+});
+
+
 app.on('ready', function() {
     require("../share/profile").start();
-    startRenderApp();
+    startRenderApp(startupArgParsed);
+
+    // Get template for default menu
+    const menu = defaultMenu(app, shell);
+    // Set top-level application menu, using modified template
+    Menu.setApplicationMenu(Menu.buildFromTemplate(menu));
 });

@@ -17,12 +17,20 @@
   "bin": {
     "postem": "bin/cmd.js"
   },
-  "directories": {
-    "test": "test"
+  "build": {
+    "appId": "info.efcl.postem",
+    "mac": {
+      "target": [
+        "zip"
+      ],
+      "category": "your.app.category.type"
+    }
   },
   "scripts": {
     "build": "NODE_ENV=production gulp build",
-    "start": "NODE_ENV=development electron ."
+    "start": "NODE_ENV=development electron .",
+    "predist": "npm run build",
+    "dist": "electron-builder"
   },
   "keywords": [
     "electron",
@@ -40,6 +48,7 @@
     "codemirror-textlint": "^1.2.0",
     "combokeys": "^2.4.6",
     "electron-authentication-hatena": "^2.0.0",
+    "electron-default-menu": "^1.0.1",
     "electron-positioner": "^3.0.0",
     "electron-template-menu": "^1.0.3",
     "electron-window-state": "^4.1.1",
@@ -83,6 +92,8 @@
     "babel-preset-es2015": "^6.24.1",
     "babel-preset-react-optimize": "^1.0.1",
     "electron": "^1.7.5",
+    "electron-builder": "^20.8.1",
+    "electron-packager": "^12.0.0",
     "gulp": "^3.9.0",
     "gulp-babel": "^6.1.1",
     "gulp-if": "^2.0.0"
