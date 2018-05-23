@@ -79,7 +79,7 @@ function createPostFrom(item, callback) {
     fs.writeFileSync(filePath, createPost(item), "utf8");
     // sync
     const title = item.title;
-    var syncScript = path.join(__dirname, "git-sync.sh");
+    var syncScript = path.join(repositoryDirectory, "./tools/git-sync.sh");
     exec(`bash ${syncScript} "${title}"`, {
         cwd: repositoryDirectory
     }, callback);
