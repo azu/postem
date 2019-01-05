@@ -11,7 +11,7 @@ function isJS(file) {
 gulp.task("build", function () {
     const babelOptions = JSON.parse(fs.readFileSync("./.babelrc", "utf-8"));
     const babelify = babel(babelOptions);
-    gulp.src("src/**/*", {base: 'src'})
+    return gulp.src("src/**/*", {base: 'src'})
         .pipe(gulpif(isJS, babelify))
         .pipe(gulp.dest("lib/"));
 });
