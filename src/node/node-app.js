@@ -34,30 +34,20 @@ function openFromProtocol(urlString) {
     }
 }
 
-function startRenderApp(argv) {
-    const shouldQuit = app.makeSingleInstance(function(argv, workingDirectory) {
-        // singleton application instance
-        const argvParsed = minimist(argv.slice(2));
-        const isTwitter = argvParsed.twitter !== undefined;
-        // focus existing running instance window
-        const mode = isTwitter ? WindowMode.twitter : WindowMode.default;
-        // difference mode, exit and launch
-        if (mode !== application.mode) {
-            application.close();
-            application = new Application(mode);
-            application.launch(argvParsed);
-            return;
-        }
-        if (application.isDeactived) {
-            application.launch(argvParsed);
-        } else {
-            application.restoreWindow(argvParsed);
-        }
-        return true;
-    });
 
-    if (shouldQuit) {
+const gotTheLock = app.requestSingleInstanceLock();
+
+function startRenderApp(argv) {
+    if (!gotTheLock) {
         return app.quit();
+    } else {
+        app.on('second-instance', (event, commandLine, workingDirectory) => {
+            // Someone tried to run a second instance, we should focus our window.
+            if (application) {
+                const argvParsed = minimist(argv.slice(2));
+                application.restoreWindow(argvParsed);
+            }
+        })
     }
 
     const argvParsed = argv || minimist(process.argv.slice(2));
