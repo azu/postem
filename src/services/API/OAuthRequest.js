@@ -15,8 +15,12 @@ export default class OAuthRequest {
             consumerKey,
             consumerSecret,
             '1.0',
-            null,
-            'HMAC-SHA1'
+            "https://example.com/auth/callback",
+            'HMAC-SHA1',
+            undefined,
+            {
+                "User-Agent": "postem/API"
+            }
         );
     }
 

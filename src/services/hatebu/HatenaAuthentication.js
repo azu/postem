@@ -3,9 +3,10 @@
 /*
     this module work on Main(Node.js) Context.
  */
-import AuthenticationHatena from "electron-authentication-hatena";
+import { AuthenticationHatena } from "electron-authentication-hatena";
 import Consumer from "./HatenaCunsumer";
 import storage from "../../node/storage/accounts";
+
 exports.canAccess = function canAccess() {
     return storage.has("hatena");
 };

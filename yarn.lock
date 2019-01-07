@@ -709,10 +709,17 @@
     structured-source "^3.0.2"
     txt-ast-traverse "^1.2.1"
 
-"@types/node@^10.12.18":
+"@types/node@*", "@types/node@^10.12.18":
   version "10.12.18"
   resolved "https://registry.npmjs.org/@types/node/-/node-10.12.18.tgz#1d3ca764718915584fcd9f6344621b7672665c67"
   integrity sha512-fh+pAqt4xRzPfqA6eh3Z2y6fyZavRIumvjhaCL753+TVkGKGhpPeyrJG2JftD0T9q4GF00KjefsQ+PQNDdWQaQ==
+
+"@types/oauth@^0.9.1":
+  version "0.9.1"
+  resolved "https://registry.npmjs.org/@types/oauth/-/oauth-0.9.1.tgz#e17221e7f7936b0459ae7d006255dff61adca305"
+  integrity sha512-a1iY62/a3yhZ7qH7cNUsxoI3U/0Fe9+RnuFrpTKr+0WVOzbKlSLojShCKe20aOD1Sppv+i8Zlq0pLDuTJnwS4A==
+  dependencies:
+    "@types/node" "*"
 
 "@types/url-join@^0.8.2":
   version "0.8.2"
@@ -1999,10 +2006,12 @@ ejs@^2.6.1:
   resolved "https://registry.npmjs.org/ejs/-/ejs-2.6.1.tgz#498ec0d495655abc6f23cd61868d926464071aa0"
   integrity sha512-0xy4A/twfrRCnkhfk8ErDi5DqdAsAqeGxht4xkCUrsvhhbQNs7E+4jV0CN7+NKIY0aHE72+XvqtBIXzD31ZbXQ==
 
-electron-authentication-hatena@^2.0.0:
-  version "2.0.1"
-  resolved "https://registry.yarnpkg.com/electron-authentication-hatena/-/electron-authentication-hatena-2.0.1.tgz#f3fe607c3cbd8370555611198bae6efe8f9072b2"
+electron-authentication-hatena@^3.0.1:
+  version "3.0.1"
+  resolved "https://registry.npmjs.org/electron-authentication-hatena/-/electron-authentication-hatena-3.0.1.tgz#27991419ccd1272c3b18fdfe4a3fbc94c0907115"
+  integrity sha512-5HmV9nHChpmMpmHi8xqygYiPvCb5CX+3PG82LUE76J/g0K+WjO2eGDwDorRN27vdvyvW6PQG5ayXTC8mhqXtIw==
   dependencies:
+    "@types/oauth" "^0.9.1"
     oauth "^0.9.14"
 
 electron-builder@^20.38.4:

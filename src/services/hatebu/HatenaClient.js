@@ -1,9 +1,9 @@
 // LICENSE : MIT
 "use strict";
-import Consumer from "./HatenaCunsumer";
 import querystring from "querystring"
 import OAuthRequest from "../API/OAuthRequest";
-import {OAuth} from "oauth";
+import Consumer from "./HatenaCunsumer";
+
 const Authentication = require('electron').remote.require(__dirname + "/HatenaAuthentication");
 export default class HatenaClient {
     isLogin() {
@@ -15,14 +15,13 @@ export default class HatenaClient {
     }
 
     _hatenaRequest() {
-        var credential = Authentication.getCredential();
-        const oauth = new OAuthRequest({
+        const credential = Authentication.getCredential();
+        return new OAuthRequest({
             consumerKey: Consumer.key,
             consumerSecret: Consumer.secret,
             accessKey: credential.accessKey,
             accessSecret: credential.accessSecret
         });
-        return oauth;
     }
 
     getContent(url) {
@@ -32,7 +31,7 @@ export default class HatenaClient {
         return this._hatenaRequest().get("http://api.b.hatena.ne.jp/1/my/bookmark?" + query).then(response => {
             if (response.statusCode === 403) {
                 const data = JSON.parse(response["data"]);
-                return Promise.reject(new Error(data["messsage"]));
+                return Promise.reject(new Error(data["message"]));
             }
             return response;
         });

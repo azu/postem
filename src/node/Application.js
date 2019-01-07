@@ -38,7 +38,10 @@ export default class Application {
                 x: mainWindowState.x,
                 y: mainWindowState.y,
                 width: mainWindowState.width,
-                height: mainWindowState.height
+                height: mainWindowState.height,
+                webPreferences: {
+                    nodeIntegration: true
+                }
             });
             const positioner = new Positioner(browserWindow);
             if (mainWindowState.y === undefined || mainWindowState.x === undefined) {
