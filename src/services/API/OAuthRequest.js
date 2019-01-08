@@ -2,8 +2,9 @@
 "use strict";
 import assert from "assert";
 import { OAuth } from "oauth";
+
 export default class OAuthRequest {
-    constructor({consumerKey ,consumerSecret, accessKey, accessSecret}) {
+    constructor({ consumerKey, consumerSecret, accessKey, accessSecret }) {
         assert(consumerKey && consumerSecret);
         assert(accessKey && accessSecret);
         this.accessKey = accessKey;
@@ -17,21 +18,23 @@ export default class OAuthRequest {
             '1.0',
             "https://example.com/auth/callback",
             'HMAC-SHA1',
-            undefined,
+            null,
             {
-                "User-Agent": "postem/API"
+                "User-Agent": "postem"
             }
         );
     }
 
     get(URL, options) {
         return new Promise((resolve, reject) => {
+            console.log("OAuth::get", URL);
             this.oauth.get(
                 URL,
                 this.accessKey,
                 this.accessSecret,
-                function (error, data, res) {
+                function(error, data, res) {
                     if (error) {
+                        console.error("response", res);
                         return reject(error);
                     }
                     resolve(JSON.parse(data));
@@ -47,8 +50,9 @@ export default class OAuthRequest {
                 this.accessKey,
                 this.accessSecret,
                 body,
-                function (error, data, res) {
+                function(error, data, res) {
                     if (error) {
+                        console.error("response", res);
                         return reject(error);
                     }
                     resolve(JSON.parse(data));

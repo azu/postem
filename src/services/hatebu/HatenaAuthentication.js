@@ -15,12 +15,14 @@ exports.getCredential = function getCredential() {
 };
 exports.requireAccess = function requireAccess(callback) {
     // http://developer.hatena.com/ja/documents/auth/apis/oauth/consumer
-    var hatena = new AuthenticationHatena({
+    const hatena = new AuthenticationHatena({
         key: Consumer.key,
         secret: Consumer.secret,
         scopes: ["read_public", "write_public", "read_private", "write_private"]
     });
+    console.log("requireAccess: request start");
     hatena.startRequest().then((result) => {
+        console.log("requireAccess: response result", result);
         var accessToken = result.accessToken;
         var accessTokenSecret = result.accessTokenSecret;
         var credential = {
@@ -29,5 +31,7 @@ exports.requireAccess = function requireAccess(callback) {
         };
         storage.set("hatena", credential);
         callback(null, credential);
+    }).catch(error => {
+        callback(error);
     });
 };

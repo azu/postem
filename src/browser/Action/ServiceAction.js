@@ -95,12 +95,12 @@ export default class ServiceAction extends Action {
     }
 
     enableService(service) {
-        console.log(service);
+        console.log("enableService", service);
         if (typeof service === "string") {
             throw new Error("Not ServiceId, It should be service instance")
         }
         const client = serviceInstance.getClient(service);
-        console.log(client);
+        console.log("enableService", client);
         if (client.isLogin()) {
             this.dispatch(keys.enableService, service);
         } else {

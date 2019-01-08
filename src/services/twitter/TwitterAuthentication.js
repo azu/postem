@@ -5,8 +5,9 @@
  */
 import Consumer from "./TwitterConsumer";
 import NodeTwitterApi from 'node-twitter-api';
-import {BrowserWindow} from "electron";
+import { BrowserWindow, session } from "electron";
 import storage from "../../node/storage/accounts";
+
 const twitter = new NodeTwitterApi({
     callback: 'http://example.com',
     consumerKey: Consumer.key,
@@ -21,8 +22,16 @@ exports.getCredential = function getCredential() {
 exports.requireAccess = function requireAccess(callback) {
     twitter.getRequestToken((_error, reqToken, reqTokenSecret) => {
         const authUrl = twitter.getAuthUrl(reqToken);
-        const loginWindow = new BrowserWindow({width: 800, height: 600, 'node-integration': false});
-        loginWindow.webContents.on('will-navigate', (e, url) => {
+        const loginWindow = new BrowserWindow({ width: 800, height: 600, 'node-integration': false });
+
+        const filter = {
+            urls: ['*']
+        };
+        session.defaultSession.webRequest.onCompleted(filter, (details) => {
+            const url = details.url;
+            handleURL(url);
+        });
+        const handleURL = (e, url, preventDefault) => {
             const closeWindow = () => setTimeout(() => loginWindow.close(), 0);
             let matched;
             if (matched = url.match(/\?oauth_token=([^&]*)&oauth_verifier=([^&]*)/)) {
@@ -37,8 +46,13 @@ exports.requireAccess = function requireAccess(callback) {
                     }
                 });
             }
-            e.preventDefault();
+            if (preventDefault) {
+                e.preventDefault();
+            }
             closeWindow();
+        };
+        loginWindow.webContents.on('will-navigate', (event, url) => {
+            handleURL(url, () => event.preventDefault());
         });
         loginWindow.loadURL(authUrl);
     });
