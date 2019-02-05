@@ -31,7 +31,7 @@ exports.requireAccess = function requireAccess(callback) {
             const url = details.url;
             handleURL(url);
         });
-        const handleURL = (e, url, preventDefault) => {
+        const handleURL = (url, preventDefault) => {
             const closeWindow = () => setTimeout(() => loginWindow.close(), 0);
             let matched;
             if (matched = url.match(/\?oauth_token=([^&]*)&oauth_verifier=([^&]*)/)) {
@@ -41,15 +41,15 @@ exports.requireAccess = function requireAccess(callback) {
                         accessSecret: accessTokenSecret
                     };
                     storage.set("twitter", credential);
+                    closeWindow();
                     if (callback) {
                         callback(null, credential);
                     }
                 });
             }
             if (preventDefault) {
-                e.preventDefault();
+                preventDefault();
             }
-            closeWindow();
         };
         loginWindow.webContents.on('will-navigate', (event, url) => {
             handleURL(url, () => event.preventDefault());
