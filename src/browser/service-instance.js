@@ -2,23 +2,16 @@
 "use strict";
 // service
 import ServiceManger from "./service-manager";
-import path from "path";
-import interopRequire from "interop-require";
 const manager = new ServiceManger();
-const serviceNameList = [
-    "twitter",
-    "hatebu",
-    "jser.info",
-    "ecmascript-daily",
-    "jser.info-ping"
-];
-console.log(process.env.NODE_ENV);
-if (process.env.NODE_ENV === 'development') {
-    serviceNameList.push("debug");
-}
-const services = serviceNameList.map(name => {
-    const service = interopRequire(path.join(__dirname, "../services/", name, "index.js"));
-    return [service.Model, service.Client];
+// Load service definitions
+const serviceNameList = require("../../service.js");
+const services = serviceNameList
+    .filter(service => {
+        return service.enabled;
+    })
+    .map(service => {
+    const { Model, Client } = require(service.indexPath);
+    return [Model, Client];
 });
 services.forEach(([Model, Client]) => {
     manager.addService(new Model(), new Client());

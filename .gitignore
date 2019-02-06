@@ -84,3 +84,4 @@ crashlytics-build.properties
 
 /dist/
 /src/services/hatebu/consumer.json
+/service.js

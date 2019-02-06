@@ -1,6 +1,9 @@
 # Postem
 
-TomblooとかTombfixみたいなElectronアプリ。
+[Tombloo](https://github.com/to/tombloo)とか[TombfixBuild Status](https://github.com/tombfix/core)のようなElectronアプリ。
+
+:memo: Note: このアプリは個人的な用途で作成されているため、バイナリが配布されていません。
+そのため、手元のElectron環境で動かす前提の作りになっています。(それを修正するPRは歓迎です)
 
 ## Feature
 
@@ -11,24 +14,48 @@ TomblooとかTombfixみたいなElectronアプリ。
 
 ## Installation
 
-    npm install
+    yarn install
 
-## Usage
+## 利用するサービスの設定
 
-    npm start
-    # develop
+クロスポストできるサービスの一覧を`service.js`で定義します。
 
-### Command Line
+- [service.example.js](./service.example.js)を`service.js`にリネームして設定
 
-- `--title`: default title
-- `--url`: default url
-- `--twitter`: open twitter mode
+また、[src/services](./src/services)を参考にして独自のサービスを追加できます。
 
-### production
+## Usage: 起動方法
+
+Development mode:
+
+    yarn start
+    
+Production mode:
 
     npm run build
     ./bin/cmd.js
     # production
+
+### Command Line引数
+
+次の引数を付けて起動すると初期値が入った状態で起動できます。
+
+- `--title`: set default title
+- `--url`:   set default url
+
+### URL scheme
+
+次のURL schemeが自動的に登録されます。
+
+```
+postem://
+```
+
+今見ているサイトについて投稿する場合は、次のJavaScriptを実行するとアプリが起動できます。
+
+```
+location.href = `postem://?url=${encodeURIComponent(window.top.location.href)}&title=${encodeURIComponent(window.top.document.title)}`
+```
 
 ## Contributing
 

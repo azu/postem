@@ -2,7 +2,7 @@
 "use strict";
 import Model from "./JSerModel";
 import Client from "./JSerClient";
-export default {
+export {
     Model,
     Client
 };
