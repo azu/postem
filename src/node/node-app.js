@@ -3,7 +3,7 @@
 const url = require("url");
 const defaultMenu = require('electron-default-menu');
 const { Menu, app, shell } = require("electron");
-import Application, { WindowMode } from "./Application";
+import Application  from "./Application";
 
 app.setAsDefaultProtocolClient("postem");
 const minimist = require('minimist');
@@ -23,7 +23,7 @@ function queryToArgs(urlString) {
 function openFromProtocol(urlString) {
     const argvParsed = queryToArgs(urlString);
     if (!application) {
-        application = new Application(WindowMode.default);
+        application = new Application();
         application.launch(argvParsed);
         return;
     }
@@ -51,8 +51,7 @@ function startRenderApp(argv) {
     }
 
     const argvParsed = argv || minimist(process.argv.slice(2));
-    const isTwitter = argvParsed.twitter !== undefined;
-    application = new Application(isTwitter ? WindowMode.twitter : WindowMode.default);
+    application = new Application();
     application.launch(argvParsed);
 }
 
