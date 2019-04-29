@@ -63,8 +63,8 @@ Production mode:
 
 表示されているアイコンの左から順番に<kbd>Cmd+数字</kbd>のショートカットが振られています。
 
-- <kbd>Cmd+1<kbd>: Twitter
-- <kbd>Cmd+2<kbd>: はてなブックマーク
+- <kbd>Cmd+1</kbd>: Twitter
+- <kbd>Cmd+2</kbd>: はてなブックマーク
 
 最後のアイコンだけは<kbd>Cmd+0</kbd>が振られています。
 
