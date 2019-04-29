@@ -1,4 +1,4 @@
-# Postem [![Build Status](https://travis-ci.org/azu/postem.svg?branch=master)](https://travis-ci.org/azu/postem)
+# Postem
 
 [Tombloo](https://github.com/to/tombloo)とか[Tombfix](https://github.com/tombfix/core)のようなクロスポストクライアントアプリ。
 
