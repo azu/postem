@@ -5,16 +5,19 @@
 :memo: Note: このアプリは個人的な用途で作成されているため、バイナリが配布されていません。
 そのため、手元のElectron環境で動かす前提の作りになっています。(それを修正するPRは歓迎です)
 
-## Feature
+## Features
 
-- Twitter、はてなブックマークとかへのクロスポスト
-- [textlint](https://github.com/textlint/textlint "textlint")でのリアルタイムLint
+- Twitter、はてなブックマークなどへのクロスポスト
+- はてなブックマークを使ったタグ補完
+- 独自に対応サービスを追加可能
+- 入力欄は[textlint](https://github.com/textlint/textlint "textlint")でのリアルタイムLint
+- URLスキームを使ってブラウザから起動できる
 
 ![screenshot](https://monosnap.com/file/9WtShAGiCilmCOLtuGEWnfphfpKndf.png)
 
 ## Installation
 
-アプリに必要な必要を[Yarn](https://yarnpkg.com/)でインストールします。
+アプリに必要な依存を[Yarn](https://yarnpkg.com/)でインストールします。
 
     yarn install
     
