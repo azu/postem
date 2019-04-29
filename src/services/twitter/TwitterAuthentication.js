@@ -9,7 +9,7 @@ import { BrowserWindow, session } from "electron";
 import storage from "../../node/storage/accounts";
 
 const twitter = new NodeTwitterApi({
-    callback: 'http://example.com',
+    callback: Consumer.callbackURL,
     consumerKey: Consumer.key,
     consumerSecret: Consumer.secret
 });

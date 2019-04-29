@@ -20,7 +20,11 @@
 
 クロスポストできるサービスの一覧を`service.js`で定義します。
 
-- [service.example.js](./service.example.js)を`service.js`にリネームして設定
+- [src/service.example.js](./src/service.example.js)を`service.js`にリネームして設定
+
+```
+cp src/service.example.js src/service.js
+```
 
 また、[src/services](./src/services)を参考にして独自のサービスを追加できます。
 

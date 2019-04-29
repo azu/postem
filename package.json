@@ -1,50 +1,34 @@
 {
   "name": "postem",
+  "version": "1.0.0",
+  "description": "electron app that like tombloo.",
+  "keywords": [
+    "electron",
+    "hatena",
+    "twitter"
+  ],
+  "homepage": "https://github.com/azu/postem",
+  "bugs": {
+    "url": "https://github.com/azu/postem/issues"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/azu/postem.git"
   },
-  "author": "azu",
-  "email": "azuciao@gmail.com",
-  "homepage": "https://github.com/azu/postem",
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/azu/postem/issues"
-  },
-  "version": "1.0.0",
-  "description": "electron app that like tombloo.",
+  "author": "azu",
   "main": "index.js",
   "bin": {
     "postem": "bin/cmd.js"
   },
-  "build": {
-    "appId": "info.efcl.postem",
-    "mac": {
-      "target": [
-        "zip"
-      ],
-      "category": "your.app.category.type"
-    }
-  },
   "scripts": {
     "build": "NODE_ENV=production gulp build",
-    "start": "NODE_ENV=development electron .",
     "predist": "npm run build",
-    "dist": "electron-builder"
+    "dist": "electron-builder",
+    "start": "NODE_ENV=development electron ."
   },
-  "keywords": [
-    "electron",
-    "twitter",
-    "hatena"
-  ],
   "dependencies": {
-    "@babel/core": "^7.0.0",
-    "@babel/plugin-transform-destructuring": "^7.0.0",
-    "@babel/plugin-transform-modules-commonjs": "^7.0.0",
-    "@babel/plugin-transform-parameters": "^7.0.0",
-    "@babel/polyfill": "^7.0.0",
-    "@babel/preset-react": "^7.0.0",
-    "@babel/register": "^7.0.0",
+    "@babel/polyfill": "^7.4.4",
     "codemirror": "^5.26.0",
     "codemirror-textlint": "^1.2.0",
     "combokeys": "^2.4.6",
@@ -89,13 +73,28 @@
     "twitter-text": "^1.14.6"
   },
   "devDependencies": {
-    "@babel/core": "^7.0.0",
-    "@babel/preset-env": "^7.0.0",
+    "@babel/core": "^7.4.4",
+    "@babel/plugin-transform-destructuring": "^7.4.4",
+    "@babel/plugin-transform-modules-commonjs": "^7.4.4",
+    "@babel/plugin-transform-parameters": "^7.4.4",
+    "@babel/preset-env": "^7.4.4",
+    "@babel/preset-react": "^7.0.0",
+    "@babel/register": "^7.4.4",
     "electron": "^4.0.1",
     "electron-builder": "^20.38.4",
     "electron-packager": "^13.0.1",
-    "gulp": "^4.0.0",
+    "gulp": "^4.0.1",
     "gulp-babel": "^8.0.0",
     "gulp-if": "^2.0.0"
-  }
+  },
+  "build": {
+    "appId": "info.efcl.postem",
+    "mac": {
+      "target": [
+        "zip"
+      ],
+      "category": "your.app.category.type"
+    }
+  },
+  "email": "azuciao@gmail.com"
 }

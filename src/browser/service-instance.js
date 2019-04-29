@@ -4,7 +4,7 @@
 import ServiceManger from "./service-manager";
 const manager = new ServiceManger();
 // Load service definitions
-const serviceNameList = require("../../service.js");
+const serviceNameList = require("../service.js");
 const services = serviceNameList
     .filter(service => {
         return service.enabled;

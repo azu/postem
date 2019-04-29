@@ -1,6 +1,7 @@
 // LICENSE : MIT
 "use strict";
 export default {
-    key: 'KAR2eM09o2GCddFfHUXz7vFKV',
-    secret: '8MoozYzEzkstemW4fagnm5qlGMVELIxuWBTcBOz0BpUDIpDWqY'
+    key: 'nXS4XxyAlv7qPOKdv2zX7TO4z',
+    secret: 'H9heHTmEdeLaE2gOPkeCoTX9iyOfQfjKNQYY05BRQnWvBf24gI',
+    callbackURL: "https://github.com/azu/postem"
 };
