@@ -14,17 +14,27 @@
 
 ## Installation
 
-    yarn install
+アプリに必要な必要を[Yarn](https://yarnpkg.com/)でインストールします。
 
-## 利用するサービスの設定
+    yarn install
+    
+アプリを起動する前に利用するサービスの設定を`service.js`で定義してください。
+
+### 利用するサービスの設定
 
 クロスポストできるサービスの一覧を`service.js`で定義します。
 
 - [src/service.example.js](./src/service.example.js)を`service.js`にリネームして設定
 
-```
+```shell
 cp src/service.example.js src/service.js
 ```
+
+デフォルトでは次のサービスが有効になっています。
+
+- Twitter
+- はてなブックマーク
+- デバッグ(Development modeのみ有効)
 
 また、[src/services](./src/services)を参考にして独自のサービスを追加できます。
 
