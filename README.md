@@ -1,6 +1,6 @@
 # Postem [![Build Status](https://travis-ci.org/azu/postem.svg?branch=master)](https://travis-ci.org/azu/postem)
 
-[Tombloo](https://github.com/to/tombloo)とか[Tombfix](https://github.com/tombfix/core)のようなElectronアプリ。
+[Tombloo](https://github.com/to/tombloo)とか[Tombfix](https://github.com/tombfix/core)のようなクロスポストクライアントアプリ。
 
 :memo: Note: このアプリは個人的な用途で作成されているため、バイナリが配布されていません。
 そのため、手元のElectron環境で動かす前提の作りになっています。(それを修正するPRは歓迎です)
