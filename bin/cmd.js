@@ -1,24 +1,26 @@
 #!/usr/bin/env node
-var os = require('os').type();
+var os = require("os").type();
 
 var electron = /electron/i.test(process.argv[0]);
 if (electron) {
-    require('../');
+    require("../");
 }
 
 if (!electron) {
-    if (os === 'Windows_NT' && process.argv[2] === 'init' && process.versions.node[0] < 4 && process.versions.node[1] < 1) {
-        require('../')
+    if (
+        os === "Windows_NT" &&
+        process.argv[2] === "init" &&
+        process.versions.node[0] < 4 &&
+        process.versions.node[1] < 1
+    ) {
+        require("../");
     } else {
-        process.title = 'Postem';
-        var spawn = require('child_process').spawn;
-        spawn(
-            require('electron'),
-            [__filename].concat(process.argv.slice(2)),
-            {
-                stdio: [0, 1, 2]
-            }).on('close', function (code) {
-            process.exit(code)
-        })
+        process.title = "Postem";
+        var spawn = require("child_process").spawn;
+        spawn(require("electron"), [__filename].concat(process.argv.slice(2)), {
+            stdio: [0, 1, 2]
+        }).on("close", function(code) {
+            process.exit(code);
+        });
     }
 }

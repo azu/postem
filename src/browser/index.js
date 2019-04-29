@@ -1,6 +1,6 @@
 // LICENSE : MIT
 "use strict";
-if (process.env.NODE_ENV === 'development') {
+if (process.env.NODE_ENV === "development") {
     require("@babel/register");
 }
 require("./App");

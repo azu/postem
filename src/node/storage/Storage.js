@@ -1,6 +1,6 @@
 // LICENSE : MIT
 "use strict";
-import {app} from "electron";
+import { app } from "electron";
 import path from "path";
 import assert from "assert";
 import jetpack from "fs-jetpack";
@@ -8,7 +8,7 @@ export default class Storage {
     constructor(storeName, defaults = {}) {
         assert(typeof storeName === "string");
         this.path = path.join(app.getPath("userData"), storeName + ".json");
-        this.all = jetpack.read(this.path, 'json') || defaults;
+        this.all = jetpack.read(this.path, "json") || defaults;
     }
 
     get(name) {

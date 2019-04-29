@@ -20,9 +20,12 @@ class App extends React.Component {
     constructor(...args) {
         super(...args);
         this._TagSelect = null;
-        this.state = Object.assign({
-            initialized: false
-        }, appContext.ServiceStore.state);
+        this.state = Object.assign(
+            {
+                initialized: false
+            },
+            appContext.ServiceStore.state
+        );
     }
 
     componentWillMount() {
@@ -50,12 +53,14 @@ class App extends React.Component {
             const state = appContext.ServiceStore.state;
             const service = serviceManger.getService("api.b.hatena.ne.jp");
             if (service && state.selectedTags.length === 0 && state.comment.length === 0) {
-                appContext.ServiceAction.fetchContent(service, URL).then(({ comment, tags }) => {
-                    appContext.ServiceAction.updateComment(comment);
-                    appContext.ServiceAction.selectTags(tags);
-                }).catch(error => {
-                    console.log("fetchContent:error", error);
-                });
+                appContext.ServiceAction.fetchContent(service, URL)
+                    .then(({ comment, tags }) => {
+                        appContext.ServiceAction.updateComment(comment);
+                        appContext.ServiceAction.selectTags(tags);
+                    })
+                    .catch(error => {
+                        console.log("fetchContent:error", error);
+                    });
             }
         });
         ipcRenderer.on("afterUpdate", (event, { title, url }) => {
@@ -66,7 +71,7 @@ class App extends React.Component {
                 isInitialized = false;
             }
         });
-        ipcRenderer.on("resetField", (event) => {
+        ipcRenderer.on("resetField", event => {
             appContext.ServiceAction.resetField();
         });
         // Fetch tags using
@@ -103,13 +108,13 @@ class App extends React.Component {
         const updateViaURL = ServiceAction.updateViaURL.bind(ServiceAction);
         const updateComment = ServiceAction.updateComment.bind(ServiceAction);
         const services = serviceManger.getServices();
-        const toggleServiceAtIndex = (index) => {
+        const toggleServiceAtIndex = index => {
             const service = serviceManger.getServices()[index];
             if (service) {
                 toggleService(service);
             }
         };
-        const toggleService = (service) => {
+        const toggleService = service => {
             const isEnabled = this.state.enabledServiceIDs.some(serviceID => service.id === serviceID);
             if (isEnabled) {
                 disableService(service);
@@ -117,16 +122,16 @@ class App extends React.Component {
                 enableService(service);
             }
         };
-        const enableService = (service) => {
+        const enableService = service => {
             ServiceAction.enableService(service);
         };
-        const disableService = (service) => {
+        const disableService = service => {
             ServiceAction.disableService(service);
         };
-        const login = (service) => {
+        const login = service => {
             ServiceAction.login(service);
         };
-        const editItem = (relatedItem) => {
+        const editItem = relatedItem => {
             ServiceAction.editRelatedItem(relatedItem);
         };
         const finishEditing = (relatedItem, value) => {
@@ -136,33 +141,44 @@ class App extends React.Component {
             ServiceAction.addRelatedItem();
         };
         const submitPostLink = this.postLink.bind(this);
-        return <div className="App">
-            <ServiceList services={serviceManger.getServices()} enabledServices={this.state.enabledServiceIDs}
-                         enableService={enableService}
-                         disableService={disableService}
-                         login={login}/>
-            <TitleInput title={this.state.title} updateTitle={updateTitle}/>
-            <URLInput URL={this.state.URL} updateURL={updateURL}/>
-            <ViaURLInput URL={this.state.viaURL} updateURL={updateViaURL}/>
-            <TagSelect
-                ref={(c) => this._TagSelect = c}
-                tags={this.state.tags}
-                selectTags={selectTags}
-                selectedTags={this.state.selectedTags}/>
-            <Editor value={this.state.comment} onChange={updateComment}
+        return (
+            <div className="App">
+                <ServiceList
+                    services={serviceManger.getServices()}
+                    enabledServices={this.state.enabledServiceIDs}
+                    enableService={enableService}
+                    disableService={disableService}
+                    login={login}
+                />
+                <TitleInput title={this.state.title} updateTitle={updateTitle} />
+                <URLInput URL={this.state.URL} updateURL={updateURL} />
+                <ViaURLInput URL={this.state.viaURL} updateURL={updateViaURL} />
+                <TagSelect
+                    ref={c => (this._TagSelect = c)}
+                    tags={this.state.tags}
+                    selectTags={selectTags}
+                    selectedTags={this.state.selectedTags}
+                />
+                <Editor
+                    value={this.state.comment}
+                    onChange={updateComment}
                     onSubmit={submitPostLink}
                     services={services}
-                    toggleServiceAtIndex={toggleServiceAtIndex}/>
-            <RelatedListBox relatedItems={this.state.relatedItems}
-                            editItem={editItem}
-                            finishEditing={finishEditing}
-                            addItem={addItem}/>
-            <SubmitButton onSubmit={submitPostLink}/>
-        </div>;
+                    toggleServiceAtIndex={toggleServiceAtIndex}
+                />
+                <RelatedListBox
+                    relatedItems={this.state.relatedItems}
+                    editItem={editItem}
+                    finishEditing={finishEditing}
+                    addItem={addItem}
+                />
+                <SubmitButton onSubmit={submitPostLink} />
+            </div>
+        );
     }
 }
 
 appContext.on("dispatch", ({ eventKey }) => {
     ipcRenderer.send(String(eventKey));
 });
-render(<App/>, document.getElementById("js-main"));
+render(<App />, document.getElementById("js-main"));

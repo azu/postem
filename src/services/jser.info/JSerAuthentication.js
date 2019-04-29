@@ -1,6 +1,6 @@
 import prompt from "../config-dialog/prompt";
 import storage from "../../node/storage/accounts";
-exports.canAccess = function () {
+exports.canAccess = function() {
     return storage.has("jser.info-dir");
 };
 /*
@@ -10,13 +10,13 @@ so, handing callback as async way
 
 I think that this limitation is caused by ipc.
  */
-exports.requireAccess = function (callback) {
+exports.requireAccess = function(callback) {
     const options = {
         title: "JSer.info Config",
         message: "JSer.infoリポジトリのあるディレクトリを指定して下さい",
         placeholder: "/path/to/jser.info/"
     };
-    prompt(options, function (res) {
+    prompt(options, function(res) {
         var filePath = res.trim();
         if (filePath.length > 0) {
             storage.set("jser.info-dir", filePath);

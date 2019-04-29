@@ -25,7 +25,8 @@
     "build": "NODE_ENV=production gulp build",
     "predist": "npm run build",
     "dist": "electron-builder",
-    "start": "NODE_ENV=development electron ."
+    "start": "NODE_ENV=development electron .",
+    "prettier": "prettier --write \"**/*.{js,jsx,ts,tsx,css}\""
   },
   "dependencies": {
     "@babel/polyfill": "^7.4.4",
@@ -85,7 +86,10 @@
     "electron-packager": "^13.0.1",
     "gulp": "^4.0.1",
     "gulp-babel": "^8.0.0",
-    "gulp-if": "^2.0.0"
+    "gulp-if": "^2.0.0",
+    "husky": "^2.1.0",
+    "lint-staged": "^8.1.5",
+    "prettier": "^1.17.0"
   },
   "build": {
     "appId": "info.efcl.postem",
@@ -96,5 +100,21 @@
       "category": "your.app.category.type"
     }
   },
-  "email": "azuciao@gmail.com"
+  "email": "azuciao@gmail.com",
+  "prettier": {
+    "singleQuote": false,
+    "printWidth": 120,
+    "tabWidth": 4
+  },
+  "husky": {
+    "hooks": {
+      "precommit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx,css}": [
+      "prettier --write",
+      "git add"
+    ]
+  }
 }

@@ -36,5 +36,4 @@ export default class ServiceManager {
     getClient(service) {
         return this.services.get(service);
     }
-
 }

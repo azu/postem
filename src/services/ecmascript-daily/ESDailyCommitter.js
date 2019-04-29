@@ -7,9 +7,9 @@ const fs = require("fs");
 const yaml = require("js-yaml");
 const moment = require("moment");
 const slugg = require("slugg");
-const mkdirp = require('mkdirp');
+const mkdirp = require("mkdirp");
 import storage from "../../node/storage/accounts";
-import {exec} from "child_process"
+import { exec } from "child_process";
 /**
  * Return index.json path which find from `Date` object
  * @param {Date} date
@@ -52,10 +52,7 @@ function pickFromMatter(item) {
 }
 function createPost(item) {
     var frontMatter = pickFromMatter(item);
-    return ("---\n" +
-    yaml.safeDump(frontMatter) +
-    "---\n" +
-    String(item.content) + "\n").replace(/[\n\r]/g, '\n');
+    return ("---\n" + yaml.safeDump(frontMatter) + "---\n" + String(item.content) + "\n").replace(/[\n\r]/g, "\n");
 }
 function creteSafeSlug(item) {
     var slugForItem = slugg(item.title);
@@ -80,7 +77,11 @@ function createPostFrom(item, callback) {
     // sync
     const title = item.title;
     var syncScript = path.join(repositoryDirectory, "./tools/git-sync.sh");
-    exec(`bash ${syncScript} "${title}"`, {
-        cwd: repositoryDirectory
-    }, callback);
+    exec(
+        `bash ${syncScript} "${title}"`,
+        {
+            cwd: repositoryDirectory
+        },
+        callback
+    );
 }

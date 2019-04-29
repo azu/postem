@@ -8,8 +8,8 @@ export default class APIServer {
 
     start() {
         let app = express();
-        app.get('/', (req, res) => {
-            let {title, url} = req.query;
+        app.get("/", (req, res) => {
+            let { title, url } = req.query;
             if (title) {
                 this.webContent.send("updateTitle", title);
             }

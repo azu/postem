@@ -2,12 +2,12 @@
 "use strict";
 import { app, BrowserWindow } from "electron";
 import Positioner from "electron-positioner";
-import windowStateKeeper from 'electron-window-state';
+import windowStateKeeper from "electron-window-state";
 import path from "path";
 import keys from "../browser/Action/ServiceActionConst";
 import WebMessenger from "./WebMessenger";
 
-const ipcMain = require('electron').ipcMain;
+const ipcMain = require("electron").ipcMain;
 
 export default class Application {
     get isDeactived() {
@@ -38,12 +38,12 @@ export default class Application {
         });
         const positioner = new Positioner(browserWindow);
         if (mainWindowState.y === undefined || mainWindowState.x === undefined) {
-            positioner.move('topRight');
+            positioner.move("topRight");
         }
         const index = {
             html: path.join(__dirname, "..", "browser", "index.html")
         };
-        browserWindow.loadURL('file://' + index.html);
+        browserWindow.loadURL("file://" + index.html);
         // Let us register listeners on the window, so we can update the state
         // automatically (the listeners will be removed when the window is closed)
         // and restore the maximized or full screen state
@@ -80,7 +80,7 @@ export default class Application {
         // command line
         const argv = argvParsed;
         this.mainWindow = this._createBrowserWindow();
-        this.mainWindow.webContents.on('did-finish-load', () => {
+        this.mainWindow.webContents.on("did-finish-load", () => {
             const messenger = new WebMessenger(this.mainWindow.webContents);
             if (argv.title) {
                 messenger.updateTitle(argv.title);
@@ -95,17 +95,17 @@ export default class Application {
             //server.start();
         });
         let force_quit = false;
-        app.on('before-quit', function(e) {
+        app.on("before-quit", function(e) {
             force_quit = true;
         });
 
-        this.mainWindow.on('close', (event) => {
+        this.mainWindow.on("close", event => {
             if (!force_quit) {
                 event.preventDefault();
                 this.hide();
             }
         });
-        this.mainWindow.on('closed', () => {
+        this.mainWindow.on("closed", () => {
             this.mainWindow = null;
         });
         // set top

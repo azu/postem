@@ -30,7 +30,7 @@ module.exports = [
     // Last service is special
     // Assign shortcut as Cmd + 0
     {
-        enabled: process.env.NODE_ENV === 'development',
+        enabled: process.env.NODE_ENV === "development",
         name: "debug",
         indexPath: path.join(__dirname, "services/debug/index.js")
     }

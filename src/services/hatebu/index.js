@@ -2,7 +2,4 @@
 "use strict";
 import Model from "./HatenaModel";
 import Client from "./HatenaClient";
-export {
-    Model,
-    Client
-};
+export { Model, Client };

@@ -4,8 +4,8 @@ import { Action } from "material-flux";
 import keys from "./ServiceActionConst";
 
 export { keys };
-import notie from "notie"
-import { show as LoadingShow, dismiss as LoadingDismiss } from "../view-util/Loading"
+import notie from "notie";
+import { show as LoadingShow, dismiss as LoadingDismiss } from "../view-util/Loading";
 import RelatedItemModel from "../models/RelatedItemModel";
 import serviceInstance from "../service-instance";
 
@@ -17,11 +17,14 @@ export default class ServiceAction extends Action {
             return;
         }
         console.log("fetchTags: " + service.id);
-        return client.getTags().then(tags => {
-            this.dispatch(keys.fetchTags, tags);
-        }).catch(error => {
-            console.log(error);
-        });
+        return client
+            .getTags()
+            .then(tags => {
+                this.dispatch(keys.fetchTags, tags);
+            })
+            .catch(error => {
+                console.log(error);
+            });
     }
 
     fetchContent(service, url) {
@@ -39,7 +42,7 @@ export default class ServiceAction extends Action {
             return {
                 service,
                 client
-            }
+            };
         });
         var enabledCS = mapCS.filter(({ client }) => client.isLogin());
         var servicePromises = enabledCS.map(({ service, client }) => {
@@ -49,15 +52,18 @@ export default class ServiceAction extends Action {
         if (servicePromises.length) {
             LoadingShow();
         }
-        return Promise.all(servicePromises).then(() => {
-            notie.alert(1, 'Post Success!', 1.5);
-            this.dispatch(keys.postLink);
-        }).catch(error => {
-            notie.alert(3, 'Post Error.', 2.5);
-            console.log(error);
-        }).then(function finish() {
-            LoadingDismiss(100);
-        });
+        return Promise.all(servicePromises)
+            .then(() => {
+                notie.alert(1, "Post Success!", 1.5);
+                this.dispatch(keys.postLink);
+            })
+            .catch(error => {
+                notie.alert(3, "Post Error.", 2.5);
+                console.log(error);
+            })
+            .then(function finish() {
+                LoadingDismiss(100);
+            });
     }
 
     selectTags(tags) {
@@ -97,7 +103,7 @@ export default class ServiceAction extends Action {
     enableService(service) {
         console.log("enableService", service);
         if (typeof service === "string") {
-            throw new Error("Not ServiceId, It should be service instance")
+            throw new Error("Not ServiceId, It should be service instance");
         }
         const client = serviceInstance.getClient(service);
         console.log("enableService", client);
@@ -125,15 +131,18 @@ export default class ServiceAction extends Action {
     }
 
     addRelatedItem() {
-        this.dispatch(keys.addRelatedItem, new RelatedItemModel({
-            title: "Dummy",
-            URL: "http://example.com/"
-        }));
+        this.dispatch(
+            keys.addRelatedItem,
+            new RelatedItemModel({
+                title: "Dummy",
+                URL: "http://example.com/"
+            })
+        );
     }
 
     finishEditingRelatedItem(item, value) {
         if (!value) {
-            return this.dispatch(keys.removeRelatedItem, item)
+            return this.dispatch(keys.removeRelatedItem, item);
         }
         item.updateWithValue(value);
         item.finishEditing();

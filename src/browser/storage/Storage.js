@@ -25,7 +25,7 @@ export default class Storage {
 
     delete(name) {
         delete this.all[name];
-        localStorage.setItem(this.storeName, JSON.stringify(this.all))
+        localStorage.setItem(this.storeName, JSON.stringify(this.all));
     }
 
     clear() {

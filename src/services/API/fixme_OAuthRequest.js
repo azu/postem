@@ -11,12 +11,12 @@ export default class OAuthRequest {
     get(URL) {
         const Authorization = this.oauthSignature.create("GET", URL);
         return fetch(URL, {
-            method: 'get',
+            method: "get",
             headers: {
-                'Accept': 'application/json',
-                'Authorization': Authorization
+                Accept: "application/json",
+                Authorization: Authorization
             }
-        }).then(function (response) {
+        }).then(function(response) {
             return response.json();
         });
     }
@@ -24,9 +24,9 @@ export default class OAuthRequest {
     post(URL, body) {
         const Authorization = this.oauthSignature.create("POST", URL);
         return fetch(URL, {
-            method: 'post',
+            method: "post",
             headers: {
-                'Authorization': Authorization,
+                Authorization: Authorization,
                 "Content-Type": "application/x-www-form-urlencoded"
             },
             body: body

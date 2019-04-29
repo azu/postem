@@ -2,7 +2,7 @@
 "use strict";
 let idCount = 0;
 export default class RelatedItem {
-    constructor({title,URL}) {
+    constructor({ title, URL }) {
         this.title = title;
         this.URL = URL;
         this.id = idCount++;
@@ -18,8 +18,7 @@ export default class RelatedItem {
                 this.title = title;
                 this.URL = URL;
             }
-        } catch (error) {
-        }
+        } catch (error) {}
     }
 
     startEditing() {
@@ -27,7 +26,7 @@ export default class RelatedItem {
     }
 
     finishEditing() {
-        this.isEditing = false
+        this.isEditing = false;
     }
 
     toJSON() {

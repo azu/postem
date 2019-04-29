@@ -1,8 +1,8 @@
 // LICENSE : MIT
 "use strict";
-import querystring from "querystring"
-const Authentication = require('electron').remote.require(__dirname + "/JSerAuthentication");
-const Committer = require('electron').remote.require(__dirname + "/JSerCommitter");
+import querystring from "querystring";
+const Authentication = require("electron").remote.require(__dirname + "/JSerAuthentication");
+const Committer = require("electron").remote.require(__dirname + "/JSerCommitter");
 export default class HatenaClient {
     isLogin() {
         return Authentication.canAccess();
@@ -23,7 +23,7 @@ export default class HatenaClient {
         }
      */
     postLink(options = {}) {
-        let {title, url, viaURL, comment, tags, relatedItems} = options;
+        let { title, url, viaURL, comment, tags, relatedItems } = options;
         let serializedObject = JSON.stringify({
             date: new Date(),
             title,

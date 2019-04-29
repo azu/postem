@@ -1,7 +1,7 @@
 // LICENSE : MIT
 "use strict";
-const Authentication = require('electron').remote.require(__dirname + "/ESDailyAuthentication");
-const Committer = require('electron').remote.require(__dirname + "/ESDailyCommitter");
+const Authentication = require("electron").remote.require(__dirname + "/ESDailyAuthentication");
+const Committer = require("electron").remote.require(__dirname + "/ESDailyCommitter");
 export default class HatenaClient {
     isLogin() {
         return Authentication.canAccess();
@@ -22,7 +22,7 @@ export default class HatenaClient {
         }
      */
     postLink(options = {}) {
-        let {title, url,comment,tags,relatedItems} = options;
+        let { title, url, comment, tags, relatedItems } = options;
         let serializedObject = JSON.stringify({
             date: new Date(),
             title,
@@ -36,7 +36,7 @@ export default class HatenaClient {
             resolve = _resolve;
             reject = _reject;
         });
-        Committer.savePost(serializedObject, function (error) {
+        Committer.savePost(serializedObject, function(error) {
             if (error) {
                 return reject(error);
             }

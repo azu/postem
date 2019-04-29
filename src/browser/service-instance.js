@@ -10,9 +10,9 @@ const services = serviceNameList
         return service.enabled;
     })
     .map(service => {
-    const { Model, Client } = require(service.indexPath);
-    return [Model, Client];
-});
+        const { Model, Client } = require(service.indexPath);
+        return [Model, Client];
+    });
 services.forEach(([Model, Client]) => {
     manager.addService(new Model(), new Client());
 });

@@ -21,17 +21,20 @@ exports.requireAccess = function requireAccess(callback) {
         scopes: ["read_public", "write_public", "read_private", "write_private"]
     });
     console.log("requireAccess: request start");
-    hatena.startRequest().then((result) => {
-        console.log("requireAccess: response result", result);
-        var accessToken = result.accessToken;
-        var accessTokenSecret = result.accessTokenSecret;
-        var credential = {
-            accessKey: accessToken,
-            accessSecret: accessTokenSecret
-        };
-        storage.set("hatena", credential);
-        callback(null, credential);
-    }).catch(error => {
-        callback(error);
-    });
+    hatena
+        .startRequest()
+        .then(result => {
+            console.log("requireAccess: response result", result);
+            var accessToken = result.accessToken;
+            var accessTokenSecret = result.accessTokenSecret;
+            var credential = {
+                accessKey: accessToken,
+                accessSecret: accessTokenSecret
+            };
+            storage.set("hatena", credential);
+            callback(null, credential);
+        })
+        .catch(error => {
+            callback(error);
+        });
 };

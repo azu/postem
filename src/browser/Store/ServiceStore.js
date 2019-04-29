@@ -19,7 +19,7 @@ export default class ServiceStore extends Store {
             relatedItems: [],
             enabledServiceIDs: []
         };
-        this.register(keys.fetchTags, (tags) => {
+        this.register(keys.fetchTags, tags => {
             if (tags.length > 0) {
                 ServiceStorage.set("tags", tags);
             }
@@ -27,17 +27,17 @@ export default class ServiceStore extends Store {
                 tags
             });
         });
-        this.register(keys.selectTags, (selectedTags) => {
+        this.register(keys.selectTags, selectedTags => {
             this.setState({
                 selectedTags
             });
         });
-        this.register(keys.updateTitle, (title) => {
+        this.register(keys.updateTitle, title => {
             this.setState({
                 title
             });
         });
-        this.register(keys.updateQuote, (text) => {
+        this.register(keys.updateQuote, text => {
             if (text.length > 0) {
                 this.setState({
                     quote: `「${text}」`
@@ -45,18 +45,18 @@ export default class ServiceStore extends Store {
             }
         });
 
-        this.register(keys.updateURL, (URL) => {
+        this.register(keys.updateURL, URL => {
             this.setState({
                 URL
             });
         });
 
-        this.register(keys.updateViaURL, (viaURL) => {
+        this.register(keys.updateViaURL, viaURL => {
             this.setState({
                 viaURL
             });
         });
-        this.register(keys.updateComment, (comment) => {
+        this.register(keys.updateComment, comment => {
             this.setState({
                 comment
             });
@@ -75,7 +75,7 @@ export default class ServiceStore extends Store {
         };
         this.register(keys.resetField, resetState);
         //this.register(keys.postLink, resetState);
-        this.register(keys.enableService, (service) => {
+        this.register(keys.enableService, service => {
             let enabledServiceIDs = this.state.enabledServiceIDs.slice();
             if (this.state.enabledServiceIDs.indexOf(service.id) === -1) {
                 enabledServiceIDs.push(service.id);
@@ -84,7 +84,7 @@ export default class ServiceStore extends Store {
                 enabledServiceIDs
             });
         });
-        this.register(keys.disableService, (service) => {
+        this.register(keys.disableService, service => {
             const enabledServiceIDs = this.state.enabledServiceIDs.filter(serviceId => {
                 return service.id !== serviceId;
             });
@@ -93,18 +93,18 @@ export default class ServiceStore extends Store {
             });
         });
 
-        this.register(keys.addRelatedItem, (relatedItem) => {
+        this.register(keys.addRelatedItem, relatedItem => {
             const relatedItems = this.state.relatedItems.slice();
             relatedItems.push(relatedItem);
             this.setState({ relatedItems });
         });
-        this.register(keys.removeRelatedItem, (relatedItem) => {
+        this.register(keys.removeRelatedItem, relatedItem => {
             var relatedItems = this.state.relatedItems;
             const index = relatedItems.indexOf(relatedItem);
             relatedItems.splice(index, 1);
             this.setState({ relatedItems });
         });
-        const updateRelatedItem = (relatedItem) => {
+        const updateRelatedItem = relatedItem => {
             var relatedItems = this.state.relatedItems;
             const index = relatedItems.indexOf(relatedItem);
             relatedItems[index] = relatedItem;

@@ -5,8 +5,7 @@ export default class JSerInfoPintClient {
         return true;
     }
 
-    loginAsync(callback) {
-    }
+    loginAsync(callback) {}
 
     /**
      *
@@ -19,7 +18,7 @@ export default class JSerInfoPintClient {
         }
      */
     postLink(options = {}) {
-        const {title, url, viaURL, comment, tags, relatedItems} = options;
+        const { title, url, viaURL, comment, tags, relatedItems } = options;
 
         function createIssue(issueData, callback) {
             const xhr = new XMLHttpRequest();
@@ -40,16 +39,19 @@ export default class JSerInfoPintClient {
         }
 
         return new Promise((resolve, reject) => {
-            createIssue({
-                url: url,
-                description: comment
-            }, function(error, response) {
-                if (error) {
-                    reject(error);
-                } else {
-                    resolve(response);
+            createIssue(
+                {
+                    url: url,
+                    description: comment
+                },
+                function(error, response) {
+                    if (error) {
+                        reject(error);
+                    } else {
+                        resolve(response);
+                    }
                 }
-            });
+            );
         });
     }
 }

@@ -2,7 +2,4 @@
 "use strict";
 import Model from "./ESDailyModel";
 import Client from "./ESDailyClient";
-export {
-    Model,
-    Client
-};
+export { Model, Client };

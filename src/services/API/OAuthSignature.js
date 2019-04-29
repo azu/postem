@@ -14,10 +14,10 @@ export default class OAuthSignature {
             oauth_token,
             oauth_nonce,
             oauth_timestamp,
-            oauth_signature,// <= created signature
+            oauth_signature, // <= created signature
             oauth_signature_method,
-            oauth_version,
-            } = parameters;
+            oauth_version
+        } = parameters;
         return `OAuth oauth_consumer_key="${oauth_consumer_key}", oauth_nonce="${oauth_nonce}", oauth_signature="${oauth_signature}", oauth_signature_method="${oauth_signature_method}", oauth_timestamp="${oauth_timestamp}", oauth_token="${oauth_token}", oauth_version="${oauth_version}"`;
     }
 
@@ -27,8 +27,8 @@ export default class OAuthSignature {
             oauth_token: this.credencial.accessKey,
             oauth_nonce: this._generateNonce(),
             oauth_timestamp: this._getTimestamp(),
-            oauth_signature_method: 'HMAC-SHA1',
-            oauth_version: '1.0'
+            oauth_signature_method: "HMAC-SHA1",
+            oauth_version: "1.0"
         };
         const parameters = Object.assign(oathParameters, userParameters);
         const consumerSecret = this.consumer.secret;
@@ -44,11 +44,68 @@ export default class OAuthSignature {
 
     _generateNonce(nonceSize = 32) {
         const NONCE_CHARS = [
-            'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n',
-            'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'A', 'B',
-            'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P',
-            'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '0', '1', '2', '3',
-            '4', '5', '6', '7', '8', '9'
+            "a",
+            "b",
+            "c",
+            "d",
+            "e",
+            "f",
+            "g",
+            "h",
+            "i",
+            "j",
+            "k",
+            "l",
+            "m",
+            "n",
+            "o",
+            "p",
+            "q",
+            "r",
+            "s",
+            "t",
+            "u",
+            "v",
+            "w",
+            "x",
+            "y",
+            "z",
+            "A",
+            "B",
+            "C",
+            "D",
+            "E",
+            "F",
+            "G",
+            "H",
+            "I",
+            "J",
+            "K",
+            "L",
+            "M",
+            "N",
+            "O",
+            "P",
+            "Q",
+            "R",
+            "S",
+            "T",
+            "U",
+            "V",
+            "W",
+            "X",
+            "Y",
+            "Z",
+            "0",
+            "1",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "7",
+            "8",
+            "9"
         ];
         var result = [];
         var chars = NONCE_CHARS;
@@ -59,10 +116,10 @@ export default class OAuthSignature {
             char_pos = Math.floor(Math.random() * nonce_chars_length);
             result[i] = chars[char_pos];
         }
-        return result.join('');
+        return result.join("");
     }
 
     _getTimestamp() {
-        return Math.floor((new Date()).getTime() / 1000);
+        return Math.floor(new Date().getTime() / 1000);
     }
 }

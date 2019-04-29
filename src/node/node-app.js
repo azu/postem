@@ -1,23 +1,25 @@
 // LICENSE : MIT
 "use strict";
 const url = require("url");
-const defaultMenu = require('electron-default-menu');
+const defaultMenu = require("electron-default-menu");
 const { Menu, app, shell } = require("electron");
-import Application  from "./Application";
+import Application from "./Application";
 
 app.setAsDefaultProtocolClient("postem");
-const minimist = require('minimist');
+const minimist = require("minimist");
 let application = null;
 let startupArgParsed;
 
 function queryToArgs(urlString) {
-    if (!urlString) {return;}
+    if (!urlString) {
+        return;
+    }
     const { query } = url.parse(urlString, true);
     return {
         title: query.title,
         url: query.url,
         quote: query.quote
-    }
+    };
 }
 
 function openFromProtocol(urlString) {
@@ -34,20 +36,19 @@ function openFromProtocol(urlString) {
     }
 }
 
-
 const gotTheLock = app.requestSingleInstanceLock();
 
 function startRenderApp(argv) {
     if (!gotTheLock) {
         return app.quit();
     } else {
-        app.on('second-instance', (event, commandLine, workingDirectory) => {
+        app.on("second-instance", (event, commandLine, workingDirectory) => {
             // Someone tried to run a second instance, we should focus our window.
             if (application) {
                 const argvParsed = minimist(argv.slice(2));
                 application.restoreWindow(argvParsed);
             }
-        })
+        });
     }
 
     const argvParsed = argv || minimist(process.argv.slice(2));
@@ -55,17 +56,16 @@ function startRenderApp(argv) {
     application.launch(argvParsed);
 }
 
-
 // Quit when all windows are closed.
-app.on('window-all-closed', function() {
+app.on("window-all-closed", function() {
     // On OS X it is common for applications and their menu bar
     // to stay active until the user quits explicitly with Cmd + Q
-    if (process.platform !== 'darwin') {
+    if (process.platform !== "darwin") {
         app.quit();
     }
 });
 
-app.on('activate', function() {
+app.on("activate", function() {
     if (!app.isReady()) {
         return;
     }
@@ -87,8 +87,7 @@ app.on("open-url", function(event, url) {
     }
 });
 
-
-app.on('ready', function() {
+app.on("ready", function() {
     require("../share/profile").start();
     startRenderApp(startupArgParsed);
 
