@@ -53,14 +53,30 @@ Production mode:
     ./bin/cmd.js
     # production
 
-### Command Line引数
+### 使い方: 投稿
+
+1. 投稿するサービスの選択(アイコンをクリック or ショートカット)
+2. タグや説明欄を入力
+3. "Submit"で送信(<kbd>Cmd+Enter</kbd>)
+
+### 使い方: ショートカット
+
+表示されているアイコンの左から順番に<kbd>Cmd+数字</kbd>のショートカットが振られています。
+
+- <kbd>Cmd+1<kbd>: Twitter
+- <kbd>Cmd+2<kbd>: はてなブックマーク
+
+最後のアイコンだけは<kbd>Cmd+0</kbd>が振られています。
+
+
+### 使い方: コマンドライン引数
 
 次の引数を付けて起動すると初期値が入った状態で起動できます。
 
 - `--title`: set default title
 - `--url`:   set default url
 
-### URL scheme
+### 使い方: URL scheme
 
 次のURL schemeが自動的に登録されます。
 
