@@ -47,11 +47,10 @@ Development mode:
 
     yarn start
     
-Production mode:
+Production mode:　`dist/`ディレクトリにバイナリが出力されます。
 
-    npm run build
-    ./bin/cmd.js
-    # production
+    yarn run dist
+    # dist/ にアプリができる
 
 ### 使い方: 投稿
 
@@ -76,9 +75,10 @@ Production mode:
 - `--title`: set default title
 - `--url`:   set default url
 
-### 使い方: URL scheme
+### 使い方: URL scheme(production)
 
-次のURL schemeが自動的に登録されます。
+URL schemeはproduction modeで作成したバイナリを一度起動しておく必要があります。
+起動すると、次のURL schemeが自動的に登録されます。
 
 ```
 postem://
