@@ -75,6 +75,10 @@ Production mode:　`dist/`ディレクトリにバイナリが出力されます
 - `--title`: set default title
 - `--url`:   set default url
 
+```
+./bin/cmd.js --title "タイトル" --url "https://example.com"
+```
+
 ### 使い方: URL scheme(production)
 
 URL schemeはproduction modeで作成したバイナリを一度起動しておく必要があります。
