@@ -51,7 +51,7 @@ class App extends React.Component {
         ipcRenderer.on("updateURL", (event, URL) => {
             appContext.ServiceAction.updateURL(URL);
             const state = appContext.ServiceStore.state;
-            const service = serviceManger.getService("api.b.hatena.ne.jp");
+            const service = serviceManger.getTagService();
             if (service && state.selectedTags.length === 0 && state.comment.length === 0) {
                 appContext.ServiceAction.fetchContent(service, URL)
                     .then(({ comment, tags }) => {
@@ -74,13 +74,14 @@ class App extends React.Component {
         ipcRenderer.on("resetField", event => {
             appContext.ServiceAction.resetField();
         });
-        // Fetch tags using
-        const service = serviceManger.getService("api.b.hatena.ne.jp");
-        // Enable hatena by default
-        appContext.ServiceAction.enableService(service);
+        // Fetch tags from tagService
+        const service = serviceManger.getTagService();
         if (service) {
+            // Enable tagService by default
+            appContext.ServiceAction.enableService(service);
             appContext.ServiceAction.fetchTags(service);
         }
+        console.error("TagService should be available at least one");
     }
 
     postLink() {

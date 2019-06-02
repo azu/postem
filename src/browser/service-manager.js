@@ -21,6 +21,17 @@ export default class ServiceManager {
         return undefined;
     }
 
+    /**
+     * @returns {*|undefined}
+     */
+    getTagService() {
+        const services = Array.from(this.services.keys());
+        console.log(services);
+        return services.find(service => {
+            return service.tagService === true;
+        })
+    }
+
     getServices() {
         return [...this.services.keys()];
     }

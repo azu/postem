@@ -6,5 +6,6 @@ export default class HatenaModel {
         this.name = "HatenaModel";
         this.description = "はてなブックマーク";
         this.icon = __dirname + "/hatena-bookmark-logo-s.png";
+        this.tagService = true;
     }
 }

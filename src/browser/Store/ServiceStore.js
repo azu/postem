@@ -1,7 +1,7 @@
 // LICENSE : MIT
 "use strict";
-import { Store } from "material-flux";
-import { keys } from "../Action/ServiceAction";
+import {Store} from "material-flux";
+import {keys} from "../Action/ServiceAction";
 import Storage from "../storage/Storage";
 
 export default class ServiceStore extends Store {
@@ -63,6 +63,8 @@ export default class ServiceStore extends Store {
         });
 
         const resetState = () => {
+            const tagService = manager.getTagService();
+            console.log("tagService", tagService);
             this.setState({
                 title: "",
                 URL: "",
@@ -70,7 +72,7 @@ export default class ServiceStore extends Store {
                 quote: "",
                 selectedTags: [],
                 relatedItems: [],
-                enabledServiceIDs: ["api.b.hatena.ne.jp"]
+                enabledServiceIDs: tagService ? [tagService.id] : []
             });
         };
         this.register(keys.resetField, resetState);
@@ -96,19 +98,19 @@ export default class ServiceStore extends Store {
         this.register(keys.addRelatedItem, relatedItem => {
             const relatedItems = this.state.relatedItems.slice();
             relatedItems.push(relatedItem);
-            this.setState({ relatedItems });
+            this.setState({relatedItems});
         });
         this.register(keys.removeRelatedItem, relatedItem => {
             var relatedItems = this.state.relatedItems;
             const index = relatedItems.indexOf(relatedItem);
             relatedItems.splice(index, 1);
-            this.setState({ relatedItems });
+            this.setState({relatedItems});
         });
         const updateRelatedItem = relatedItem => {
             var relatedItems = this.state.relatedItems;
             const index = relatedItems.indexOf(relatedItem);
             relatedItems[index] = relatedItem;
-            this.setState({ relatedItems });
+            this.setState({relatedItems});
         };
         this.register(keys.editRelatedItem, updateRelatedItem);
         this.register(keys.finishEditingRelatedItem, updateRelatedItem);
