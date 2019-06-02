@@ -1208,10 +1208,10 @@ asn1@~0.2.3:
   version "0.2.3"
   resolved "https://registry.yarnpkg.com/asn1/-/asn1-0.2.3.tgz#dac8787713c9966849fc8180777ebe9c1ddf3b86"
 
-asocial-bookmark@^1.0.2:
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/asocial-bookmark/-/asocial-bookmark-1.0.2.tgz#122ae3f588b8219f96a3f98aa8e0ca8b72becd12"
-  integrity sha512-0q9Hnx6j9+BeFXKRxDOWH3Q0lKL/7sYo5eHph06dX0OlSpueGSiIsJCYxDSMCxk97Z2I4rhSAapECM0kMbf9Mw==
+asocial-bookmark@^1.0.4:
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/asocial-bookmark/-/asocial-bookmark-1.0.4.tgz#e48fe637c32777bec43300ab21cdde5e7ed5d0b3"
+  integrity sha512-m7UNYip1gL8IpsZDm3NuIxCUcZJdmMxVfhD09CSjT1OZozWf3QLggsvmXNCNFcr1yrgYWhhSwr5RM4aXmzs9PQ==
   dependencies:
     dayjs "^1.8.14"
     debug "^4.1.1"
@@ -1221,6 +1221,7 @@ asocial-bookmark@^1.0.2:
     korefile "^1.1.0"
     meow "^5.0.0"
     node-fetch "^2.6.0"
+    normalize-url "^4.3.0"
 
 assert-plus@1.0.0, assert-plus@^1.0.0:
   version "1.0.0"
@@ -4937,6 +4938,11 @@ normalize-path@^2.1.1:
   integrity sha1-GrKLVW4Zg2Oowab35vogE3/mrtk=
   dependencies:
     remove-trailing-separator "^1.0.1"
+
+normalize-url@^4.3.0:
+  version "4.3.0"
+  resolved "https://registry.yarnpkg.com/normalize-url/-/normalize-url-4.3.0.tgz#9c49e10fc1876aeb76dba88bf1b2b5d9fa57b2ee"
+  integrity sha512-0NLtR71o4k6GLP+mr6Ty34c5GA6CMoEsncKJxvQd8NzPxaHRJNnb5gZE8R1XF4CPIS7QPHLJ74IFszwtNVAHVQ==
 
 notie@^3.9.4:
   version "3.9.5"

@@ -89,7 +89,7 @@ class App extends React.Component {
         let postData = {
             title: this.state.title,
             url: this.state.URL,
-            viaURL: this.state.viaURL.length > 0 ? this.state.viaURL : null,
+            viaURL: this.state.viaURL.length > 0 ? this.state.viaURL : undefined,
             comment: this.state.comment,
             tags: this.state.selectedTags,
             relatedItems: this.state.relatedItems
