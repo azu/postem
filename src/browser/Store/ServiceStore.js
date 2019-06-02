@@ -3,7 +3,7 @@
 import {Store} from "material-flux";
 import {keys} from "../Action/ServiceAction";
 import Storage from "../storage/Storage";
-
+import manager from "../service-instance";
 export default class ServiceStore extends Store {
     constructor(...args) {
         super(...args);
