@@ -30,7 +30,7 @@
   },
   "dependencies": {
     "@babel/polyfill": "^7.4.4",
-    "asocial-bookmark": "^1.0.4",
+    "asocial-bookmark": "^1.1.0",
     "codemirror": "^5.26.0",
     "codemirror-textlint": "^1.2.0",
     "combokeys": "^2.4.6",
