@@ -4,6 +4,7 @@ import {Store} from "material-flux";
 import {keys} from "../Action/ServiceAction";
 import Storage from "../storage/Storage";
 import manager from "../service-instance";
+
 export default class ServiceStore extends Store {
     constructor(...args) {
         super(...args);
@@ -63,8 +64,9 @@ export default class ServiceStore extends Store {
         });
 
         const resetState = () => {
-            const tagService = manager.getTagService();
-            console.log("tagService", tagService);
+            const checkedServicesByDefault = manager.getDefaultCheckedService().map(service => {
+                return service.id;
+            });
             this.setState({
                 title: "",
                 URL: "",
@@ -72,7 +74,7 @@ export default class ServiceStore extends Store {
                 quote: "",
                 selectedTags: [],
                 relatedItems: [],
-                enabledServiceIDs: tagService ? [tagService.id] : []
+                enabledServiceIDs: checkedServicesByDefault
             });
         };
         this.register(keys.resetField, resetState);

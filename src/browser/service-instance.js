@@ -2,6 +2,7 @@
 "use strict";
 // service
 import ServiceManger from "./service-manager";
+
 const manager = new ServiceManger();
 // Load service definitions
 const serviceNameList = require("../service.js");
@@ -10,10 +11,18 @@ const services = serviceNameList
         return service.enabled;
     })
     .map(service => {
-        const { Model, Client } = require(service.indexPath);
-        return [Model, Client];
+        const {Model, Client} = require(service.indexPath);
+        return {
+            model: new Model(),
+            client: new Client(),
+            isDefaultChecked: service.isDefaultChecked
+        };
     });
-services.forEach(([Model, Client]) => {
-    manager.addService(new Model(), new Client());
+services.forEach(({model, client, isDefaultChecked}) => {
+    manager.addService({
+        model,
+        client,
+        isDefaultChecked
+    });
 });
 export default manager;

@@ -3,10 +3,20 @@
 export default class ServiceManager {
     constructor() {
         this.services = new Map();
+        this.defaultServices = new Set();
     }
 
-    addService(service, client) {
-        this.services.set(service, client);
+    /**
+     * Add service
+     * @param model
+     * @param client
+     * @param [isDefaultChecked] is default checked
+     */
+    addService({model, client, isDefaultChecked}) {
+        this.services.set(model, client);
+        if (isDefaultChecked) {
+            this.defaultServices.add(model);
+        }
     }
 
     removeService(service) {
@@ -26,10 +36,17 @@ export default class ServiceManager {
      */
     getTagService() {
         const services = Array.from(this.services.keys());
-        console.log(services);
         return services.find(service => {
             return service.tagService === true;
         })
+    }
+
+    /**
+     * @returns {*|undefined}
+     */
+    getDefaultCheckedService() {
+        console.log("defaultServices", Array.from(this.defaultServices.keys()));
+        return Array.from(this.defaultServices.keys());
     }
 
     getServices() {

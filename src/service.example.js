@@ -6,8 +6,8 @@ module.exports = [
         indexPath: path.join(__dirname, "services/twitter/index.js")
     },
     {
-        // Can not disabled
         enabled: true,
+        isDefaultChecked: true,
         name: "hatebu",
         indexPath: path.join(__dirname, "services/hatebu/index.js")
     },
