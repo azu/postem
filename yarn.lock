@@ -1208,13 +1208,14 @@ asn1@~0.2.3:
   version "0.2.3"
   resolved "https://registry.yarnpkg.com/asn1/-/asn1-0.2.3.tgz#dac8787713c9966849fc8180777ebe9c1ddf3b86"
 
-asocial-bookmark@^1.1.1:
-  version "1.1.1"
-  resolved "https://registry.yarnpkg.com/asocial-bookmark/-/asocial-bookmark-1.1.1.tgz#f53a89a6df199a2e9d0e486da1b8eeb034d604ac"
-  integrity sha512-dd658wuqsLY1uvi60zsCra/v1/Y5AT/UBJOnNuHBPzIR/ZhqrgLFO97W3qGKa/3W6AFfQAH2IABqMv7LzWCA1Q==
+asocial-bookmark@^1.1.2:
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/asocial-bookmark/-/asocial-bookmark-1.1.2.tgz#e765e39c0f064dcff06d0428354b4c02e4c7a291"
+  integrity sha512-GMh2i1IL4dZ2mFfMxW28BkaJLfx5uabMQlLuAJywovKJSraDcCBYFMyEFHckR8GRAsf2rQGRaIosKU5SiUKrfQ==
   dependencies:
     dayjs "^1.8.14"
     debug "^4.1.1"
+    fast-deep-equal "^2.0.1"
     fromfrom "^1.3.0"
     glob "^7.1.4"
     hatebu-mydata-parser "^1.0.0"
