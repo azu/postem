@@ -55,9 +55,14 @@ class App extends React.Component {
             const service = serviceManger.getTagService();
             if (service && state.selectedTags.length === 0 && state.comment.length === 0) {
                 appContext.ServiceAction.fetchContent(service, URL)
-                    .then(({comment, tags}) => {
+                    .then(({comment, tags, relatedItems}) => {
                         appContext.ServiceAction.updateComment(comment);
                         appContext.ServiceAction.selectTags(tags);
+                        if (Array.isArray(relatedItems)) {
+                            relatedItems.forEach(relatedItem => {
+                                appContext.ServiceAction.addRelatedItem(relatedItem);
+                            });
+                        }
                     })
                     .catch(error => {
                         console.log("fetchContent:error", error);

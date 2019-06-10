@@ -1,11 +1,11 @@
 // LICENSE : MIT
 "use strict";
-import { Action } from "material-flux";
+import {Action} from "material-flux";
 import keys from "./ServiceActionConst";
 
-export { keys };
+export {keys};
 import notie from "notie";
-import { show as LoadingShow, dismiss as LoadingDismiss } from "../view-util/Loading";
+import {show as LoadingShow, dismiss as LoadingDismiss} from "../view-util/Loading";
 import RelatedItemModel from "../models/RelatedItemModel";
 import serviceInstance from "../service-instance";
 
@@ -44,8 +44,8 @@ export default class ServiceAction extends Action {
                 client
             };
         });
-        var enabledCS = mapCS.filter(({ client }) => client.isLogin());
-        var servicePromises = enabledCS.map(({ service, client }) => {
+        var enabledCS = mapCS.filter(({client}) => client.isLogin());
+        var servicePromises = enabledCS.map(({service, client}) => {
             console.log("postLink: " + service.id);
             return client.postLink(postData);
         });
@@ -130,13 +130,17 @@ export default class ServiceAction extends Action {
         }
     }
 
-    addRelatedItem() {
+    addRelatedItem({title, URL} = {}) {
+        const relatedItem = new RelatedItemModel({
+            title: title || "Dummy",
+            URL: URL || "http://example.com/"
+        });
+        if (title && URL) {
+            relatedItem.finishEditing();
+        }
         this.dispatch(
             keys.addRelatedItem,
-            new RelatedItemModel({
-                title: "Dummy",
-                URL: "http://example.com/"
-            })
+            relatedItem
         );
     }
 

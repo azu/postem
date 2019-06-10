@@ -17,7 +17,20 @@ export default class HatenaClient {
         return asocialBookmark.getBookmark({
             url,
             date: new Date()
-        });
+        }).then(result => {
+            return {
+                title: result.title,
+                url: result.url,
+                comment: result.content,
+                tags: result.tags,
+                relatedItems: result.relatedItems ? result.relatedItems.map(item => {
+                    return {
+                        title: item.title,
+                        URL: item.url
+                    }
+                }) : []
+            }
+        })
     }
 
     getTags() {
