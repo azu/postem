@@ -1208,10 +1208,10 @@ asn1@~0.2.3:
   version "0.2.3"
   resolved "https://registry.yarnpkg.com/asn1/-/asn1-0.2.3.tgz#dac8787713c9966849fc8180777ebe9c1ddf3b86"
 
-asocial-bookmark@^1.1.3:
-  version "1.1.3"
-  resolved "https://registry.yarnpkg.com/asocial-bookmark/-/asocial-bookmark-1.1.3.tgz#c8c20157dcfdd39e6bb3ec13bb9adf8d7cb63a4e"
-  integrity sha512-Hn0hPvK0lJ/lOAC8i5SDihiyW1L7m+GAuQGsI6TNXu/bPwDz86AULPHNmppCt9XdVcxHypa1Dvh2tpVr8Fih8A==
+asocial-bookmark@^1.1.5:
+  version "1.1.5"
+  resolved "https://registry.yarnpkg.com/asocial-bookmark/-/asocial-bookmark-1.1.5.tgz#9b9b19290cb6d53b18388eb4c001499f5c87072e"
+  integrity sha512-QzR+olalDqx5REfGZ+Wv7fgjF9oxVA0/N0+DM6Xwy0NMjDvoYr+S/sC/+bq8qYSeVSHpxXNCMIdXbTBprDmaqA==
   dependencies:
     dayjs "^1.8.14"
     debug "^4.1.1"
