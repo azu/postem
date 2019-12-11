@@ -20,6 +20,7 @@ export default class ServiceAction extends Action {
         return client
             .getTags()
             .then(tags => {
+                console.log("fetchTags:", tags);
                 this.dispatch(keys.fetchTags, tags);
             })
             .catch(error => {
