@@ -5,7 +5,7 @@ import ServiceManger from "./service-manager";
 
 const notBundledRequire = require;
 const manager = new ServiceManger();
-const getServiceNameList = process.env.BROWSER !== "1"
+const getServiceNameList = process.env.BROWSER === "1"
     ? () => require("../service.browser.js")
     : () => notBundledRequire("../service.js");
 const services = getServiceNameList()
