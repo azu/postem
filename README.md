@@ -52,6 +52,10 @@ Production mode:　`dist/`ディレクトリにバイナリが出力されます
     yarn run dist
     # dist/ にアプリができる
 
+Browser mode: [asocial-bookmark](https://github.com/azu/asocial-bookmark)形式のリポジトリに対応しています。
+
+- `https://postem.netlify.com/?title={TITLE}&url={URL}&github.owner={Owner名}&github.repo={リポジトリ名}&github.ref={refsheads%2Fブランチ名}&github.indexPropertyName={プロパティ名}&github.token={GitHub_Token}`
+
 ### 使い方: 投稿
 
 1. 投稿するサービスの選択(アイコンをクリック or ショートカット)

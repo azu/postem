@@ -4,21 +4,21 @@
 import ServiceManger from "./service-manager";
 
 const manager = new ServiceManger();
-// Load service definitions
-const serviceNameList = require("../service.js");
-const services = serviceNameList
+const getServiceNameList =
+    process.env.BROWSER !== "1" ? () => require("../service.js") : () => require("../service.browser.js");
+const services = getServiceNameList()
     .filter(service => {
         return service.enabled;
     })
     .map(service => {
-        const {Model, Client} = require(service.indexPath);
+        const { Model, Client } = service.index ? service.index : require(service.indexPath);
         return {
             model: new Model(),
             client: new Client(),
             isDefaultChecked: service.isDefaultChecked
         };
     });
-services.forEach(({model, client, isDefaultChecked}) => {
+services.forEach(({ model, client, isDefaultChecked }) => {
     manager.addService({
         model,
         client,

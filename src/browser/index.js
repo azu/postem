@@ -1,7 +1,9 @@
 // LICENSE : MIT
 "use strict";
-if (process.env.NODE_ENV === "development") {
+if (process.env.NODE_ENV === "development" && process.env.BROWSER !== "1") {
     require("@babel/register");
 }
 require("./App");
-require("../share/profile").stop();
+if (process.env.BROWSER !== "1") {
+    require("../share/profile").stop();
+}
