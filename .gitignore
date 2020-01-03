@@ -87,3 +87,6 @@ crashlytics-build.properties
 src/service.js
 src/service.browser.js
 .cache
+
+# Local Netlify folder
+.netlify

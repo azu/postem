@@ -26,6 +26,7 @@
   ],
   "scripts": {
     "browser": "NODE_ENV=browser parcel serve src/browser/index.html",
+    "build:browser": "NODE_ENV=browser parcel serve src/browser/index.html --out-dir build/browser",
     "build": "NODE_ENV=production gulp build",
     "predist": "npm run build",
     "dist": "electron-builder",
