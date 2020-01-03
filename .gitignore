@@ -85,8 +85,9 @@ crashlytics-build.properties
 /dist/
 /src/services/hatebu/consumer.json
 src/service.js
-src/service.browser.js
+#src/service.browser.js
 .cache
 
 # Local Netlify folder
 .netlify
+/build/
