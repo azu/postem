@@ -26,7 +26,7 @@ export default class HatenaClient {
                 relatedItems: result.relatedItems ? result.relatedItems.map(item => {
                     return {
                         title: item.title,
-                        URL: item.url
+                        URL: item.URL
                     }
                 }) : []
             }
