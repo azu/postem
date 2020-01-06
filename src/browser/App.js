@@ -22,9 +22,9 @@ class BrowserEvent extends EventEmitter {
 }
 
 const browserEventEmitter = new BrowserEvent();
-const ipcRenderer = process.env.BROWSER !== "1"
-    ? require("electron").ipcRenderer
-    : browserEventEmitter;
+const ipcRenderer = process.env.BROWSER === "1"
+    ? browserEventEmitter
+    : require("electron").ipcRenderer;
 const appContext = new AppContext();
 
 class App extends React.Component {
