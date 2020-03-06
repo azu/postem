@@ -40,6 +40,7 @@ export default class OAuthRequest {
 
     post(URL, options = {}) {
         let body = options.body;
+        console.log("OAuth::post", URL);
         return new Promise((resolve, reject) => {
             this.oauth.post(URL, this.accessKey, this.accessSecret, body, function(error, data, res) {
                 if (error) {
