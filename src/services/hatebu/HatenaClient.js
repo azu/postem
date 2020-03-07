@@ -29,7 +29,7 @@ export default class HatenaClient {
             url
         });
         return this._hatenaRequest()
-            .get("http://api.b.hatena.ne.jp/1/my/bookmark?" + query)
+            .get("https://bookmark.hatenaapis.com/rest/1/my/bookmark?" + query)
             .then(response => {
                 if (response.statusCode === 403) {
                     const data = JSON.parse(response["data"]);
@@ -41,7 +41,7 @@ export default class HatenaClient {
 
     getTags() {
         return this._hatenaRequest()
-            .get("http://api.b.hatena.ne.jp/1/my/tags")
+            .get("https://bookmark.hatenaapis.com/rest/1/my/tags")
             .then(response => {
                 return response.tags.map(tag => tag.tag);
             });
@@ -72,6 +72,6 @@ export default class HatenaClient {
             url,
             comment
         });
-        return this._hatenaRequest().post("http://api.b.hatena.ne.jp/1/my/bookmark?" + query);
+        return this._hatenaRequest().post("https://bookmark.hatenaapis.com/rest/1/my/bookmark?" + query);
     }
 }

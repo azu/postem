@@ -26,7 +26,7 @@ export default class HatenaClient {
                 relatedItems: result.relatedItems ? result.relatedItems.map(item => {
                     return {
                         title: item.title,
-                        URL: item.URL
+                        URL: item.url
                     }
                 }) : []
             }
@@ -50,7 +50,7 @@ export default class HatenaClient {
      */
     postLink(options = {}) {
         const {title, url, viaURL, comment, tags, relatedItems} = options;
-        const asocialBookmark = new AsocialBookmark(Consumer);
+        const asocialBookmark = new AsocialBookmark(Consumer.github.indexPropertyName);
         const date = new Date();
         const isoDate = new Date(date.getTime() - (date.getTimezoneOffset() * 60000)).toISOString();
         return asocialBookmark.updateBookmark({
