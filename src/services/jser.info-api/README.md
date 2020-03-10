@@ -1,6 +1,6 @@
-# asocial-bookmark
+# JSer.info API
 
-[asocial-bookmark](https://github.com/azu/asocial-bookmark)is a personal bookmark system based on GitHub/
+https://github.com/jser/jser.info/ + [asocial-bookmark](https://github.com/azu/asocial-bookmark)
 
 ## Custom consumer
 
@@ -11,10 +11,11 @@ You should put [asocial-bookmark](https://github.com/azu/asocial-bookmark) Optio
 ```json
 {
   "github": {
-    "owner": "azu",
-    "repo": "asocial-bookmark",
-    "ref": "refs/master",
-    "GH_TOKEN": "xxxx"
+    "owner": "jser",
+    "repo": "jser.info",
+    "ref": "refs/gh-pages",
+    "GH_TOKEN": "xxxx",
+    "indexPropertyName": "list"
   }
 }
 ```
