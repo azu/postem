@@ -58,7 +58,7 @@ export default class HatenaClient {
             github: Consumer.github,
         });
         const date = new Date();
-        const isoDate = new Date(date.getTime() - (date.getTimezoneOffset() * 60000)).toISOString();
+        const isoDate = new Date(date.getTime() + (date.getTimezoneOffset() * 60000)).toISOString();
         return asocialBookmark.updateBookmark({
             date: isoDate,
             title,

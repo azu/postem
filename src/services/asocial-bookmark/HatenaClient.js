@@ -52,7 +52,7 @@ export default class HatenaClient {
         const {title, url, viaURL, comment, tags, relatedItems} = options;
         const asocialBookmark = new AsocialBookmark(Consumer);
         const date = new Date();
-        const isoDate = new Date(date.getTime() - (date.getTimezoneOffset() * 60000)).toISOString();
+        const isoDate = new Date(date.getTime() + (date.getTimezoneOffset() * 60000)).toISOString();
         return asocialBookmark.updateBookmark({
             title,
             url,
