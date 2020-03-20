@@ -2,7 +2,7 @@
 "use strict";
 import { AsocialBookmark } from "asocial-bookmark"
 import Consumer from "./HatenaCunsumer";
-
+const moment = require("moment");
 export default class HatenaClient {
     isLogin() {
         return true;
@@ -58,7 +58,7 @@ export default class HatenaClient {
             github: Consumer.github,
         });
         const date = new Date();
-        const isoDate = new Date(date.getTime() + (date.getTimezoneOffset() * 60000)).toISOString();
+        const isoDate = moment().utc().toDate();
         return asocialBookmark.updateBookmark({
             date: isoDate,
             title,
