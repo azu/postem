@@ -8,6 +8,7 @@ const manager = new ServiceManger();
 const getServiceNameList = process.env.BROWSER === "1"
     ? () => require("../service.browser.js")
     : () => notBundledRequire("../service.js");
+console.log("getServiceNameList()", getServiceNameList());
 const services = getServiceNameList()
     .filter(service => {
         return service.enabled;
@@ -16,7 +17,7 @@ const services = getServiceNameList()
         const { Model, Client } = service.index ? service.index : require(service.indexPath);
         return {
             model: new Model(),
-            client: new Client(),
+            client: new Client(service.options),
             isDefaultChecked: service.isDefaultChecked
         };
     });
