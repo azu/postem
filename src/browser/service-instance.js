@@ -8,7 +8,6 @@ const manager = new ServiceManger();
 const getServiceNameList = process.env.BROWSER === "1"
     ? () => require("../service.browser.js")
     : () => notBundledRequire("../service.js");
-console.log("getServiceNameList()", getServiceNameList());
 const services = getServiceNameList()
     .filter(service => {
         return service.enabled;
