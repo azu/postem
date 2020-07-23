@@ -27,7 +27,7 @@
   "scripts": {
     "browser": "NODE_ENV=browser parcel serve src/browser/index.html",
     "build:browser": "NODE_ENV=browser parcel build src/browser/index.html --out-dir build/browser",
-    "build": "NODE_ENV=production gulp build",
+    "build": "NODE_ENV=production gulp build && npm run build:css",
     "build:css": "sass css/index.scss css/index.css",
     "watch:css": "sass --watch css/index.scss css/index.css",
     "predist": "npm run build",
