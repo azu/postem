@@ -32,7 +32,10 @@ const createConfig = process.env.BROWSER === "1"
                 "sentence-length": moduleInterop(require("textlint-rule-sentence-length")),
                 "no-mix-dearu-desumasu": moduleInterop(require("textlint-rule-no-mix-dearu-desumasu")),
                 "no-nfd": moduleInterop(require("textlint-rule-no-nfd")),
-                proofdict: moduleInterop(require("textlint-rule-proofdict"))
+                proofdict: moduleInterop(require("textlint-rule-proofdict")),
+                "no-invalid-control-character": moduleInterop(require("@textlint-rule/textlint-rule-no-invalid-control-character")),
+                "ja-unnatural-alphabet": moduleInterop(require("textlint-rule-ja-unnatural-alphabet")),
+                "no-unmatched-pair": moduleInterop(require("@textlint-rule/textlint-rule-no-unmatched-pair"))
             },
             rulesConfig: {
                 // https://github.com/azu/textlint-rule-max-ten
@@ -70,7 +73,10 @@ const createConfig = process.env.BROWSER === "1"
                 "no-nfd": true,
                 proofdict: {
                     dictURL: "https://azu.github.io/proof-dictionary/"
-                }
+                },
+                "no-unmatched-pair": true,
+                "ja-unnatural-alphabet": true,
+                "no-invalid-control-character": true
             }
         };
     };

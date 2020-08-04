@@ -37,6 +37,8 @@
   },
   "dependencies": {
     "@babel/polyfill": "^7.4.4",
+    "@textlint-rule/textlint-rule-no-invalid-control-character": "^1.2.0",
+    "@textlint-rule/textlint-rule-no-unmatched-pair": "^1.0.7",
     "@textlint/module-interop": "^1.0.2",
     "asocial-bookmark": "^1.3.0",
     "codemirror": "^5.26.0",
@@ -69,6 +71,7 @@
     "request": "^2.81.0",
     "slugg": "^1.2.1",
     "spin.js": "^2.3.2",
+    "textlint-rule-ja-unnatural-alphabet": "^2.0.1",
     "textlint-rule-max-ten": "^2.0.3",
     "textlint-rule-no-double-negative-ja": "^1.0.5",
     "textlint-rule-no-doubled-conjunction": "^1.0.2",
