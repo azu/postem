@@ -23,7 +23,18 @@
     
 アプリを起動する前に利用するサービスの設定を`service.js`で定義してください。
 
-### 利用するサービスの設定
+## サポートしているサービス
+
+利用するサービスは後述する`service.js`に定義します。
+postemリポジトリに実装があるビルトインサポートしているサービスは次の通りです。
+
+- [はてなブックマーク](./src/services/hatebu)
+- [Twitter](./src/services/twitter)
+- [Slack](./src/services/slack)
+- [asocial-bookmark](./src/services/asocial-bookmark)
+- [debug](./src/services/debug)
+
+## 利用するサービスの設定
 
 クロスポストできるサービスの一覧を`service.js`で定義します。
 
