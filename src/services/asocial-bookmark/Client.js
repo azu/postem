@@ -1,9 +1,16 @@
 // LICENSE : MIT
 "use strict";
-import {AsocialBookmark} from "asocial-bookmark"
-import Consumer from "./HatenaCunsumer";
+import { AsocialBookmark, AsocialBookmarkOptions } from "asocial-bookmark"
+
 const moment = require("moment");
-export default class HatenaClient {
+export default class Client {
+    /**
+     * @param {import("asocial-bookmark").AsocialBookmarkOptions}serviceOptions
+     */
+    constructor(serviceOptions) {
+        this.serviceOptions = serviceOptions;
+    }
+
     isLogin() {
         return true;
     }
@@ -13,7 +20,7 @@ export default class HatenaClient {
     }
 
     getContent(url) {
-        const asocialBookmark = new AsocialBookmark(Consumer);
+        const asocialBookmark = new AsocialBookmark(this.serviceOptions);
         return asocialBookmark.getBookmark({
             url,
             date: new Date()
@@ -49,7 +56,7 @@ export default class HatenaClient {
         }
      */
     postLink(options = {}) {
-        const {title, url, viaURL, comment, tags, relatedItems} = options;
+        const { title, url, viaURL, comment, tags, relatedItems } = options;
         const asocialBookmark = new AsocialBookmark(Consumer);
         const date = new Date();
         const isoDate = moment().utc().toDate();

@@ -1,6 +1,4 @@
-// LICENSE : MIT
-"use strict";
-export default class HatenaModel {
+export default class Model {
     constructor() {
         this.id = "com.github.azu.AsocialBookmark";
         this.name = "AsocialBookmark";
