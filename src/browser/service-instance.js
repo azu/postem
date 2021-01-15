@@ -3,6 +3,7 @@
 // service
 import ServiceManger from "./service-manager";
 
+// FIXME: use IPC
 const notBundledRequire = require;
 const manager = new ServiceManger();
 const getServiceNameList = process.env.BROWSER === "1"

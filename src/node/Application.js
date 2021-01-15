@@ -33,7 +33,8 @@ export default class Application {
             width: mainWindowState.width,
             height: mainWindowState.height,
             webPreferences: {
-                nodeIntegration: true
+                nodeIntegration: true,
+                enableRemoteModule: true,
             }
         });
         const positioner = new Positioner(browserWindow);
