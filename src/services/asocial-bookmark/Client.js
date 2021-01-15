@@ -41,7 +41,7 @@ export default class Client {
     }
 
     getTags() {
-        const asocialBookmark = new AsocialBookmark(Consumer);
+        const asocialBookmark = new AsocialBookmark(this.serviceOptions);
         return asocialBookmark.getTags();
     }
 
@@ -57,7 +57,7 @@ export default class Client {
      */
     postLink(options = {}) {
         const { title, url, viaURL, comment, tags, relatedItems } = options;
-        const asocialBookmark = new AsocialBookmark(Consumer);
+        const asocialBookmark = new AsocialBookmark(this.serviceOptions);
         const date = new Date();
         const isoDate = moment().utc().toDate();
         return asocialBookmark.updateBookmark({
