@@ -11,22 +11,6 @@ module.exports = [
         name: "hatebu",
         indexPath: path.join(__dirname, "services/hatebu/index.js")
     },
-    // For @azu services
-    {
-        enabled: false,
-        name: "jser.info",
-        indexPath: path.join(__dirname, "services/jser.info/index.js")
-    },
-    {
-        enabled: false,
-        name: "ecmascript-daily",
-        indexPath: path.join(__dirname, "services/ecmascript-daily/index.js")
-    },
-    {
-        enabled: false,
-        name: "jser.info-ping",
-        indexPath: path.join(__dirname, "services/jser.info-ping/index.js")
-    },
     // Last service is special
     // Assign shortcut as Cmd + 0
     {
