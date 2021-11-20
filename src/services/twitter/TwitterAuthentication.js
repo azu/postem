@@ -25,13 +25,6 @@ exports.requireAccess = function requireAccess(callback) {
         const authUrl = twitter.getAuthUrl(reqToken);
         const loginWindow = new BrowserWindow({ width: 800, height: 600, "node-integration": false });
 
-        const filter = {
-            urls: ["*://*/*oauth_token"]
-        };
-        session.defaultSession.webRequest.onCompleted(filter, details => {
-            const url = details.url;
-            handleURL(url);
-        });
         const handleURL = (url, preventDefault) => {
             const closeWindow = () => setTimeout(() => loginWindow.close(), 0);
             let matched;
@@ -61,5 +54,13 @@ exports.requireAccess = function requireAccess(callback) {
             handleURL(url, () => event.preventDefault());
         });
         loginWindow.loadURL(authUrl);
+    
+        const filter = {
+            urls: ["*://*/*oauth_token"]
+        };
+        session.defaultSession.webRequest.onCompleted(filter, details => {
+            const url = details.url;
+            handleURL(url);
+        });
     });
 };
