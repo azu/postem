@@ -24,7 +24,6 @@ export default class Application {
             defaultWidth: 320,
             defaultHeight: 480
         });
-        process.title = title;
         const browserWindow = new BrowserWindow({
             title: title,
             frame: false,
@@ -34,6 +33,7 @@ export default class Application {
             height: mainWindowState.height,
             webPreferences: {
                 nodeIntegration: true,
+                contextIsolation: false,
                 enableRemoteModule: true,
             }
         });
@@ -111,6 +111,8 @@ export default class Application {
         });
         // set top
         this.mainWindow.setAlwaysOnTop(true);
+        // integration remote
+        require("@electron/remote/main").enable(this.mainWindow.webContents);
         this.registerIpcHandling();
     }
 

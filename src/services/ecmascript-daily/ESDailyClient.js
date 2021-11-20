@@ -1,7 +1,7 @@
 // LICENSE : MIT
 "use strict";
-const Authentication = require("electron").remote.require(__dirname + "/ESDailyAuthentication");
-const Committer = require("electron").remote.require(__dirname + "/ESDailyCommitter");
+const Authentication = require('@electron/remote').require(__dirname + "/ESDailyAuthentication");
+const Committer = require('@electron/remote').require(__dirname + "/ESDailyCommitter");
 export default class HatenaClient {
     isLogin() {
         return Authentication.canAccess();

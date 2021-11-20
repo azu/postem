@@ -17,7 +17,7 @@ exports.requireAccess = function(callback) {
         placeholder: "/path/to/ecmascript-daily.github.com/"
     };
     prompt(options, function(res) {
-        var filePath = res.trim();
+        const filePath = res.trim();
         if (filePath.length > 0) {
             storage.set("ecmascript-daily-dir", filePath);
             callback(null, res);

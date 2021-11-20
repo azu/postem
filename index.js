@@ -1,7 +1,7 @@
 // LICENSE : MIT
 "use strict";
 console.log("NODE_ENV: " + process.env.NODE_ENV);
-require("@babel/polyfill");
+require('@electron/remote/main').initialize();
 if (process.env.NODE_ENV === "development") {
     require("@babel/register");
     // Start Node -> Browser

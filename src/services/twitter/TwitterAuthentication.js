@@ -20,12 +20,13 @@ exports.getCredential = function getCredential() {
     return storage.get("twitter");
 };
 exports.requireAccess = function requireAccess(callback) {
+    console.log(Consumer);
     twitter.getRequestToken((_error, reqToken, reqTokenSecret) => {
         const authUrl = twitter.getAuthUrl(reqToken);
         const loginWindow = new BrowserWindow({ width: 800, height: 600, "node-integration": false });
 
         const filter = {
-            urls: ["*"]
+            urls: ["*://*/*oauth_token"]
         };
         session.defaultSession.webRequest.onCompleted(filter, details => {
             const url = details.url;
@@ -51,9 +52,9 @@ exports.requireAccess = function requireAccess(callback) {
                         }
                     }
                 );
-            }
-            if (preventDefault) {
-                preventDefault();
+                if (preventDefault) {
+                    preventDefault();
+                }
             }
         };
         loginWindow.webContents.on("will-navigate", (event, url) => {

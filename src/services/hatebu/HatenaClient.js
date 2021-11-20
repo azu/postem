@@ -4,7 +4,7 @@ import querystring from "querystring";
 import OAuthRequest from "../API/OAuthRequest";
 import Consumer from "./HatenaCunsumer";
 
-const Authentication = require("electron").remote.require(__dirname + "/HatenaAuthentication");
+const Authentication = require('@electron/remote').require(__dirname + "/HatenaAuthentication");
 export default class HatenaClient {
     isLogin() {
         return Authentication.canAccess();

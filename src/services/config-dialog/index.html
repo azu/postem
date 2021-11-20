@@ -14,17 +14,16 @@
     </form>
 </div>
 <script>
-    var ipc = require("electron").ipcRenderer;
     var titleElement = document.getElementById("js-title");
     var messageElement = document.getElementById("js-message");
     var inputElement = document.getElementById("js-input");
     var formElement = document.getElementById("js-form");
     formElement.addEventListener("submit", function (event) {
         event.preventDefault();
-        var value = inputElement.value;
-        ipc.send("finish", value);
+        const value = inputElement.value;
+        window.api.submit(value);
     });
-    ipc.on("initialize", function (event, request) {
+    window.api.onInitialize((request) => {
         var title = request.title;
         var message = request.message;
         var placeholder = request.placeholder;
