@@ -1,7 +1,8 @@
 // LICENSE : MIT
 "use strict";
-import { AsocialBookmark } from "asocial-bookmark"
+import { AsocialBookmark } from "asocial-bookmark";
 import Consumer from "./HatenaCunsumer";
+
 const moment = require("moment");
 export default class HatenaClient {
     isLogin() {
@@ -15,25 +16,29 @@ export default class HatenaClient {
     getContent(url) {
         const asocialBookmark = new AsocialBookmark({
             indexPropertyName: Consumer.indexPropertyName,
-            github: Consumer.github,
+            github: Consumer.github
         });
-        return asocialBookmark.getBookmark({
-            url,
-            date: new Date()
-        }).then(result => {
-            return {
-                title: result.title,
-                url: result.url,
-                comment: result.content,
-                tags: result.tags,
-                relatedItems: result.relatedLinks ? result.relatedLinks.map(item => {
-                    return {
-                        title: item.title,
-                        URL: item.url
-                    }
-                }) : []
-            }
-        })
+        return asocialBookmark
+            .getBookmark({
+                url,
+                date: new Date()
+            })
+            .then((result) => {
+                return {
+                    title: result.title,
+                    url: result.url,
+                    comment: result.content,
+                    tags: result.tags,
+                    relatedItems: result.relatedLinks
+                        ? result.relatedLinks.map((item) => {
+                              return {
+                                  title: item.title,
+                                  URL: item.url
+                              };
+                          })
+                        : []
+                };
+            });
     }
 
     getTags() {
@@ -55,7 +60,7 @@ export default class HatenaClient {
         const { title, url, viaURL, comment, tags, relatedItems } = options;
         const asocialBookmark = new AsocialBookmark({
             indexPropertyName: Consumer.indexPropertyName,
-            github: Consumer.github,
+            github: Consumer.github
         });
         const date = new Date();
         const isoDate = moment().utc().toDate();
@@ -66,11 +71,11 @@ export default class HatenaClient {
             content: comment,
             tags,
             viaURL,
-            relatedLinks: relatedItems.map(item => {
+            relatedLinks: relatedItems.map((item) => {
                 return {
                     title: item.title,
                     url: item.URL
-                }
+                };
             })
         });
     }

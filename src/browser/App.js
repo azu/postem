@@ -22,9 +22,7 @@ class BrowserEvent extends EventEmitter {
 }
 
 const browserEventEmitter = new BrowserEvent();
-const ipcRenderer = process.env.BROWSER === "1"
-    ? browserEventEmitter
-    : require("electron").ipcRenderer;
+const ipcRenderer = process.env.BROWSER === "1" ? browserEventEmitter : require("electron").ipcRenderer;
 const appContext = new AppContext();
 
 class App extends React.Component {
@@ -67,15 +65,19 @@ class App extends React.Component {
             if (service && state.selectedTags.length === 0 && state.comment.length === 0) {
                 appContext.ServiceAction.fetchContent(service, URL)
                     .then(({ comment, tags, relatedItems }) => {
-                        appContext.ServiceAction.updateComment(comment);
-                        appContext.ServiceAction.selectTags(tags);
+                        if (comment) {
+                            appContext.ServiceAction.updateComment(comment);
+                        }
+                        if (Array.isArray(tags) && tags.length > 0) {
+                            appContext.ServiceAction.selectTags(tags);
+                        }
                         if (Array.isArray(relatedItems)) {
-                            relatedItems.forEach(relatedItem => {
+                            relatedItems.forEach((relatedItem) => {
                                 appContext.ServiceAction.addRelatedItem(relatedItem);
                             });
                         }
                     })
-                    .catch(error => {
+                    .catch((error) => {
                         console.log("fetchContent:error", error);
                     });
             }
@@ -88,7 +90,7 @@ class App extends React.Component {
                 isInitialized = false;
             }
         });
-        ipcRenderer.on("resetField", event => {
+        ipcRenderer.on("resetField", (event) => {
             appContext.ServiceAction.resetField();
         });
         // Fetch tags from tagService
@@ -125,30 +127,30 @@ class App extends React.Component {
         const updateViaURL = ServiceAction.updateViaURL.bind(ServiceAction);
         const updateComment = ServiceAction.updateComment.bind(ServiceAction);
         const services = serviceManger.getServices();
-        const toggleServiceAtIndex = index => {
+        const toggleServiceAtIndex = (index) => {
             const service = serviceManger.getServices()[index];
             if (service) {
                 toggleService(service);
             }
         };
-        const toggleService = service => {
-            const isEnabled = this.state.enabledServiceIDs.some(serviceID => service.id === serviceID);
+        const toggleService = (service) => {
+            const isEnabled = this.state.enabledServiceIDs.some((serviceID) => service.id === serviceID);
             if (isEnabled) {
                 disableService(service);
             } else {
                 enableService(service);
             }
         };
-        const enableService = service => {
+        const enableService = (service) => {
             ServiceAction.enableService(service);
         };
-        const disableService = service => {
+        const disableService = (service) => {
             ServiceAction.disableService(service);
         };
-        const login = service => {
+        const login = (service) => {
             ServiceAction.login(service);
         };
-        const editItem = relatedItem => {
+        const editItem = (relatedItem) => {
             ServiceAction.editRelatedItem(relatedItem);
         };
         const finishEditing = (relatedItem, value) => {
@@ -167,11 +169,11 @@ class App extends React.Component {
                     disableService={disableService}
                     login={login}
                 />
-                <TitleInput title={this.state.title} updateTitle={updateTitle}/>
-                <URLInput URL={this.state.URL} updateURL={updateURL}/>
-                <ViaURLInput URL={this.state.viaURL} updateURL={updateViaURL}/>
+                <TitleInput title={this.state.title} updateTitle={updateTitle} />
+                <URLInput URL={this.state.URL} updateURL={updateURL} />
+                <ViaURLInput URL={this.state.viaURL} updateURL={updateViaURL} />
                 <TagSelect
-                    ref={c => (this._TagSelect = c)}
+                    ref={(c) => (this._TagSelect = c)}
                     tags={this.state.tags}
                     selectTags={selectTags}
                     selectedTags={this.state.selectedTags}
@@ -189,7 +191,7 @@ class App extends React.Component {
                     finishEditing={finishEditing}
                     addItem={addItem}
                 />
-                <SubmitButton onSubmit={submitPostLink}/>
+                <SubmitButton onSubmit={submitPostLink} />
             </div>
         );
     }
@@ -198,7 +200,7 @@ class App extends React.Component {
 appContext.on("dispatch", ({ eventKey }) => {
     ipcRenderer.send(String(eventKey));
 });
-render(<App/>, document.getElementById("js-main"), () => {
+render(<App />, document.getElementById("js-main"), () => {
     const url = new URL(location.href);
     if (url.searchParams.has("title")) {
         browserEventEmitter.emit("updateTitle", {}, url.searchParams.get("title"));
