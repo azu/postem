@@ -21,6 +21,7 @@ export default class Client {
 
     getContent(url) {
         const asocialBookmark = new AsocialBookmark(this.serviceOptions);
+        const fallbackPromise = fetch(`https://jser-product-name.deno.dev/?url=${url}`);
         return asocialBookmark
             .getBookmark({
                 url,
@@ -49,7 +50,7 @@ export default class Client {
                 );
                 const version = (match && match.groups.version) || undefined;
                 // default
-                return fetch(`https://jser-product-name.deno.dev/?url=${url}`)
+                return fallbackPromise
                     .then((res) => res.json())
                     .then((json) => {
                         // { name, url }
