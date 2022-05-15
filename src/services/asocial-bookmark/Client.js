@@ -53,7 +53,7 @@ export default class Client {
                     .then((res) => res.json())
                     .then((json) => {
                         // { name, url }
-                        if (json) {
+                        if (json && json.releaseNoteProbability > 0.5) {
                             const comment = version ? `${json.name} ${version}リリース。` : `${json.name}`;
                             return {
                                 comment
