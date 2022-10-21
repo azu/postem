@@ -43,18 +43,15 @@ export default class Client {
                 };
             })
             .catch((error) => {
-                // https://github.com/webpack/webpack/releases/tag/v5.64.2
-                const match = url.match(
-                    /^https:\/\/github\.com\/(?<owner>[^/])+\/(?<repo>[^/])+\/releases\/tag\/(?<version>[^/]+)/
-                );
-                const version = (match && match.groups.version) || undefined;
-                // default
                 return fetch(`https://jser-product-name.deno.dev/?url=${url}`)
                     .then((res) => res.json())
                     .then((json) => {
                         // { name, url }
                         if (json && json.releaseNoteProbability > 0.5) {
-                            const comment = version ? `${json.name} ${version}リリース。` : `${json.name}`;
+                            const comment =
+                                json.releaseNoteVersion !== undefined
+                                    ? `${json.name} ${json.releaseNoteVersion}リリース。`
+                                    : `${json.name}`;
                             return {
                                 comment
                             };
