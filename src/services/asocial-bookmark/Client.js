@@ -21,11 +21,25 @@ export default class Client {
 
     getContent(url) {
         const asocialBookmark = new AsocialBookmark(this.serviceOptions);
-        return asocialBookmark
-            .getBookmark({
-                url,
-                date: new Date()
-            })
+        const fetchBookmarkSincePrevMonth = async () => {
+            // current/prev 1 month/prev 2 month
+            const trialMonths = [0, 1, 2];
+            const current = new Date();
+            const promises = trialMonths.map((month) => {
+                const prevMonth = new Date(current.getFullYear(), current.getMonth() - month, 1);
+                return asocialBookmark.getBookmark({
+                    url,
+                    date: prevMonth
+                });
+            });
+            // success one
+            const result = (await Promise.allSettled(promises)).find((result) => result.status === "fulfilled");
+            if (result) {
+                return result.value;
+            }
+            return Promise.reject(new Error("Not found"));
+        };
+        return fetchBookmarkSincePrevMonth()
             .then((result) => {
                 return {
                     title: result.title,
