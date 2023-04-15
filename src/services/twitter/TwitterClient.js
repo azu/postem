@@ -1,26 +1,57 @@
 // LICENSE : MIT
 "use strict";
-import Consumer from "./TwitterConsumer";
-import Twitter from "twitter";
+import { TwitterApi } from "twitter-api-v2";
 import { truncate } from "tweet-truncator";
+import { TwitterApiV2Settings } from "twitter-api-v2";
 
-const Authentication = require('@electron/remote').require(__dirname + "/TwitterAuthentication");
+TwitterApiV2Settings.debug = true;
 export default class TwitterClient {
+    constructor(serviceOptions) {
+        this.serviceOptions = serviceOptions;
+    }
+
+    get _hasServiceOptions() {
+        return Boolean(
+            this.serviceOptions &&
+                this.serviceOptions.appKey &&
+                this.serviceOptions.appSecret &&
+                this.serviceOptions.accessToken &&
+                this.serviceOptions.accessSecret
+        );
+    }
+
     isLogin() {
-        return Authentication.canAccess();
+        return this._hasServiceOptions;
     }
 
     loginAsync(callback) {
-        return Authentication.requireAccess(callback);
+        callback(
+            new Error(`Please set Twitter App Key and Secret to options
+    {
+        enabled: true,
+        name: "twitter",
+        indexPath: path.join(__dirname, "services/twitter/index.js"),
+        options: {
+            appKey: "app key",
+            appSecret: "app secret",
+            accessToken: "access token ",
+            accessSecret: "access token secret"
+        }
+    }
+`)
+        );
     }
 
+    /**
+     * @returns {TwitterApi}
+     * @private
+     */
     _getClient() {
-        var credential = Authentication.getCredential();
-        return new Twitter({
-            consumer_key: Consumer.key,
-            consumer_secret: Consumer.secret,
-            access_token_key: credential.accessKey,
-            access_token_secret: credential.accessSecret
+        return new TwitterApi({
+            appKey: this.serviceOptions.appKey,
+            appSecret: this.serviceOptions.appSecret,
+            accessToken: this.serviceOptions.accessToken,
+            accessSecret: this.serviceOptions.accessSecret
         });
     }
 
@@ -41,15 +72,9 @@ export default class TwitterClient {
         const status = truncate(contents, {
             template: `%desc% %quote% "%title%" %url% %tags%`
         });
-        return new Promise((resolve, reject) => {
-            this._getClient().post("statuses/update", { status: status }, function(error, tweet, response) {
-                if (error) {
-                    console.error(error, response);
-                    reject(error);
-                    return;
-                }
-                resolve();
-            });
+
+        return this._getClient().readWrite.v2.tweet(status, {
+            requestEventDebugHandler: (eventType, data) => console.log("Event", eventType, "with data", data)
         });
     }
 }
