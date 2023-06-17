@@ -18,6 +18,9 @@
   "license": "MIT",
   "author": "azu",
   "main": "index.js",
+  "targets": {
+    "main": false
+  },
   "bin": {
     "postem": "bin/cmd.js"
   },
@@ -26,7 +29,7 @@
   ],
   "scripts": {
     "browser": "NODE_ENV=browser parcel serve src/browser/index.html",
-    "build:browser": "NODE_ENV=browser parcel build src/browser/index.html --out-dir build/browser",
+    "build:browser": "NODE_ENV=browser parcel build src/browser/index.html --dist-dir build/browser",
     "build": "NODE_ENV=production gulp build && npm run build:css",
     "build:css": "sass css/index.scss css/index.css",
     "watch:css": "sass --watch css/index.scss css/index.css",
@@ -37,6 +40,7 @@
     "prepare": "git config --local core.hooksPath .githooks"
   },
   "dependencies": {
+    "@atproto/api": "^0.3.12",
     "@babel/polyfill": "^7.12.1",
     "@electron/remote": "^2.0.9",
     "@textlint-rule/textlint-rule-no-invalid-control-character": "^1.2.0",
@@ -64,7 +68,6 @@
     "notie": "^3.9.4",
     "oauth": "^0.9.14",
     "oauth-signature": "^1.3.1",
-    "qs": "^6.4.0",
     "react": "^15.6.1",
     "react-codemirror": "^0.3.0",
     "react-dom": "^15.6.1",
@@ -86,20 +89,26 @@
     "twitter-api-v2": "^1.14.2"
   },
   "devDependencies": {
-    "@babel/core": "^7.21.4",
-    "@babel/preset-env": "^7.21.4",
-    "@babel/preset-react": "^7.18.6",
-    "@babel/register": "^7.21.0",
+    "@babel/core": "^7.22.5",
+    "@babel/preset-env": "^7.22.5",
+    "@babel/preset-react": "^7.22.5",
+    "@babel/register": "^7.22.5",
+    "assert": "^2.0.0",
     "electron": "^24.1.2",
     "electron-builder": "^23.6.0",
     "electron-packager": "^17.1.1",
+    "events": "^3.1.0",
     "gulp": "^4.0.1",
     "gulp-babel": "^8.0.0",
     "gulp-if": "^2.0.0",
-    "lint-staged": "^12.0.3",
-    "parcel": "^1.12.4",
-    "prettier": "^2.4.1",
-    "sass": "^1.26.10"
+    "lint-staged": "^13.2.2",
+    "parcel": "^2.9.2",
+    "path-browserify": "^1.0.0",
+    "prettier": "^2.8.8",
+    "process": "^0.11.10",
+    "punycode": "^1.4.1",
+    "sass": "^1.26.10",
+    "url": "^0.11.0"
   },
   "build": {
     "appId": "info.efcl.postem",

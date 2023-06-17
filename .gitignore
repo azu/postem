@@ -91,3 +91,4 @@ src/service.js
 # Local Netlify folder
 .netlify
 /build/
+/.parcel-cache/

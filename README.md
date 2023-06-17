@@ -32,6 +32,7 @@ postemリポジトリに実装があるビルトインサポートしている�
 - [Twitter](./src/services/twitter)
 - [Slack](./src/services/slack)
 - [asocial-bookmark](./src/services/asocial-bookmark)
+- [Bluesky](./src/services/bluesky)
 - [debug](./src/services/debug)
 
 ## 利用するサービスの設定
