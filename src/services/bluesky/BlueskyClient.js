@@ -1,6 +1,6 @@
 // LICENSE : MIT
 "use strict";
-import { BskyAgent } from "@atproto/api";
+import { BskyAgent, RichText } from "@atproto/api";
 import { truncate } from "tweet-truncator";
 
 export default class BlueskyClient {
@@ -60,8 +60,14 @@ export default class BlueskyClient {
             identifier: this.serviceOptions.identifier,
             password: this.serviceOptions.appPassword
         });
-        return agent.post({
-            text: status
-        });
+        const rt = new RichText({ text: status });
+        await rt.detectFacets(agent); // automatically detects mentions and links
+        const postRecord = {
+            $type: "app.bsky.feed.post",
+            text: rt.text,
+            facets: rt.facets,
+            createdAt: new Date().toISOString()
+        };
+        return agent.post(postRecord);
     }
 }
