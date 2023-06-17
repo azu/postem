@@ -18,6 +18,9 @@
   "license": "MIT",
   "author": "azu",
   "main": "index.js",
+  "targets": {
+    "main": false
+  },
   "bin": {
     "postem": "bin/cmd.js"
   },
