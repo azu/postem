@@ -13,7 +13,7 @@
 - 入力欄は[textlint](https://github.com/textlint/textlint "textlint")でのリアルタイムLint
 - URLスキームを使ってブラウザから起動できる
 
-![screenshot](https://monosnap.com/file/9WtShAGiCilmCOLtuGEWnfphfpKndf.png)
+<img width="448" alt="image" src="https://github.com/azu/postem/assets/19714/deb060a9-57ad-4bdc-a012-40ab2bb27581">
 
 ## Installation
 
