@@ -1,11 +1,11 @@
 // LICENSE : MIT
 "use strict";
-import {Action} from "material-flux";
+import { Action } from "material-flux";
 import keys from "./ServiceActionConst";
 
-export {keys};
+export { keys };
 import notie from "notie";
-import {show as LoadingShow, dismiss as LoadingDismiss} from "../view-util/Loading";
+import { show as LoadingShow, dismiss as LoadingDismiss } from "../view-util/Loading";
 import RelatedItemModel from "../models/RelatedItemModel";
 import serviceInstance from "../service-instance";
 
@@ -19,11 +19,11 @@ export default class ServiceAction extends Action {
         console.log("fetchTags: " + service.id);
         return client
             .getTags()
-            .then(tags => {
+            .then((tags) => {
                 console.log("fetchTags:", tags);
                 this.dispatch(keys.fetchTags, tags);
             })
-            .catch(error => {
+            .catch((error) => {
                 console.log(error);
             });
     }
@@ -38,17 +38,30 @@ export default class ServiceAction extends Action {
     }
 
     postLink(services, postData) {
-        var mapCS = services.map(service => {
+        var mapCS = services.map((service) => {
             const client = serviceInstance.getClient(service);
             return {
                 service,
                 client
             };
         });
-        var enabledCS = mapCS.filter(({client}) => client.isLogin());
-        var servicePromises = enabledCS.map(({service, client}) => {
+        const retry = async (cb, retryCount = 0) => {
+            try {
+                return await cb();
+            } catch (error) {
+                if (retryCount < 3) {
+                    return await retry(cb, retryCount + 1);
+                } else {
+                    throw error;
+                }
+            }
+        };
+        var enabledCS = mapCS.filter(({ client }) => client.isLogin());
+        var servicePromises = enabledCS.map(({ service, client }) => {
             console.log("postLink: " + service.id);
-            return client.postLink(postData);
+            return retry(() => {
+                return client.postLink(postData);
+            });
         });
         if (servicePromises.length) {
             LoadingShow();
@@ -58,7 +71,7 @@ export default class ServiceAction extends Action {
                 notie.alert(1, "Post Success!", 1.5);
                 this.dispatch(keys.postLink);
             })
-            .catch(error => {
+            .catch((error) => {
                 notie.alert(3, "Post Error.", 2.5);
                 console.log(error);
             })
@@ -93,7 +106,7 @@ export default class ServiceAction extends Action {
 
     login(service) {
         const client = serviceInstance.getClient(service);
-        client.loginAsync(error => {
+        client.loginAsync((error) => {
             if (error) {
                 return console.error(error);
             }
@@ -111,7 +124,7 @@ export default class ServiceAction extends Action {
         if (client.isLogin()) {
             this.dispatch(keys.enableService, service);
         } else {
-            client.loginAsync(error => {
+            client.loginAsync((error) => {
                 if (error) {
                     return console.error(error);
                 }
@@ -131,7 +144,7 @@ export default class ServiceAction extends Action {
         }
     }
 
-    addRelatedItem({title, URL} = {}) {
+    addRelatedItem({ title, URL } = {}) {
         const relatedItem = new RelatedItemModel({
             title: title || "Dummy",
             URL: URL || "http://example.com/"
@@ -139,10 +152,7 @@ export default class ServiceAction extends Action {
         if (title && URL) {
             relatedItem.finishEditing();
         }
-        this.dispatch(
-            keys.addRelatedItem,
-            relatedItem
-        );
+        this.dispatch(keys.addRelatedItem, relatedItem);
     }
 
     finishEditingRelatedItem(item, value) {
