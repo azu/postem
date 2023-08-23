@@ -51,7 +51,7 @@ export default class BlueskyClient {
         const contents = { title, url, desc: comment, tags, quote: quote || "" };
         const status = truncate(contents, {
             template: `%desc% %quote% "%title%" %url% %tags%`,
-            maxLength: 300
+            maxLength: 280
         });
         const agent = new BskyAgent({
             service: "https://bsky.social"
