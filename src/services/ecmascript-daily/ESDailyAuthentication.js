@@ -1,7 +1,8 @@
-import prompt from "../config-dialog/prompt";
-import storage from "../../node/storage/accounts";
-exports.canAccess = function() {
-    return storage.has("ecmascript-daily-dir");
+import * as fs from "fs";
+import path from "path";
+
+exports.canAccess = function () {
+    return fs.existsSync(path.join(__dirname, "consumer.json"));
 };
 /*
 Electron bug?
@@ -10,19 +11,7 @@ so, handing callback as async way
 
 I think that this limitation is caused by ipc.
  */
-exports.requireAccess = function(callback) {
-    const options = {
-        title: "ecmascript-daily Config",
-        message: "ecmascript-dailyリポジトリのあるディレクトリを指定して下さい",
-        placeholder: "/path/to/ecmascript-daily.github.com/"
-    };
-    prompt(options, function(res) {
-        const filePath = res.trim();
-        if (filePath.length > 0) {
-            storage.set("ecmascript-daily-dir", filePath);
-            callback(null, res);
-        } else {
-            callback(new Error("input file path is undefined"));
-        }
-    });
+exports.requireAccess = function (callback) {
+    alert("consumer.jsonを設定してください");
+    callback(new Error("consumer.json is required"));
 };

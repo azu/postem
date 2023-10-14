@@ -1,8 +1,7 @@
 // LICENSE : MIT
 "use strict";
-import querystring from "querystring";
-const Authentication = require('@electron/remote').require(__dirname + "/JSerAuthentication");
-const Committer = require('@electron/remote').require(__dirname + "/JSerCommitter");
+const Authentication = require("@electron/remote").require(__dirname + "/JSerAuthentication");
+const Committer = require("@electron/remote").require(__dirname + "/JSerCommitter");
 export default class HatenaClient {
     isLogin() {
         return Authentication.canAccess();
@@ -31,7 +30,7 @@ export default class HatenaClient {
             viaURL,
             content: comment,
             tags: tags,
-            relatedLinks: relatedItems.map(item => {
+            relatedLinks: relatedItems.map((item) => {
                 return {
                     title: item.title,
                     url: item.URL
@@ -43,7 +42,7 @@ export default class HatenaClient {
             resolve = _resolve;
             reject = _reject;
         });
-        Committer.savePost(serializedObject, function(error) {
+        Committer.savePost(serializedObject, function (error) {
             if (error) {
                 return reject(error);
             }

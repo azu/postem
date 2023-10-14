@@ -6,7 +6,7 @@ const path = require("path");
 const fs = require("fs");
 const mkdirp = require("mkdirp");
 import storage from "../../node/storage/accounts";
-import { exec, execSync } from "child_process";
+import { exec } from "child_process";
 
 function format0(str, len) {
     return ("_" + Math.pow(10, len) + str).slice(-len);
@@ -38,7 +38,7 @@ export function savePost(serializedObject, callback) {
     }
     // pre-sync
     var preSyncScript = path.join(storage.get("jser.info-dir"), "./tools/pre-git-sync.sh");
-    exec(`bash ${preSyncScript}`, error => {
+    exec(`bash ${preSyncScript}`, (error) => {
         if (error) {
             return callback(error);
         }
@@ -62,11 +62,11 @@ export function savePost(serializedObject, callback) {
             delete item.viaURL;
         }
         // if duplicated item, overwrite
-        const foundSameItem = posts.list.some(listedItem => {
+        const foundSameItem = posts.list.some((listedItem) => {
             return item.url === listedItem.url;
         });
         if (foundSameItem) {
-            const itemIndex = posts.list.findIndex(listedItem => {
+            const itemIndex = posts.list.findIndex((listedItem) => {
                 return item.url === listedItem.url;
             });
             posts.list[itemIndex] = item;
