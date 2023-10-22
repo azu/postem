@@ -12,6 +12,6 @@ so, handing callback as async way
 I think that this limitation is caused by ipc.
  */
 exports.requireAccess = function (callback) {
-    alert("consumer.jsonを設定してください");
+    console.error("consumer.jsonを設定してください");
     callback(new Error("consumer.json is required"));
 };
