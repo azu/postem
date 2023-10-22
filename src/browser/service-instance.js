@@ -6,19 +6,19 @@ import ServiceManger from "./service-manager";
 // FIXME: use IPC
 const notBundledRequire = require;
 const manager = new ServiceManger();
-const getServiceNameList = process.env.BROWSER === "1"
-    ? () => require("../service.browser.js")
-    : () => notBundledRequire("../service.js");
+const getServiceNameList =
+    process.env.BROWSER === "1" ? () => require("../service.browser.js") : () => notBundledRequire("../service.js");
 const services = getServiceNameList()
-    .filter(service => {
+    .filter((service) => {
         return service.enabled;
     })
-    .map(service => {
+    .map((service) => {
         const { Model, Client } = service.index ? service.index : require(service.indexPath);
+        const client = new Client(service.options);
         return {
             model: new Model(),
-            client: new Client(service.options),
-            isDefaultChecked: service.isDefaultChecked
+            client: client,
+            isDefaultChecked: service.isDefaultChecked && client.isLogin()
         };
     });
 services.forEach(({ model, client, isDefaultChecked }) => {
