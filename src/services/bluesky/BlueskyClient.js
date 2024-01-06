@@ -44,7 +44,7 @@ export default class BlueskyClient {
 
     loginAsync(callback) {
         callback(
-            new Error(`Please set Twitter App Key and Secret to options
+            new Error(`Please set Bluesky ID and App Password to options
     {
         enabled: true,
         name: "bluesky",
