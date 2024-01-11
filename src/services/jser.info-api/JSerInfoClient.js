@@ -4,7 +4,7 @@ import { AsocialBookmark } from "asocial-bookmark";
 import Consumer from "./HatenaCunsumer";
 
 const moment = require("moment");
-export default class HatenaClient {
+export default class JSerInfoClient {
     isLogin() {
         return true;
     }
