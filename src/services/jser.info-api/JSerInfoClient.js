@@ -1,7 +1,7 @@
 // LICENSE : MIT
 "use strict";
 import { AsocialBookmark } from "asocial-bookmark";
-import Consumer from "./HatenaCunsumer";
+import Consumer from "./JSerInfoConsumer.js";
 
 const moment = require("moment");
 export default class JSerInfoClient {
