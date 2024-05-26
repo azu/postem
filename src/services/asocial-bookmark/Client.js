@@ -84,23 +84,24 @@ export default class Client {
      * @param options
      * @returns {*}
      * {
-            url,
-            comment,
-            tags = []
-        }
+     url,
+     comment,
+     tags = []
+     }
      */
     postLink(options = {}) {
-        const { title, url, viaURL, comment, tags, relatedItems } = options;
+        const { title, url, viaURL, comment, additionalNote, tags, relatedItems } = options;
         const asocialBookmark = new AsocialBookmark(this.serviceOptions);
         const date = new Date();
         const isoDate = moment().utc().toDate();
+        const content = additionalNote ? `${comment}\n\n---\n\n${additionalNote}` : comment;
         return asocialBookmark.updateBookmark({
             title,
             url,
             tags,
             viaURL,
             relatedItems,
-            content: comment,
+            content,
             date: isoDate
         });
     }

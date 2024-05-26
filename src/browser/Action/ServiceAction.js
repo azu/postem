@@ -56,11 +56,35 @@ export default class ServiceAction extends Action {
                 }
             }
         };
+        // comment に -{3,5} が含まれている時は、 { content, note } に分ける
+        // content は URL の内容
+        // note は　コメント的なもの
+        // という風に分ける
+        const splitContent = (content) => {
+            const match = content.match(/-{3,5}/);
+            if (match) {
+                const index = match.index;
+                return {
+                    content: content.slice(0, index).trim(),
+                    note: content.slice(index + match[0].length).trim()
+                };
+            } else {
+                return {
+                    content
+                };
+            }
+        };
+        const { content, note } = splitContent(postData.comment);
+        const normalizedPostData = {
+            ...postData,
+            comment: content,
+            additionalNote: note
+        };
         var enabledCS = mapCS.filter(({ client }) => client.isLogin());
         var servicePromises = enabledCS.map(({ service, client }) => {
             console.log("postLink: " + service.id);
             return retry(() => {
-                return client.postLink(postData);
+                return client.postLink(normalizedPostData);
             });
         });
         if (servicePromises.length) {

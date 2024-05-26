@@ -51,13 +51,13 @@ export default class JSerInfoClient {
      * @param options
      * @returns {*}
      * {
-            url,
-            comment,
-            tags = []
-        }
+     url,
+     comment,
+     tags = []
+     }
      */
     postLink(options = {}) {
-        const { title, url, viaURL, comment, tags, relatedItems } = options;
+        const { title, url, viaURL, comment, additionalNote, tags, relatedItems } = options;
         const asocialBookmark = new AsocialBookmark({
             indexPropertyName: Consumer.indexPropertyName,
             github: Consumer.github
@@ -69,6 +69,7 @@ export default class JSerInfoClient {
             title,
             url,
             content: comment,
+            additionalNote,
             tags,
             viaURL,
             relatedLinks: relatedItems.map((item) => {
