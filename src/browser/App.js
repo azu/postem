@@ -35,9 +35,8 @@ class App extends React.Component {
             },
             appContext.ServiceStore.state
         );
-    }
 
-    componentWillMount() {
+        // ServiceStore の変更を監視（constructorで登録）
         appContext.ServiceStore.onChange(() => {
             let newState = Object.assign({}, this.state, appContext.ServiceStore.state);
             this.setState(newState);
