@@ -43,7 +43,7 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: mcr.microsoft.com/playwright:v${{ needs.get-playwright-version.outputs.playwright-version }}-noble
-      options: --init --ipc=host --user=1001
+      options: --init --ipc=host --user=1001 --shm-size=2gb
     steps:
     - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
     
@@ -57,7 +57,17 @@ jobs:
     - name: Install dependencies
       run: pnpm install
     
+    - name: Setup virtual display
+      run: |
+        export DISPLAY=:99
+        Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 &
+        sleep 3
+    
     - name: Run integration tests
+      env:
+        DISPLAY: :99
+        DBUS_SESSION_BUS_ADDRESS: /dev/null
+        XDG_RUNTIME_DIR: /tmp
       run: pnpm test:integration
 
   build:

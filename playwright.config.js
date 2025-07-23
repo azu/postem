@@ -21,7 +21,7 @@ export default defineConfig({
     projects: [
         {
             name: "electron",
-            testMatch: "**/*.spec.js"
+            testMatch: "**/*.play.js"
         }
     ]
 });

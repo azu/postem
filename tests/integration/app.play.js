@@ -14,10 +14,23 @@ test.describe("Postem Application", () => {
                 "--no-sandbox",
                 "--disable-setuid-sandbox",
                 "--disable-dev-shm-usage",
-                "--disable-gpu"
+                "--disable-gpu",
+                "--disable-software-rasterizer",
+                "--disable-background-timer-throttling",
+                "--disable-renderer-backgrounding",
+                "--disable-features=TranslateUI",
+                "--disable-ipc-flooding-protection",
+                "--headless"
             ],
             // テスト用サービス設定を使用（development環境でsrcディレクトリを使用）
-            env: { ...process.env, NODE_ENV: "development", PLAYWRIGHT_TEST: "1" },
+            env: {
+                ...process.env,
+                NODE_ENV: "development",
+                PLAYWRIGHT_TEST: "1",
+                DISPLAY: ":99",
+                DBUS_SESSION_BUS_ADDRESS: "/dev/null",
+                XDG_RUNTIME_DIR: "/tmp"
+            },
             timeout: 30000
         });
 
@@ -95,9 +108,22 @@ test.describe("Postem Application", () => {
                 "--no-sandbox",
                 "--disable-setuid-sandbox",
                 "--disable-dev-shm-usage",
-                "--disable-gpu"
+                "--disable-gpu",
+                "--disable-software-rasterizer",
+                "--disable-background-timer-throttling",
+                "--disable-renderer-backgrounding",
+                "--disable-features=TranslateUI",
+                "--disable-ipc-flooding-protection",
+                "--headless"
             ],
-            env: { ...process.env, NODE_ENV: "development", PLAYWRIGHT_TEST: "1" },
+            env: {
+                ...process.env,
+                NODE_ENV: "development",
+                PLAYWRIGHT_TEST: "1",
+                DISPLAY: ":99",
+                DBUS_SESSION_BUS_ADDRESS: "/dev/null",
+                XDG_RUNTIME_DIR: "/tmp"
+            },
             timeout: 30000
         });
 
