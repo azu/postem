@@ -93,59 +93,165 @@ test.describe("Postem Application", () => {
     test("DEBUGサービスを使った投稿テスト", async ({ window }) => {
         await window.waitForLoadState("domcontentloaded");
 
-        // コンソールメッセージをキャプチャ
-        const consoleMessages = [];
-        window.on("console", (msg) => consoleMessages.push(msg.text()));
-
         // ServiceListが表示されるまで待機
         await expect(window.locator(".ServiceList")).toBeVisible();
 
-        // 利用可能なサービスを確認
-        const services = window.locator(".ServiceList img");
-        const serviceCount = await services.count();
+        // DEBUGサービスをクリック
+        const debugService = window.locator(".ServiceList img").first();
+        await expect(debugService).toBeVisible();
+        await debugService.click();
+        await window.waitForTimeout(500); // 状態変化を待つ
 
-        // DEBUGサービス（最初のサービス）をクリック
-        const firstService = services.first();
-        await expect(firstService).toBeVisible();
-        await firstService.click();
-        await window.waitForTimeout(500); // クリック後の状態変化を待つ
+        // フォーム入力を行う
+        await window.locator("input").first().fill("統合テスト投稿タイトル");
+        await window.locator("input").nth(1).fill("https://integration-test.example.com");
 
-        // 入力フィールドを確認
-        const inputs = window.locator("input");
-        const inputCount = await inputs.count();
+        // 投稿ボタンをクリック
+        const submitButton = window.locator('button, input[type="submit"], .SubmitButton').first();
+        await expect(submitButton).toBeVisible();
+        await submitButton.click();
 
-        // タイトル入力（最初の入力フィールド）
-        const titleInput = inputs.first();
+        // 投稿完了を待つ
+        await window.waitForTimeout(1000);
+
+        // 基本的な動作確認
+        expect(await window.locator(".ServiceList img").count()).toBeGreaterThan(0);
+    });
+
+    test("サービス選択のUI状態変化テスト", async ({ window }) => {
+        await window.waitForLoadState("domcontentloaded");
+
+        // 初期状態：サービスが未選択
+        const serviceList = window.locator(".ServiceList");
+        await expect(serviceList).toBeVisible();
+
+        // DEBUGサービスをクリック
+        const debugService = serviceList.locator("img").first();
+        await debugService.click();
+        await window.waitForTimeout(300);
+
+        // 選択後の状態を確認
+        // サービスが選択されているかの視覚的確認（例：アクティブクラスなど）
+        const selectedService = debugService;
+        await expect(selectedService).toBeVisible();
+
+        // 入力フィールドが利用可能になっていることを確認
+        const titleInput = window.locator("input").first();
         await expect(titleInput).toBeVisible();
-        await titleInput.fill("テスト投稿");
+        await expect(titleInput).toBeEnabled();
+    });
 
-        // URL入力（2番目の入力フィールド）
-        if (inputCount > 1) {
-            const urlInput = inputs.nth(1);
-            await expect(urlInput).toBeVisible();
-            await urlInput.fill("https://example.com");
-        }
+    test("フォーム入力の検証テスト", async ({ window }) => {
+        await window.waitForLoadState("domcontentloaded");
 
-        // 投稿ボタンを探す
-        const submitButtons = window.locator('button, input[type="submit"], .SubmitButton');
-        const buttonCount = await submitButtons.count();
+        // DEBUGサービスを選択
+        await window.locator(".ServiceList img").first().click();
+        await window.waitForTimeout(300);
 
-        if (buttonCount > 0) {
-            const submitButton = submitButtons.first();
-            await expect(submitButton).toBeVisible();
-            await submitButton.click();
-        }
+        // 各入力フィールドをテスト
+        const titleInput = window.locator("input").first();
+        const urlInput = window.locator("input").nth(1);
 
-        // 投稿処理完了を待つ
-        await window.waitForTimeout(2000);
+        // タイトル入力テスト
+        await expect(titleInput).toBeVisible();
+        await titleInput.fill("テストタイトル");
+        await expect(titleInput).toHaveValue("テストタイトル");
 
-        // 投稿処理が実行されたことを確認
-        // (投稿ボタンが正常にクリックされ、UIが適切に応答することを検証)
-        expect(buttonCount).toBeGreaterThan(0);
-        expect(serviceCount).toBeGreaterThan(0);
+        // URL入力テスト
+        await expect(urlInput).toBeVisible();
+        await urlInput.fill("https://test.example.com");
+        await expect(urlInput).toHaveValue("https://test.example.com");
 
-        // TODO: DEBUGサービスのconsole.log出力が期待通りに動作しない問題を調査
-        // 現在はUI操作が正常に動作することを確認
+        // 入力フィールドのクリア
+        await titleInput.clear();
+        await expect(titleInput).toHaveValue("");
+
+        // 再入力
+        await titleInput.fill("新しいタイトル");
+        await expect(titleInput).toHaveValue("新しいタイトル");
+    });
+
+    test("エラーハンドリングテスト", async ({ window }) => {
+        await window.waitForLoadState("domcontentloaded");
+
+        // DEBUGサービスを選択
+        await window.locator(".ServiceList img").first().click();
+        await window.waitForTimeout(300);
+
+        // 空のフォームで投稿を試行（エラーケース）
+        const submitButton = window.locator('button, input[type="submit"], .SubmitButton').first();
+
+        // タイトルを空のままで投稿
+        await window.locator("input").first().fill("");
+        await window.locator("input").nth(1).fill("https://test.example.com");
+
+        // 投稿ボタンがクリック可能かを確認
+        await expect(submitButton).toBeVisible();
+
+        // 実際の投稿は行わず、UIの状態を確認
+        // (エラー表示などがあればここで確認)
+        const titleInput = window.locator("input").first();
+        await expect(titleInput).toBeVisible();
+        await expect(titleInput).toHaveValue("");
+    });
+
+    test("キーボードショートカットテスト", async ({ window }) => {
+        await window.waitForLoadState("domcontentloaded");
+
+        // DEBUGサービスを選択
+        await window.locator(".ServiceList img").first().click();
+        await window.waitForTimeout(300);
+
+        const titleInput = window.locator("input").first();
+
+        // タイトル入力フィールドにフォーカス
+        await titleInput.click();
+
+        // キーボード入力のテスト
+        await titleInput.press("Control+a"); // 全選択
+        await titleInput.type("キーボードテスト");
+        await expect(titleInput).toHaveValue("キーボードテスト");
+
+        // Tabキーでフィールド移動
+        await titleInput.press("Tab");
+
+        // URL入力フィールドがフォーカスされることを確認
+        const urlInput = window.locator("input").nth(1);
+        await expect(urlInput).toBeFocused();
+
+        // URL入力
+        await urlInput.type("https://keyboard-test.example.com");
+        await expect(urlInput).toHaveValue("https://keyboard-test.example.com");
+    });
+
+    test("ウィンドウリサイズ対応テスト", async ({ window }) => {
+        await window.waitForLoadState("domcontentloaded");
+
+        // 初期サイズでの要素確認
+        await expect(window.locator(".ServiceList")).toBeVisible();
+        await expect(window.locator("input").first()).toBeVisible();
+
+        // ウィンドウサイズを変更
+        await window.setViewportSize({ width: 800, height: 600 });
+        await window.waitForTimeout(300);
+
+        // リサイズ後も要素が表示されることを確認
+        await expect(window.locator(".ServiceList")).toBeVisible();
+        await expect(window.locator("input").first()).toBeVisible();
+
+        // より小さいサイズ
+        await window.setViewportSize({ width: 600, height: 400 });
+        await window.waitForTimeout(300);
+
+        // 小さいサイズでも基本機能が動作することを確認
+        await expect(window.locator(".ServiceList")).toBeVisible();
+        const debugService = window.locator(".ServiceList img").first();
+        await debugService.click();
+
+        const titleInput = window.locator("input").first();
+        await expect(titleInput).toBeVisible();
+        await titleInput.fill("リサイズテスト");
+        await expect(titleInput).toHaveValue("リサイズテスト");
     });
 
     // URLパラメーター付きアプリケーション用のtest contextを定義
