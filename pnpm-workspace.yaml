@@ -1,0 +1,4 @@
+onlyBuiltDependencies:
+  - electron
+  - es5-ext
+  - fsevents
