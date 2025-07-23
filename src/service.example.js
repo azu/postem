@@ -18,6 +18,11 @@ module.exports = [
             // Post Tweets that requires access token and secret
             accessToken: "access token",
             accessSecret: "access token secret"
+            // Optional: Control who can reply to your tweets
+            // - "following": Only accounts the author follows can reply
+            // - "mentionedUsers": Only accounts mentioned in the Tweet can reply
+            // - Default (omitted): Everyone can reply
+            // reply_settings: "following"
         }
     },
     {

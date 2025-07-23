@@ -73,8 +73,11 @@ export default class TwitterClient {
             template: `%desc% %quote% "%title%" %url% %tags%`
         });
 
-        return this._getClient().readWrite.v2.tweet(status, {
-            requestEventDebugHandler: (eventType, data) => console.log("Event", eventType, "with data", data)
-        });
+        const tweetOptions = {
+            requestEventDebugHandler: (eventType, data) => console.log("Event", eventType, "with data", data),
+            ...(this.serviceOptions.reply_settings ? { reply_settings: this.serviceOptions.reply_settings } : {})
+        };
+
+        return this._getClient().readWrite.v2.tweet(status, tweetOptions);
     }
 }
