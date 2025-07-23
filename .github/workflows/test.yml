@@ -7,9 +7,8 @@ on:
     branches: [ master ]
 
 jobs:
-  test:
+  unit-test:
     runs-on: ubuntu-latest
-    
     steps:
     - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
     
@@ -20,23 +19,61 @@ jobs:
         node-version: '22'
         cache: 'pnpm'
     
-    # Xvfbのセットアップ（Electron用）
-    - name: Setup Xvfb
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y xvfb
-    
     - name: Install dependencies
       run: pnpm install
     
     - name: Run unit tests
       run: pnpm test:unit
+
+  get-playwright-version:
+    runs-on: ubuntu-latest
+    outputs:
+      playwright-version: ${{ steps.playwright-version.outputs.playwright-version }}
+    steps:
+    - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+    - uses: pnpm/action-setup@eae0cfeb286e66ffb5155f1a79b90583a127a68b # v2.4.1
+    - name: Get Playwright version
+      id: playwright-version
+      run: |
+        version=$(node -e "console.log(require('./package.json').devDependencies['@playwright/test'])" | sed 's/^\^//')
+        echo "playwright-version=$version" >> "$GITHUB_OUTPUT"
+
+  integration-test:
+    needs: get-playwright-version
+    runs-on: ubuntu-latest
+    container:
+      image: mcr.microsoft.com/playwright:v${{ needs.get-playwright-version.outputs.playwright-version }}-noble
+      options: --init --ipc=host --user=1001
+    steps:
+    - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+    
+    - uses: pnpm/action-setup@eae0cfeb286e66ffb5155f1a79b90583a127a68b # v2.4.1
+    
+    - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+      with:
+        node-version: '22'
+        cache: 'pnpm'
+    
+    - name: Install dependencies
+      run: pnpm install
     
     - name: Run integration tests
-      run: xvfb-run -a pnpm test:integration
-      env:
-        # Electronのサンドボックスを無効化（CI環境用）
-        ELECTRON_DISABLE_SANDBOX: 1
+      run: pnpm test:integration
+
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+    
+    - uses: pnpm/action-setup@eae0cfeb286e66ffb5155f1a79b90583a127a68b # v2.4.1
+    
+    - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+      with:
+        node-version: '22'
+        cache: 'pnpm'
+    
+    - name: Install dependencies
+      run: pnpm install
     
     - name: Build project
       run: pnpm run build
