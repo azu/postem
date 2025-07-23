@@ -2,35 +2,53 @@ const { test: baseTest, expect } = require("@playwright/test");
 const { _electron: electron } = require("playwright");
 const path = require("path");
 
+// Electron起動オプションを生成する関数
+function createElectronLaunchOptions(additionalArgs = []) {
+    // CI環境でのみヘッドレスモードを使用
+    const isCI = process.env.CI === "true" || process.env.GITHUB_ACTIONS === "true";
+
+    const baseArgs = [
+        path.join(__dirname, "../../index.js"),
+        ...additionalArgs,
+        "--no-sandbox",
+        "--disable-setuid-sandbox",
+        "--disable-dev-shm-usage",
+        "--disable-gpu",
+        "--disable-software-rasterizer",
+        "--disable-background-timer-throttling",
+        "--disable-renderer-backgrounding",
+        "--disable-features=TranslateUI",
+        "--disable-ipc-flooding-protection"
+    ];
+
+    // CI環境でのみヘッドレスフラグを追加
+    const args = isCI ? [...baseArgs, "--headless"] : baseArgs;
+
+    // CI環境でのみX server関連の環境変数を設定
+    const baseEnv = {
+        ...process.env,
+        NODE_ENV: "development",
+        PLAYWRIGHT_TEST: "1"
+    };
+
+    const env = isCI
+        ? {
+              ...baseEnv,
+              DISPLAY: ":99",
+              DBUS_SESSION_BUS_ADDRESS: "/dev/null",
+              XDG_RUNTIME_DIR: "/tmp"
+          }
+        : baseEnv;
+
+    return { args, env, timeout: 30000 };
+}
+
 // Test contextを使用してElectronアプリケーションとウィンドウを管理
 const test = baseTest.extend({
     app: async ({}, use) => {
         // 各テストで独立したElectronアプリケーションを起動
-        const app = await electron.launch({
-            args: [
-                path.join(__dirname, "../../index.js"),
-                "--no-sandbox",
-                "--disable-setuid-sandbox",
-                "--disable-dev-shm-usage",
-                "--disable-gpu",
-                "--disable-software-rasterizer",
-                "--disable-background-timer-throttling",
-                "--disable-renderer-backgrounding",
-                "--disable-features=TranslateUI",
-                "--disable-ipc-flooding-protection",
-                "--headless"
-            ],
-            // テスト用サービス設定を使用（development環境でsrcディレクトリを使用）
-            env: {
-                ...process.env,
-                NODE_ENV: "development",
-                PLAYWRIGHT_TEST: "1",
-                DISPLAY: ":99",
-                DBUS_SESSION_BUS_ADDRESS: "/dev/null",
-                XDG_RUNTIME_DIR: "/tmp"
-            },
-            timeout: 30000
-        });
+        const launchOptions = createElectronLaunchOptions();
+        const app = await electron.launch(launchOptions);
 
         // テストにappを提供
         await use(app);
@@ -153,32 +171,8 @@ test.describe("Postem Application", () => {
     const testWithUrlParams = baseTest.extend({
         appWithUrlParams: async ({}, use) => {
             // URLパラメーター付きでElectronアプリケーションを起動
-            const app = await electron.launch({
-                args: [
-                    path.join(__dirname, "../../index.js"),
-                    "--url=https://example.com",
-                    "--title=Test Title",
-                    "--no-sandbox",
-                    "--disable-setuid-sandbox",
-                    "--disable-dev-shm-usage",
-                    "--disable-gpu",
-                    "--disable-software-rasterizer",
-                    "--disable-background-timer-throttling",
-                    "--disable-renderer-backgrounding",
-                    "--disable-features=TranslateUI",
-                    "--disable-ipc-flooding-protection",
-                    "--headless"
-                ],
-                env: {
-                    ...process.env,
-                    NODE_ENV: "development",
-                    PLAYWRIGHT_TEST: "1",
-                    DISPLAY: ":99",
-                    DBUS_SESSION_BUS_ADDRESS: "/dev/null",
-                    XDG_RUNTIME_DIR: "/tmp"
-                },
-                timeout: 30000
-            });
+            const launchOptions = createElectronLaunchOptions(["--url=https://example.com", "--title=Test Title"]);
+            const app = await electron.launch(launchOptions);
 
             await use(app);
             await app.close();
