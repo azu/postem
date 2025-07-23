@@ -9,9 +9,16 @@ test.describe("Postem Application", () => {
     test.beforeEach(async () => {
         // Electronアプリを起動
         app = await electron.launch({
-            args: [path.join(__dirname, "../../index.js")],
+            args: [
+                path.join(__dirname, "../../index.js"),
+                "--no-sandbox",
+                "--disable-setuid-sandbox",
+                "--disable-dev-shm-usage",
+                "--disable-gpu"
+            ],
             // テスト用サービス設定を使用（development環境でsrcディレクトリを使用）
-            env: { ...process.env, NODE_ENV: "development", PLAYWRIGHT_TEST: "1" }
+            env: { ...process.env, NODE_ENV: "development", PLAYWRIGHT_TEST: "1" },
+            timeout: 30000
         });
 
         // メインウィンドウを取得
@@ -81,8 +88,17 @@ test.describe("Postem Application", () => {
 
         // URLパラメーター付きで再起動
         app = await electron.launch({
-            args: [path.join(__dirname, "../../index.js"), "--url=https://example.com", "--title=Test Title"],
-            env: { ...process.env, NODE_ENV: "development", PLAYWRIGHT_TEST: "1" }
+            args: [
+                path.join(__dirname, "../../index.js"),
+                "--url=https://example.com",
+                "--title=Test Title",
+                "--no-sandbox",
+                "--disable-setuid-sandbox",
+                "--disable-dev-shm-usage",
+                "--disable-gpu"
+            ],
+            env: { ...process.env, NODE_ENV: "development", PLAYWRIGHT_TEST: "1" },
+            timeout: 30000
         });
 
         window = await app.firstWindow();
