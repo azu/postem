@@ -6,8 +6,15 @@ import ServiceManger from "./service-manager";
 // FIXME: use IPC
 const notBundledRequire = require;
 const manager = new ServiceManger();
-const getServiceNameList =
-    process.env.BROWSER === "1" ? () => require("../service.browser.js") : () => notBundledRequire("../service.js");
+const getServiceNameList = () => {
+    if (process.env.BROWSER === "1") {
+        return require("../service.browser.js");
+    } else if (process.env.PLAYWRIGHT_TEST === "1" || process.title?.includes("playwright")) {
+        return notBundledRequire("../../tests/fixtures/test-services.js");
+    } else {
+        return notBundledRequire("../service.js");
+    }
+};
 const services = getServiceNameList()
     .filter((service) => {
         return service.enabled;
