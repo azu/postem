@@ -1,5 +1,3 @@
-import fetch from "node-fetch";
-
 export default class SlackClient {
     constructor(serviceOptions) {
         this.serviceOptions = serviceOptions;
@@ -19,8 +17,8 @@ export default class SlackClient {
         return fetch(`https://slack.com/api/chat.postMessage`, {
             method: "post",
             headers: {
-                "Authorization": "Bearer " + this.serviceOptions.token,
-                "Content-Type" : "application/json"
+                Authorization: "Bearer " + this.serviceOptions.token,
+                "Content-Type": "application/json"
             },
             body: JSON.stringify({
                 channel: this.serviceOptions.channel,
