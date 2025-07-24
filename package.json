@@ -22,7 +22,7 @@
     "postem": "bin/cmd.js"
   },
   "scripts": {
-    "build": "NODE_ENV=production gulp build",
+    "build": "echo 'No build needed - using source files directly'",
     "predist": "npm run build",
     "dist": "electron-builder",
     "start": "NODE_ENV=development electron .",
@@ -95,19 +95,12 @@
     "twitter-api-v2": "^1.18.2"
   },
   "devDependencies": {
-    "@babel/core": "^7.22.5",
-    "@babel/preset-env": "^7.22.5",
-    "@babel/preset-react": "^7.22.5",
-    "@babel/register": "^7.22.5",
     "@playwright/test": "^1.54.1",
     "assert": "^2.0.0",
     "electron": "^24.1.2",
     "electron-builder": "^23.6.0",
     "electron-packager": "^17.1.1",
     "events": "^3.1.0",
-    "gulp": "^4.0.1",
-    "gulp-babel": "^8.0.0",
-    "gulp-if": "^2.0.0",
     "lint-staged": "^13.2.2",
     "path-browserify": "^1.0.0",
     "playwright": "^1.54.1",

@@ -1,6 +1,6 @@
 // LICENSE : MIT
 "use strict";
-import Storage from "./Storage";
+const Storage = require("./Storage");
 class TagStorage extends Storage {
     updateTags(tags) {
         this.set("tags", tags);
@@ -11,4 +11,4 @@ class TagStorage extends Storage {
     }
 }
 var tags = new TagStorage("tags");
-export default tags;
+module.exports = tags;

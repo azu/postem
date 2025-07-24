@@ -1,6 +1,6 @@
 // LICENSE : MIT
 "use strict";
-export default class WebMessenger {
+class WebMessenger {
     constructor(webContent) {
         this.webContent = webContent;
     }
@@ -35,3 +35,5 @@ export default class WebMessenger {
         }
     }
 }
+
+module.exports = WebMessenger;

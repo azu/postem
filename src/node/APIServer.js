@@ -1,7 +1,7 @@
 // LICENSE : MIT
 "use strict";
-import express from "express";
-export default class APIServer {
+const express = require("express");
+class APIServer {
     constructor(webContent) {
         this.webContent = webContent;
     }
@@ -27,3 +27,5 @@ export default class APIServer {
         this.server && this.server.close();
     }
 }
+
+module.exports = APIServer;

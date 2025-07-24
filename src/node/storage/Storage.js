@@ -1,10 +1,10 @@
 // LICENSE : MIT
 "use strict";
-import { app } from "electron";
-import path from "path";
-import assert from "assert";
-import jetpack from "fs-jetpack";
-export default class Storage {
+const { app } = require("electron");
+const path = require("path");
+const assert = require("assert");
+const jetpack = require("fs-jetpack");
+class Storage {
     constructor(storeName, defaults = {}) {
         assert(typeof storeName === "string");
         this.path = path.join(app.getPath("userData"), storeName + ".json");
@@ -34,3 +34,5 @@ export default class Storage {
         jetpack.write(this.path, this.all);
     }
 }
+
+module.exports = Storage;

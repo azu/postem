@@ -3,7 +3,7 @@
 const url = require("url");
 const defaultMenu = require("electron-default-menu");
 const { Menu, app, shell } = require("electron");
-import Application from "./Application";
+const Application = require("./Application");
 
 app.setAsDefaultProtocolClient("postem");
 const minimist = require("minimist");
@@ -57,7 +57,7 @@ function startRenderApp(argv) {
 }
 
 // Quit when all windows are closed.
-app.on("window-all-closed", function() {
+app.on("window-all-closed", function () {
     // On OS X it is common for applications and their menu bar
     // to stay active until the user quits explicitly with Cmd + Q
     if (process.platform !== "darwin") {
@@ -65,7 +65,7 @@ app.on("window-all-closed", function() {
     }
 });
 
-app.on("activate", function() {
+app.on("activate", function () {
     if (!app.isReady()) {
         return;
     }
@@ -78,7 +78,7 @@ app.on("activate", function() {
     }
 });
 
-app.on("open-url", function(event, url) {
+app.on("open-url", function (event, url) {
     event.preventDefault();
     if (!app.isReady()) {
         startupArgParsed = queryToArgs(url);
@@ -87,7 +87,7 @@ app.on("open-url", function(event, url) {
     }
 });
 
-app.on("ready", function() {
+app.on("ready", function () {
     require("../share/profile").start();
     startRenderApp(startupArgParsed);
 

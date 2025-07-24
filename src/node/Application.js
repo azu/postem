@@ -1,15 +1,15 @@
 // LICENSE : MIT
 "use strict";
-import { app, BrowserWindow } from "electron";
-import Positioner from "electron-positioner";
-import windowStateKeeper from "electron-window-state";
-import path from "path";
-import keys from "../browser/Action/ServiceActionConst";
-import WebMessenger from "./WebMessenger";
+const { app, BrowserWindow } = require("electron");
+const Positioner = require("electron-positioner");
+const windowStateKeeper = require("electron-window-state");
+const path = require("path");
+const keys = require("../shared/ServiceActionConst");
+const WebMessenger = require("./WebMessenger");
 
 const ipcMain = require("electron").ipcMain;
 
-export default class Application {
+class Application {
     get isDeactived() {
         return this.mainWindow === null;
     }
@@ -166,3 +166,5 @@ export default class Application {
         });
     }
 }
+
+module.exports = Application;
