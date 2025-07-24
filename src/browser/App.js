@@ -201,6 +201,10 @@ try {
     const root = createRoot(document.getElementById("js-main"));
     root.render(<App />);
     console.log("React app rendered successfully");
+
+    // Call profile.stop() after rendering
+    const profile = require("../share/profile");
+    profile.stop();
 } catch (error) {
     console.error("Error rendering React app:", error);
 }
