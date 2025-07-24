@@ -1,49 +1,55 @@
 // LICENSE : MIT
 "use strict";
-import React from "react";
+import React, { useRef, useEffect, forwardRef, useImperativeHandle } from "react";
 import Select from "react-select";
-export default class TagSelect extends React.Component {
-    focus() {
-        if (this.refs.select) {
-            this.refs.select.focus();
+
+const TagSelect = forwardRef(function TagSelect({ tags, selectedTags, selectTags }, ref) {
+    const selectRef = useRef(null);
+
+    useImperativeHandle(ref, () => ({
+        focus: () => {
+            if (selectRef.current) {
+                selectRef.current.focus();
+            }
         }
-    }
+    }));
 
-    componentDidMount() {
-        this.focus();
-    }
-
-    render() {
-        var options = this.props.tags.map(tag => {
-            return {
-                label: tag,
-                value: tag
-            };
-        });
-        // fn
-        const selectTags = this.props.selectTags;
-        // tags[]
-        const selectedTagValue = this.props.selectedTags.join(",");
-
-        function logChange(val) {
-            var tags = val.split(",") || [];
-            selectTags(tags);
+    useEffect(() => {
+        if (selectRef.current) {
+            selectRef.current.focus();
         }
+    }, []);
 
-        return (
-            <div className="EditorToolbar">
-                <h2 className="l-header">Tags</h2>
-                <Select
-                    ref="select"
-                    name="form-field-name"
-                    value={selectedTagValue}
-                    options={options}
-                    multi={true}
-                    allowCreate={true}
-                    placeholder="Select Tag(s)"
-                    onChange={logChange}
-                />
-            </div>
-        );
-    }
-}
+    const options = tags.map((tag) => ({
+        label: tag,
+        value: tag
+    }));
+
+    const selectedOptions = selectedTags.map((tag) => ({
+        label: tag,
+        value: tag
+    }));
+
+    const handleChange = (selectedOptions) => {
+        const tags = selectedOptions ? selectedOptions.map((option) => option.value) : [];
+        selectTags(tags);
+    };
+
+    return (
+        <div className="EditorToolbar">
+            <h2 className="l-header">Tags</h2>
+            <Select
+                ref={selectRef}
+                name="form-field-name"
+                value={selectedOptions}
+                options={options}
+                isMulti
+                isClearable
+                placeholder="Select Tag(s)"
+                onChange={handleChange}
+            />
+        </div>
+    );
+});
+
+export default TagSelect;

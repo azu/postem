@@ -1,35 +1,24 @@
 // LICENSE : MIT
 "use strict";
-import React from "react";
-export default class TitleInput extends React.Component {
-    constructor(...args) {
-        super(...args);
-        this.state = {
-            value: this.props.title
-        };
-    }
+import React, { useState, useEffect } from "react";
 
-    componentWillReceiveProps(nextProps) {
-        if (this.state.value === nextProps.title) {
-            return;
-        }
-        this.setState({
-            value: nextProps.title
-        });
-    }
+export default function TitleInput({ title, updateTitle }) {
+    const [value, setValue] = useState(title);
 
-    onChange({ target }) {
-        let value = target.value;
-        this.props.updateTitle(value);
-        this.setState({ value });
-    }
+    useEffect(() => {
+        setValue(title);
+    }, [title]);
 
-    render() {
-        return (
-            <div className="TitleInput">
-                <h2 className="l-header">Title & URL</h2>
-                <input type="text" placeholder="title" value={this.state.value} onChange={this.onChange.bind(this)} />
-            </div>
-        );
-    }
+    const onChange = ({ target }) => {
+        const newValue = target.value;
+        updateTitle(newValue);
+        setValue(newValue);
+    };
+
+    return (
+        <div className="TitleInput">
+            <h2 className="l-header">Title & URL</h2>
+            <input type="text" placeholder="title" value={value} onChange={onChange} />
+        </div>
+    );
 }

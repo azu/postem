@@ -1,136 +1,172 @@
+@charset "UTF-8";
 .App {
-  padding: 0 10px;
+    padding: 0 10px;
 }
 
 .URLInput {
-  width: 100%;
-  margin: 0.1em 0;
+    width: 100%;
+    margin: 0.1em 0;
 }
 
 .URLInput input {
-  padding: 8px 0 8px 0.5em;
-  width: 100%;
-  border: 1px solid #aaaaaa;
+    padding: 8px 0 8px 0.5em;
+    width: 100%;
+    border: 1px solid #aaaaaa;
 }
 
 .URLInput input:invalid {
-  border: 1px solid red;
+    border: 1px solid red;
 }
 
 .ViaURLInput {
-  width: 100%;
-  margin: 0.1em 0;
+    width: 100%;
+    margin: 0.1em 0;
 }
 
 .ViaURLInput input {
-  padding: 8px 0 8px 0.5em;
-  width: 100%;
-  border: 1px solid #aaaaaa;
+    padding: 8px 0 8px 0.5em;
+    width: 100%;
+    border: 1px solid #aaaaaa;
 }
 
 .ViaURLInput input:invalid {
-  border: 1px solid red;
+    border: 1px solid red;
 }
 
 .TitleInput {
-  width: 100%;
-  margin: 0.1em 0;
+    width: 100%;
+    margin: 0.1em 0;
 }
 
-.TitleInput input, .TitleInput label {
-  display: inline-block;
+.TitleInput input,
+.TitleInput label {
+    display: inline-block;
 }
 .TitleInput input {
-  padding: 8px 0 8px 0.5em;
-  width: 100%;
-  border: 1px solid #aaaaaa;
+    padding: 8px 0 8px 0.5em;
+    width: 100%;
+    border: 1px solid #aaaaaa;
 }
 
 .ServiceList ul {
-  list-style: none;
-  margin: 0;
-  padding: 1rem 0;
+    list-style: none;
+    margin: 0;
+    padding: 1rem 0;
 }
 .ServiceList li {
-  margin: 0 0.5em;
-  display: inline-block;
+    margin: 0 0.5em;
+    display: inline-block;
 }
 .ServiceList .Service-icon {
-  max-width: 24px;
-  max-height: 24px;
+    max-width: 24px;
+    max-height: 24px;
 }
 .ServiceList .Service--disable .Service-icon {
-  -webkit-filter: grayscale(100%);
-  filter: grayscale(100%);
-  filter: url("data:image/svg+xml;utf8,<svg version='1.1' xmlns='http://www.w3.org/2000/svg' height='0'><filter id='greyscale'><feColorMatrix type='matrix' values='0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0 0 0 1 0' /></filter></svg>#greyscale");
+    -webkit-filter: grayscale(100%);
+    filter: grayscale(100%);
+    filter: url("data:image/svg+xml;utf8,<svg version='1.1' xmlns='http://www.w3.org/2000/svg' height='0'><filter id='greyscale'><feColorMatrix type='matrix' values='0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0 0 0 1 0' /></filter></svg>#greyscale");
 }
 
-.Editor .ReactCodeMirror {
-  background-color: #ffffff;
-  border: 1px solid #cccccc;
-  border-color: #d9d9d9 #cccccc #b3b3b3;
-  border-radius: 4px;
-  box-sizing: border-box;
-  color: #333333;
-  cursor: default;
-  outline: none;
+.Editor .cm-editor {
+    background-color: #ffffff;
+    border: 1px solid #cccccc;
+    border-color: #d9d9d9 #cccccc #b3b3b3;
+    border-radius: 4px;
+    box-sizing: border-box;
+    color: #333333;
+    outline: none;
+    margin: 0 -10px;
+    min-height: 3em;
+    font-family: Monaco, "Andale Mono", "Lucida Console", "Bitstream Vera Sans Mono", "Courier New", Courier, monospace;
+    font-size: 13px;
 }
 
-.Editor .ReactCodeMirror {
-  margin: 0 -10px;
+.Editor .cm-content {
+    min-height: 3em;
+    padding: 8px;
+    line-height: 1.4;
 }
 
-.Editor .CodeMirror, .Editor .CodeMirror-scroll {
-  min-height: 5em;
+.Editor .cm-scroller {
+    overflow: auto;
+    font-family: inherit;
 }
 
-.Editor .CodeMirror {
-  height: auto;
-  font-family: Monaco, "Andale Mono", "Lucida Console", "Bitstream Vera Sans Mono", "Courier New", Courier, monospace;
+.Editor .cm-focused {
+    outline: none;
+    border-color: #4a90e2;
+}
+
+.Editor .cm-editor.cm-focused {
+    border-color: #4a90e2;
+    box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.2);
+}
+
+/* textlint診断のスタイル */
+.Editor .cm-lintRange-error {
+    text-decoration: underline;
+    text-decoration-color: #ff6b6b;
+    text-decoration-style: wavy;
+}
+
+.Editor .cm-lintRange-warning {
+    text-decoration: underline;
+    text-decoration-color: #ffa500;
+    text-decoration-style: wavy;
+}
+
+.Editor .cm-tooltip-lint {
+    border: 1px solid #ddd;
+    background: white;
+    border-radius: 4px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    padding: 4px 8px;
+    font-size: 12px;
+    max-width: 300px;
 }
 
 .RelatedListBox .RelatedList {
-  padding-left: 1em;
-  margin: 0.1em 0;
+    padding-left: 1em;
+    margin: 0.1em 0;
 }
 
 .RelatedItem .hidden {
-  display: none;
+    display: none;
 }
 .RelatedItem .RelatedItem-edit {
-  width: 100%;
+    width: 100%;
 }
 
 .RelatedListBox-Add {
-  margin-top: 0.5rem;
+    margin-top: 0.5rem;
 }
 
 .SubmitButton {
-  text-align: center;
-  margin: 1rem 0;
+    text-align: center;
+    margin: 1rem 0;
 }
 .SubmitButton button {
-  width: 50%;
-  padding: 10px;
-  font-size: 18px;
-  background-color: #27496d;
+    width: 50%;
+    padding: 10px;
+    font-size: 18px;
+    background-color: #27496d;
 }
 
 * {
-  box-sizing: border-box;
+    box-sizing: border-box;
 }
 
 .l-header {
-  margin: 0.5em 0 0.2em 0;
-  font-size: 18px;
+    margin: 0.5em 0 0.2em 0;
+    font-size: 18px;
 }
 
 .flat-button {
-  font-size: 14px;
-  color: #fff;
-  background-color: #6496c8;
-  text-shadow: -1px 1px #417cb8;
-  border: none;
+    font-size: 14px;
+    color: #fff;
+    background-color: #6496c8;
+    text-shadow: -1px 1px #417cb8;
+    border: none;
 }
 
 /*# sourceMappingURL=index.css.map */

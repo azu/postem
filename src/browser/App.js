@@ -1,7 +1,7 @@
 // LICENSE : MIT
 "use strict";
 import React from "react";
-import { render } from "react-dom";
+import { createRoot } from "react-dom/client";
 import Editor from "./component/Editor";
 import TagSelect from "./component/TagSelect";
 import URLInput from "./component/URLInput";
@@ -35,15 +35,16 @@ class App extends React.Component {
             },
             appContext.ServiceStore.state
         );
-
-        // ServiceStore の変更を監視（constructorで登録）
-        appContext.ServiceStore.onChange(() => {
-            let newState = Object.assign({}, this.state, appContext.ServiceStore.state);
-            this.setState(newState);
-        });
     }
 
     componentDidMount() {
+        // ServiceStore の変更を監視（componentDidMountで登録）
+        this.unsubscribe = appContext.ServiceStore.onChange(() => {
+            let newState = Object.assign({}, this.state, appContext.ServiceStore.state);
+            this.setState(newState);
+        });
+
+        // 元のcomponentDidMountの処理
         let isInitialized = false;
         appContext.ServiceAction.resetField();
         // ipc from server event
@@ -98,6 +99,12 @@ class App extends React.Component {
             appContext.ServiceAction.fetchTags(service);
         } else {
             console.error("TagService should be available at least one");
+        }
+    }
+
+    componentWillUnmount() {
+        if (this.unsubscribe) {
+            this.unsubscribe();
         }
     }
 
@@ -199,12 +206,19 @@ class App extends React.Component {
 appContext.on("dispatch", ({ eventKey }) => {
     ipcRenderer.send(String(eventKey));
 });
-render(<App />, document.getElementById("js-main"), () => {
-    const url = new URL(location.href);
-    if (url.searchParams.has("title")) {
-        browserEventEmitter.emit("updateTitle", {}, url.searchParams.get("title"));
-    }
-    if (url.searchParams.has("url")) {
-        browserEventEmitter.emit("updateURL", {}, url.searchParams.get("url"));
-    }
-});
+try {
+    const root = createRoot(document.getElementById("js-main"));
+    root.render(<App />);
+    console.log("React app rendered successfully");
+} catch (error) {
+    console.error("Error rendering React app:", error);
+}
+
+// URLパラメータの処理
+const url = new URL(location.href);
+if (url.searchParams.has("title")) {
+    browserEventEmitter.emit("updateTitle", {}, url.searchParams.get("title"));
+}
+if (url.searchParams.has("url")) {
+    browserEventEmitter.emit("updateURL", {}, url.searchParams.get("url"));
+}
