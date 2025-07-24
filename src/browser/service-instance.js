@@ -7,9 +7,7 @@ import ServiceManger from "./service-manager";
 const notBundledRequire = require;
 const manager = new ServiceManger();
 const getServiceNameList = () => {
-    if (process.env.BROWSER === "1") {
-        return require("../service.browser.js");
-    } else if (process.env.PLAYWRIGHT_TEST === "1" || process.title?.includes("playwright")) {
+    if (process.env.PLAYWRIGHT_TEST === "1" || process.title?.includes("playwright")) {
         return notBundledRequire("../../tests/fixtures/test-services.js");
     } else {
         return notBundledRequire("../service.js");

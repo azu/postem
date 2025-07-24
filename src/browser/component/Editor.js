@@ -10,10 +10,6 @@ import { EditorView, keymap } from "@codemirror/view";
 import { Prec } from "@codemirror/state";
 
 const createTextlintLinter = () => {
-    if (process.env.BROWSER === "1") {
-        return null;
-    }
-
     const { createTextlintLinter } = require("codemirror-textlint");
 
     return createTextlintLinter({

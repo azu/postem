@@ -13,16 +13,7 @@ import ServiceList from "./component/ServiceList";
 import AppContext from "./AppContext";
 import serviceManger from "./service-instance";
 
-import { EventEmitter } from "events";
-
-class BrowserEvent extends EventEmitter {
-    send() {
-        // nope
-    }
-}
-
-const browserEventEmitter = new BrowserEvent();
-const ipcRenderer = process.env.BROWSER === "1" ? browserEventEmitter : require("electron").ipcRenderer;
+const ipcRenderer = require("electron").ipcRenderer;
 const appContext = new AppContext();
 
 class App extends React.Component {
@@ -212,13 +203,4 @@ try {
     console.log("React app rendered successfully");
 } catch (error) {
     console.error("Error rendering React app:", error);
-}
-
-// URLパラメータの処理
-const url = new URL(location.href);
-if (url.searchParams.has("title")) {
-    browserEventEmitter.emit("updateTitle", {}, url.searchParams.get("title"));
-}
-if (url.searchParams.has("url")) {
-    browserEventEmitter.emit("updateURL", {}, url.searchParams.get("url"));
 }
