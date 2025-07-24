@@ -22,9 +22,7 @@
     "postem": "bin/cmd.js"
   },
   "scripts": {
-    "build": "NODE_ENV=production gulp build && npm run build:css",
-    "build:css": "sass css/index.scss css/index.css",
-    "watch:css": "sass --watch css/index.scss css/index.css",
+    "build": "NODE_ENV=production gulp build",
     "predist": "npm run build",
     "dist": "electron-builder",
     "start": "NODE_ENV=development electron .",
@@ -115,7 +113,6 @@
     "playwright": "^1.54.1",
     "prettier": "^2.8.8",
     "punycode": "^1.4.1",
-    "sass": "^1.26.10",
     "url": "^0.11.0",
     "vitest": "^3.2.4"
   },
