@@ -34,7 +34,7 @@ export default class Application {
             webPreferences: {
                 nodeIntegration: true,
                 contextIsolation: false,
-                enableRemoteModule: true,
+                enableRemoteModule: true
             }
         });
         const positioner = new Positioner(browserWindow);
@@ -45,6 +45,26 @@ export default class Application {
             html: path.join(__dirname, "..", "browser", "index.html")
         };
         browserWindow.loadURL("file://" + index.html);
+
+        // ブラウザのコンソールログをNode.js側にリダイレクト
+        browserWindow.webContents.on("console-message", (event, level, message, line, sourceId) => {
+            const logLevels = ["", "warn", "error"];
+            const logMethod = logLevels[level] || "log";
+            console[logMethod](`[Renderer] ${message}`);
+            if (line && sourceId) {
+                console[logMethod](`    at ${sourceId}:${line}`);
+            }
+        });
+
+        // JavaScriptエラーをキャッチ
+        browserWindow.webContents.on("crashed", () => {
+            console.error("[Renderer] Renderer process crashed");
+        });
+
+        browserWindow.webContents.on("unresponsive", () => {
+            console.warn("[Renderer] Renderer process became unresponsive");
+        });
+
         // Let us register listeners on the window, so we can update the state
         // automatically (the listeners will be removed when the window is closed)
         // and restore the maximized or full screen state
@@ -96,11 +116,11 @@ export default class Application {
             //server.start();
         });
         let force_quit = false;
-        app.on("before-quit", function(e) {
+        app.on("before-quit", function (e) {
             force_quit = true;
         });
 
-        this.mainWindow.on("close", event => {
+        this.mainWindow.on("close", (event) => {
             if (!force_quit) {
                 event.preventDefault();
                 this.hide();
