@@ -1,9 +1,9 @@
 // LICENSE : MIT
 "use strict";
-import React, { useRef, useEffect, forwardRef, useImperativeHandle } from "react";
+import React, { useRef, useEffect, useImperativeHandle } from "react";
 import Select from "react-select";
 
-const TagSelect = forwardRef(function TagSelect({ tags, selectedTags, selectTags }, ref) {
+function TagSelect({ tags, selectedTags, selectTags, ref }) {
     const selectRef = useRef(null);
 
     useImperativeHandle(ref, () => ({
@@ -50,6 +50,6 @@ const TagSelect = forwardRef(function TagSelect({ tags, selectedTags, selectTags
             />
         </div>
     );
-});
+}
 
 export default TagSelect;
