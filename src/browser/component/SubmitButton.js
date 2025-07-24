@@ -1,5 +1,4 @@
 // LICENSE : MIT
-"use strict";
 import React from "react";
 
 export default function SubmitButton({ onSubmit }) {

@@ -1,9 +1,8 @@
 // LICENSE : MIT
-"use strict";
 import { AsocialBookmark } from "asocial-bookmark";
 import Consumer from "./JSerInfoConsumer.js";
 
-const moment = require("moment");
+import moment from "moment";
 export default class JSerInfoClient {
     isLogin() {
         return true;

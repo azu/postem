@@ -1,5 +1,4 @@
 // LICENSE : MIT
-"use strict";
 export default class BlueskyModel {
     constructor() {
         this.id = "bsky.app";

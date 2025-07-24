@@ -1,5 +1,4 @@
 // LICENSE : MIT
-"use strict";
 let idCount = 0;
 export default class RelatedItem {
     constructor({ title, URL }) {

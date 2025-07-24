@@ -1,7 +1,6 @@
 // LICENSE : MIT
-"use strict";
-import path from "path";
-import assert from "assert";
+import path from "node:path";
+import assert from "node:assert";
 export default class Storage {
     constructor(storeName, defaults = {}) {
         assert(typeof storeName === "string");

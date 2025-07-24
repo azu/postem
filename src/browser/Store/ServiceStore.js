@@ -1,9 +1,8 @@
 // LICENSE : MIT
-"use strict";
 import { Store } from "material-flux";
-import { keys } from "../Action/ServiceAction";
-import Storage from "../storage/Storage";
-import manager from "../service-instance";
+import { keys } from "../Action/ServiceAction.js";
+import Storage from "../storage/Storage.js";
+import manager from "../service-instance.js";
 
 export default class ServiceStore extends Store {
     constructor(...args) {

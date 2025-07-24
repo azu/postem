@@ -1,7 +1,6 @@
 // LICENSE : MIT
-"use strict";
-import assert from "assert";
-import OAuthSignature from "./OAuthSignature";
+import assert from "node:assert";
+import OAuthSignature from "./OAuthSignature.js";
 export default class OAuthRequest {
     constructor(consumer, credencial) {
         assert(consumer && credencial);
@@ -16,7 +15,7 @@ export default class OAuthRequest {
                 Accept: "application/json",
                 Authorization: Authorization
             }
-        }).then(function(response) {
+        }).then(function (response) {
             return response.json();
         });
     }

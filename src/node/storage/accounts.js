@@ -1,5 +1,4 @@
 // LICENSE : MIT
-"use strict";
-import Storage from "./Storage";
+import Storage from "./Storage.js";
 const accounts = new Storage("accounts");
 export default accounts;

@@ -1,5 +1,4 @@
 // LICENSE : MIT
-"use strict";
 export default class ESDailyModel {
     constructor() {
         this.id = "ecmascript-daily";

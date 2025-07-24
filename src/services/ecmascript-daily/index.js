@@ -1,5 +1,4 @@
 // LICENSE : MIT
-"use strict";
-import Model from "./ESDailyModel";
-import Client from "./ESDailyClient";
+import Model from "./ESDailyModel.js";
+import Client from "./ESDailyClient.js";
 export { Model, Client };

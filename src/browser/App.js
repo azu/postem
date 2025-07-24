@@ -1,19 +1,18 @@
 // LICENSE : MIT
-"use strict";
 import React from "react";
 import { createRoot } from "react-dom/client";
-import Editor from "./component/Editor";
-import TagSelect from "./component/TagSelect";
-import URLInput from "./component/URLInput";
-import ViaURLInput from "./component/ViaURLInput";
-import TitleInput from "./component/TitleInput";
-import SubmitButton from "./component/SubmitButton";
-import RelatedListBox from "./component/RelatedListBox";
-import ServiceList from "./component/ServiceList";
-import AppContext from "./AppContext";
-import serviceManger from "./service-instance";
+import Editor from "./component/Editor.js";
+import TagSelect from "./component/TagSelect.js";
+import URLInput from "./component/URLInput.js";
+import ViaURLInput from "./component/ViaURLInput.js";
+import TitleInput from "./component/TitleInput.js";
+import SubmitButton from "./component/SubmitButton.js";
+import RelatedListBox from "./component/RelatedListBox.js";
+import ServiceList from "./component/ServiceList.js";
+import AppContext from "./AppContext.js";
+import serviceManger from "./service-instance.js";
 
-const ipcRenderer = require("electron").ipcRenderer;
+import { ipcRenderer } from "electron";
 const appContext = new AppContext();
 
 class App extends React.Component {

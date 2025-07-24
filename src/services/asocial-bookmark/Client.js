@@ -1,8 +1,7 @@
 // LICENSE : MIT
-"use strict";
 import { AsocialBookmark, AsocialBookmarkOptions } from "asocial-bookmark";
 
-const moment = require("moment");
+import moment from "moment";
 export default class Client {
     /**
      * @param {import("asocial-bookmark").AsocialBookmarkOptions}serviceOptions

@@ -1,5 +1,4 @@
 // LICENSE : MIT
-"use strict";
 import Spinner from "spin.js";
 let _spinner;
 let _overlay;

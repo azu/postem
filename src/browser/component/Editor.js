@@ -1,5 +1,4 @@
 // LICENSE : MIT
-"use strict";
 import { moduleInterop } from "@textlint/module-interop";
 import React, { useEffect, useRef } from "react";
 import CodeMirror from "@uiw/react-codemirror";
@@ -9,27 +8,27 @@ import { lintGutter } from "@codemirror/lint";
 import { EditorView, keymap } from "@codemirror/view";
 import { Prec } from "@codemirror/state";
 
-const createTextlintLinter = () => {
-    const { createTextlintLinter } = require("codemirror-textlint");
+const createTextlintLinter = async () => {
+    const { createTextlintLinter } = await import("codemirror-textlint");
 
     return createTextlintLinter({
         rules: {
-            "max-ten": moduleInterop(require("textlint-rule-max-ten")),
+            "max-ten": moduleInterop((await import("textlint-rule-max-ten")).default),
             "no-doubled-conjunctive-particle-ga": moduleInterop(
-                require("textlint-rule-no-doubled-conjunctive-particle-ga")
+                (await import("textlint-rule-no-doubled-conjunctive-particle-ga")).default
             ),
-            "no-doubled-conjunction": moduleInterop(require("textlint-rule-no-doubled-conjunction")),
-            "no-double-negative-ja": moduleInterop(require("textlint-rule-no-double-negative-ja")),
-            "no-doubled-joshi": moduleInterop(require("textlint-rule-no-doubled-joshi")),
-            "sentence-length": moduleInterop(require("textlint-rule-sentence-length")),
-            "no-mix-dearu-desumasu": moduleInterop(require("textlint-rule-no-mix-dearu-desumasu")),
-            "no-nfd": moduleInterop(require("textlint-rule-no-nfd")),
-            proofdict: moduleInterop(require("textlint-rule-proofdict")),
+            "no-doubled-conjunction": moduleInterop((await import("textlint-rule-no-doubled-conjunction")).default),
+            "no-double-negative-ja": moduleInterop((await import("textlint-rule-no-double-negative-ja")).default),
+            "no-doubled-joshi": moduleInterop((await import("textlint-rule-no-doubled-joshi")).default),
+            "sentence-length": moduleInterop((await import("textlint-rule-sentence-length")).default),
+            "no-mix-dearu-desumasu": moduleInterop((await import("textlint-rule-no-mix-dearu-desumasu")).default),
+            "no-nfd": moduleInterop((await import("textlint-rule-no-nfd")).default),
+            proofdict: moduleInterop((await import("textlint-rule-proofdict")).default),
             "no-invalid-control-character": moduleInterop(
-                require("@textlint-rule/textlint-rule-no-invalid-control-character")
+                (await import("@textlint-rule/textlint-rule-no-invalid-control-character")).default
             ),
-            "ja-unnatural-alphabet": moduleInterop(require("textlint-rule-ja-unnatural-alphabet")),
-            "no-unmatched-pair": moduleInterop(require("@textlint-rule/textlint-rule-no-unmatched-pair"))
+            "ja-unnatural-alphabet": moduleInterop((await import("textlint-rule-ja-unnatural-alphabet")).default),
+            "no-unmatched-pair": moduleInterop((await import("@textlint-rule/textlint-rule-no-unmatched-pair")).default)
         },
         rulesConfig: {
             "max-ten": { max: 3 },
@@ -46,7 +45,7 @@ const createTextlintLinter = () => {
             "no-invalid-control-character": true
         },
         plugins: {
-            "@textlint/markdown": moduleInterop(require("@textlint/textlint-plugin-markdown"))
+            "@textlint/markdown": moduleInterop((await import("@textlint/textlint-plugin-markdown")).default)
         },
         pluginsConfig: {
             "@textlint/markdown": true
@@ -54,29 +53,34 @@ const createTextlintLinter = () => {
     });
 };
 
-const textlintLinter = createTextlintLinter();
+const textlintLinter = await createTextlintLinter();
 
-const Combokeys = require("combokeys");
+const Combokeys = (await import("combokeys")).default;
 
 export default function Editor({ value, onChange, onSubmit, services, toggleServiceAtIndex }) {
     const combokeysRef = useRef(null);
 
     useEffect(() => {
-        // Combokeysインスタンスを作成
-        combokeysRef.current = new Combokeys(document.documentElement);
+        const setupCombokeys = async () => {
+            // Combokeysインスタンスを作成
+            combokeysRef.current = new Combokeys(document.documentElement);
 
-        // global-bindプラグインを後から適用
-        require("combokeys/plugins/global-bind")(combokeysRef.current);
+            // global-bindプラグインを後から適用
+            const globalBind = await import("combokeys/plugins/global-bind");
+            globalBind.default(combokeysRef.current);
 
-        [1, 2, 3, 4, 5, 6, 7, 8, 9].forEach((key, index) => {
-            combokeysRef.current.bindGlobal(`command+${key}`, () => {
-                toggleServiceAtIndex(index);
+            [1, 2, 3, 4, 5, 6, 7, 8, 9].forEach((key, index) => {
+                combokeysRef.current.bindGlobal(`command+${key}`, () => {
+                    toggleServiceAtIndex(index);
+                });
             });
-        });
-        // last
-        combokeysRef.current.bindGlobal(`command+0`, () => {
-            toggleServiceAtIndex(services.length - 1);
-        });
+            // last
+            combokeysRef.current.bindGlobal(`command+0`, () => {
+                toggleServiceAtIndex(services.length - 1);
+            });
+        };
+
+        setupCombokeys();
 
         return () => {
             if (combokeysRef.current) {

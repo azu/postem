@@ -1,5 +1,4 @@
 // LICENSE : MIT
-"use strict";
 export default class JSerModel {
     constructor() {
         this.id = "com.example.debug";

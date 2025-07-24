@@ -1,5 +1,4 @@
 // LICENSE : MIT
-"use strict";
-import Model from "./TwitterModel";
-import Client from "./TwitterClient";
+import Model from "./TwitterModel.js";
+import Client from "./TwitterClient.js";
 export { Model, Client };

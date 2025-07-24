@@ -1,9 +1,11 @@
 // LICENSE : MIT
-"use strict";
-exports.start = function() {
+import { remote } from "@electron/remote";
+
+export function start() {
     global.profile_startTime = Date.now();
-};
-exports.stop = function() {
-    var ms = Date.now() - require('@electron/remote').getGlobal("profile_startTime");
+}
+
+export function stop() {
+    var ms = Date.now() - remote.getGlobal("profile_startTime");
     console.log("profile", ms + "ms");
-};
+}

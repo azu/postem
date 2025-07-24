@@ -1,5 +1,4 @@
 // LICENSE : MIT
-"use strict";
 export default class HatenaModel {
     constructor() {
         this.id = "api.b.hatena.ne.jp";

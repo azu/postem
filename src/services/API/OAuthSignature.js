@@ -1,5 +1,4 @@
 // LICENSE : MIT
-"use strict";
 
 import oauthSignature from "oauth-signature";
 export default class OAuthSignature {

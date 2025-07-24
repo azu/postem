@@ -1,5 +1,4 @@
 // LICENSE : MIT
-"use strict";
 import { TwitterApi } from "twitter-api-v2";
 import { truncate } from "tweet-truncator";
 import { TwitterApiV2Settings } from "twitter-api-v2";

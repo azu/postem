@@ -1,13 +1,12 @@
 // LICENSE : MIT
-"use strict";
 import { Action } from "material-flux";
-import keys from "./ServiceActionConst";
+import keys from "./ServiceActionConst.js";
 
 export { keys };
 import notie from "notie";
-import { show as LoadingShow, dismiss as LoadingDismiss } from "../view-util/Loading";
-import RelatedItemModel from "../models/RelatedItemModel";
-import serviceInstance from "../service-instance";
+import { show as LoadingShow, dismiss as LoadingDismiss } from "../view-util/Loading.js";
+import RelatedItemModel from "../models/RelatedItemModel.js";
+import serviceInstance from "../service-instance.js";
 
 export default class ServiceAction extends Action {
     fetchTags(service) {

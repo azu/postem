@@ -1,10 +1,8 @@
 // LICENSE : MIT
-"use strict";
-import querystring from "querystring";
-import OAuthRequest from "../API/OAuthRequest";
-import Consumer from "./HatenaCunsumer";
-
-const Authentication = require("@electron/remote").require(__dirname + "/HatenaAuthentication");
+import querystring from "node:querystring";
+import OAuthRequest from "../API/OAuthRequest.js";
+import Consumer from "./HatenaCunsumer.js";
+import * as Authentication from "./HatenaAuthentication.js";
 export default class HatenaClient {
     isLogin() {
         return Authentication.canAccess();

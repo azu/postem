@@ -1,5 +1,4 @@
 // LICENSE : MIT
-"use strict";
 import React, { useRef, useEffect, useImperativeHandle } from "react";
 import Select from "react-select";
 

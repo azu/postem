@@ -1,5 +1,5 @@
-import * as fs from "fs";
-import path from "path";
+import * as fs from "node:fs";
+import path from "node:path";
 
 exports.canAccess = function () {
     return fs.existsSync(path.join(__dirname, "consumer.json"));

@@ -1,8 +1,7 @@
 // LICENSE : MIT
-"use strict";
 import { app } from "electron";
-import path from "path";
-import assert from "assert";
+import path from "node:path";
+import assert from "node:assert";
 import jetpack from "fs-jetpack";
 export default class Storage {
     constructor(storeName, defaults = {}) {

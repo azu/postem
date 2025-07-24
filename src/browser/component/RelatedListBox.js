@@ -1,5 +1,4 @@
 // LICENSE : MIT
-"use strict";
 import React, { useRef, useEffect } from "react";
 
 export function RelatedItem({ title, URL, isEditing, onClick, onSubmit }) {

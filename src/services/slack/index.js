@@ -1,5 +1,4 @@
 // LICENSE : MIT
-"use strict";
-import Model from "./SlackModel";
-import Client from "./SlackClient";
+import Model from "./SlackModel.js";
+import Client from "./SlackClient.js";
 export { Model, Client };

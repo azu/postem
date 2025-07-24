@@ -1,5 +1,4 @@
 // LICENSE : MIT
-"use strict";
 export default class JSerInfoPintClient {
     isLogin() {
         return true;
@@ -22,14 +21,14 @@ export default class JSerInfoPintClient {
 
         function createIssue(issueData, callback) {
             const xhr = new XMLHttpRequest();
-            xhr.onload = function() {
+            xhr.onload = function () {
                 if (200 <= xhr.status && xhr.status < 300) {
                     callback(null, xhr.responseText);
                 } else {
                     callback(new Error(xhr.responseText));
                 }
             };
-            xhr.onerror = function() {
+            xhr.onerror = function () {
                 callback(new Error(xhr.responseText));
             };
             xhr.withCredentials = true;
@@ -44,7 +43,7 @@ export default class JSerInfoPintClient {
                     url: url,
                     description: comment
                 },
-                function(error, response) {
+                function (error, response) {
                     if (error) {
                         reject(error);
                     } else {

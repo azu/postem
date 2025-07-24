@@ -1,5 +1,4 @@
 // LICENSE : MIT
-"use strict";
 export default class SlackModel {
     constructor() {
         this.id = "slack";

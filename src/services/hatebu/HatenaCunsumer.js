@@ -1,8 +1,8 @@
 // LICENSE : MIT
-"use strict";
-var myConsumer;
+let myConsumer;
 try {
-    myConsumer = require("./consumer.json");
+    const consumerModule = await import("./consumer.json", { assert: { type: "json" } });
+    myConsumer = consumerModule.default;
 } catch (error) {}
 // マシンごとに異なるconsumerを用意しないといけない
 // https://github.com/hatena/Hatena-Bookmark-iOS-SDK/issues/40

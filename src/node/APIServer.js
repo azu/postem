@@ -1,5 +1,4 @@
 // LICENSE : MIT
-"use strict";
 import express from "express";
 export default class APIServer {
     constructor(webContent) {

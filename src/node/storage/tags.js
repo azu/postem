@@ -1,6 +1,5 @@
 // LICENSE : MIT
-"use strict";
-import Storage from "./Storage";
+import Storage from "./Storage.js";
 class TagStorage extends Storage {
     updateTags(tags) {
         this.set("tags", tags);

@@ -1,5 +1,4 @@
 // LICENSE : MIT
-"use strict";
 import React, { useState, useEffect } from "react";
 
 export default function URLInput({ URL, updateURL }) {

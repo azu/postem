@@ -1,6 +1,9 @@
-const { test: baseTest, expect } = require("@playwright/test");
-const { _electron: electron } = require("playwright");
-const path = require("path");
+import { test as baseTest, expect } from "@playwright/test";
+import { _electron as electron } from "playwright";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 // Electron起動オプションを生成する関数
 function createElectronLaunchOptions(additionalArgs = []) {

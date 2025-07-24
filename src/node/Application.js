@@ -1,13 +1,14 @@
 // LICENSE : MIT
-"use strict";
 import { app, BrowserWindow } from "electron";
 import Positioner from "electron-positioner";
 import windowStateKeeper from "electron-window-state";
-import path from "path";
-import keys from "../browser/Action/ServiceActionConst";
-import WebMessenger from "./WebMessenger";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+import keys from "../browser/Action/ServiceActionConst.js";
+import WebMessenger from "./WebMessenger.js";
+import { ipcMain } from "electron";
 
-const ipcMain = require("electron").ipcMain;
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 export default class Application {
     get isDeactived() {
@@ -132,7 +133,9 @@ export default class Application {
         // set top
         this.mainWindow.setAlwaysOnTop(true);
         // integration remote
-        require("@electron/remote/main").enable(this.mainWindow.webContents);
+        import("@electron/remote/main").then((remote) => {
+            remote.enable(this.mainWindow.webContents);
+        });
         this.registerIpcHandling();
     }
 

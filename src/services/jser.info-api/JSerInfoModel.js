@@ -1,5 +1,4 @@
 // LICENSE : MIT
-"use strict";
 export default class JSerInfoModel {
     constructor() {
         this.id = "jser.info.asocialbookmark-github-api";

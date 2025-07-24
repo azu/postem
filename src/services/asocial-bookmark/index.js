@@ -1,5 +1,4 @@
 // LICENSE : MIT
-"use strict";
-import Model from "./Model";
-import Client from "./Client";
+import Model from "./Model.js";
+import Client from "./Client.js";
 export { Model, Client };

@@ -1,6 +1,5 @@
 // LICENSE : MIT
-"use strict";
-import assert from "assert";
+import assert from "node:assert";
 import { OAuth } from "oauth";
 
 export default class OAuthRequest {
@@ -28,7 +27,7 @@ export default class OAuthRequest {
     get(URL, options) {
         return new Promise((resolve, reject) => {
             console.log("OAuth::get", URL);
-            this.oauth.get(URL, this.accessKey, this.accessSecret, function(error, data, res) {
+            this.oauth.get(URL, this.accessKey, this.accessSecret, function (error, data, res) {
                 if (error) {
                     console.error("response", res);
                     return reject(error);
@@ -42,7 +41,7 @@ export default class OAuthRequest {
         let body = options.body;
         console.log("OAuth::post", URL);
         return new Promise((resolve, reject) => {
-            this.oauth.post(URL, this.accessKey, this.accessSecret, body, function(error, data, res) {
+            this.oauth.post(URL, this.accessKey, this.accessSecret, body, function (error, data, res) {
                 if (error) {
                     console.error("response", res);
                     return reject(error);

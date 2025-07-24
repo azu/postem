@@ -1,5 +1,4 @@
 // LICENSE : MIT
-"use strict";
 export default class ServiceManager {
     constructor() {
         this.services = new Map();
@@ -12,7 +11,7 @@ export default class ServiceManager {
      * @param client
      * @param [isDefaultChecked] is default checked
      */
-    addService({model, client, isDefaultChecked}) {
+    addService({ model, client, isDefaultChecked }) {
         this.services.set(model, client);
         if (isDefaultChecked) {
             this.defaultServices.add(model);
@@ -36,9 +35,9 @@ export default class ServiceManager {
      */
     getTagService() {
         const services = Array.from(this.services.keys());
-        return services.find(service => {
+        return services.find((service) => {
             return service.tagService === true;
-        })
+        });
     }
 
     /**
@@ -54,8 +53,8 @@ export default class ServiceManager {
     }
 
     selectServices(serviceIDs) {
-        return this.getServices().filter(service => {
-            return serviceIDs.some(serviceID => {
+        return this.getServices().filter((service) => {
+            return serviceIDs.some((serviceID) => {
                 return serviceID === service.id;
             });
         });

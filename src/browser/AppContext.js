@@ -1,8 +1,7 @@
 // LICENSE : MIT
-"use strict";
 import { Context } from "material-flux";
-import ServiceAction from "./Action/ServiceAction";
-import ServiceStore from "./Store/ServiceStore";
+import ServiceAction from "./Action/ServiceAction.js";
+import ServiceStore from "./Store/ServiceStore.js";
 export default class AppContext extends Context {
     constructor() {
         super();

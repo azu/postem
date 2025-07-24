@@ -1,6 +1,6 @@
 // LICENSE : MIT
-"use strict";
-const getConsumer = () => {
-    return require("./consumer");
+const getConsumer = async () => {
+    const consumer = await import("./consumer.js");
+    return consumer.default;
 };
-export default getConsumer();
+export default await getConsumer();

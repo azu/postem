@@ -1,7 +1,7 @@
 // LICENSE : MIT
-"use strict";
 if (process.env.NODE_ENV === "development") {
-    require("@babel/register");
+    await import("@babel/register");
 }
-require("./App");
-require("../share/profile").stop();
+await import("./App.js");
+const profile = await import("../share/profile.js");
+profile.stop();

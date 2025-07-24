@@ -1,5 +1,4 @@
 // LICENSE : MIT
-"use strict";
-import Model from "./JSerModel";
-import Client from "./JSerClient";
+import Model from "./JSerModel.js";
+import Client from "./JSerClient.js";
 export { Model, Client };

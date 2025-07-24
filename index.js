@@ -1,11 +1,12 @@
 // LICENSE : MIT
-"use strict";
 console.log("NODE_ENV: " + process.env.NODE_ENV);
-require('@electron/remote/main').initialize();
+import { initialize } from "@electron/remote/main/index.js";
+initialize();
+
 if (process.env.NODE_ENV === "development") {
-    require("@babel/register");
+    // @babel/register is not needed with ESM
     // Start Node -> Browser
-    require("./src/node/node-app");
+    await import("./src/node/node-app.js");
 } else {
-    require("./lib/node/node-app");
+    await import("./lib/node/node-app.js");
 }
