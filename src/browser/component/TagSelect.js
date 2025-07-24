@@ -35,8 +35,8 @@ export default function TagSelect({ tags, selectedTags, selectTags }) {
                 name="form-field-name"
                 value={selectedOptions}
                 options={options}
-                isMulti={true}
-                isClearable={true}
+                isMulti
+                isClearable
                 placeholder="Select Tag(s)"
                 onChange={handleChange}
             />

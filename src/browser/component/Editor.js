@@ -87,7 +87,7 @@ export default function Editor({ value, onChange, onSubmit, services, toggleServ
                 combokeysRef.current.detach();
             }
         };
-    }, [services.length, toggleServiceAtIndex, onSubmit]);
+    }, [services.length, toggleServiceAtIndex, onSubmit]); // Ensure toggleServiceAtIndex and onSubmit are memoized in the parent component
 
     const extensions = [
         // 最高優先度でMod+Enterをオーバーライド

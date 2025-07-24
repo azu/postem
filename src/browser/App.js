@@ -102,6 +102,12 @@ class App extends React.Component {
         }
     }
 
+    componentWillUnmount() {
+        if (this.unsubscribe) {
+            this.unsubscribe();
+        }
+    }
+
     postLink() {
         const { ServiceAction } = appContext;
         let postData = {
