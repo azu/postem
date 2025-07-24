@@ -176,37 +176,23 @@ test.describe("Postem Application", () => {
         await urlInput.fill("https://github.com/azu/postem/pull/23");
         await expect(urlInput).toHaveValue("https://github.com/azu/postem/pull/23");
 
-        // 4. Tag選択 (react-selectコンポーネント) - タグサービスがある場合のみ
-        try {
-            const tagSelect = window.locator(".EditorToolbar [class*='control']").first();
-            const tagSelectExists = (await tagSelect.count()) > 0;
+        // 4. Tag選択 (react-selectコンポーネント)
+        const tagSelect = window.locator(".EditorToolbar [class*='control']").first();
+        await tagSelect.click();
+        await window.waitForTimeout(500);
 
-            if (tagSelectExists) {
-                console.log("Tag selector found, attempting to select a tag");
-                await tagSelect.click();
-                await window.waitForTimeout(500);
+        // タグオプションが表示されるかチェック
+        const tagOption = window.locator("[class*='option']").first();
+        const optionExists = (await tagOption.count()) > 0;
 
-                // タグオプションが表示されるかチェック
-                const tagOption = window.locator("[class*='option']").first();
-                const optionExists = (await tagOption.count()) > 0;
-
-                if (optionExists) {
-                    console.log("Tag options found, selecting first option");
-                    await tagOption.click();
-                    await window.waitForTimeout(500);
-                } else {
-                    console.log("No tag options available, skipping tag selection");
-                    // オプションがない場合はEscapeで閉じる
-                    await window.keyboard.press("Escape");
-                }
-                await window.waitForTimeout(300);
-            } else {
-                console.log("Tag selector not found, skipping tag selection (expected in test environment)");
-            }
-        } catch (error) {
-            console.log("Tag selection failed, continuing with test:", error.message);
-            // タグ選択でエラーが起きても続行（テスト環境では正常）
+        if (optionExists) {
+            await tagOption.click();
+            await window.waitForTimeout(500);
+        } else {
+            // オプションがない場合はEscapeで閉じる
+            await window.keyboard.press("Escape");
         }
+        await window.waitForTimeout(300);
 
         // 5. CodeMirrorエディタに入力
         const codeMirrorEditor = window.locator(".cm-editor .cm-content");
