@@ -7,11 +7,7 @@ on:
 
 jobs:
   release:
-    runs-on: ${{ matrix.os }}
-    
-    strategy:
-      matrix:
-        os: [macos-latest, ubuntu-latest, windows-latest]
+    runs-on: macos-latest
     
     steps:
     - name: Checkout
@@ -32,23 +28,7 @@ jobs:
     - name: Run tests
       run: npm run test:unit
     
-    # macOS specific steps
-    - name: Build and release (macOS)
-      if: matrix.os == 'macos-latest'
-      env:
-        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      run: npm run dist
-    
-    # Windows specific steps  
-    - name: Build and release (Windows)
-      if: matrix.os == 'windows-latest'
-      env:
-        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      run: npm run dist
-    
-    # Linux specific steps
-    - name: Build and release (Linux)
-      if: matrix.os == 'ubuntu-latest'
+    - name: Build and release
       env:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: npm run dist
