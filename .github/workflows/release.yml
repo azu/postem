@@ -49,4 +49,15 @@ jobs:
     - name: Build and upload assets
       env:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      run: npm run dist
+      run: |
+        # Build application with electron-builder
+        npm run dist
+        
+        # Get version from package.json
+        VERSION="v$(node -p "require('./package.json').version")"
+        
+        # Upload all built assets to the release
+        find dist -name "*.dmg" -o -name "*.zip" -o -name "*.exe" -o -name "*.AppImage" -o -name "*.deb" -o -name "*.rpm" | while read file; do
+          echo "Uploading: $file"
+          gh release upload $VERSION "$file"
+        done
