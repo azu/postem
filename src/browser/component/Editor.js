@@ -97,10 +97,6 @@ export default function Editor({ value, onChange, onSubmit, services, toggleServ
                         }
                         return true; // デフォルト動作（改行）をブロック
                     }
-                },
-                {
-                    key: "Tab",
-                    run: () => false // Tabキーのデフォルト動作を無効化
                 }
             ])
         ),
@@ -123,6 +119,7 @@ export default function Editor({ value, onChange, onSubmit, services, toggleServ
                 basicSetup={{
                     lineNumbers: false
                 }}
+                indentWithTab={false}
             />
         </div>
     );
