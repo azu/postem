@@ -71,16 +71,8 @@ jobs:
       env:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     
-    - name: Create release branch and update version
+    - name: Update version files
       run: |
-        # Configure git
-        git config --local user.name "github-actions[bot]"
-        git config --local user.email "github-actions[bot]@users.noreply.github.com"
-        
-        # Create a new branch for the release
-        RELEASE_BRANCH="release/$(date +%Y%m%d-%H%M%S)"
-        git checkout -b $RELEASE_BRANCH
-        
         # Update package.json version manually
         CURRENT_VERSION=$(node -p "require('./package.json').version")
         if [ "${{ inputs.version_type }}" = "major" ]; then
@@ -111,22 +103,14 @@ jobs:
         fi
         
         echo "NEW_VERSION=v$NEW_VERSION" >> $GITHUB_ENV
-        echo "RELEASE_BRANCH=$RELEASE_BRANCH" >> $GITHUB_ENV
-        
-        # Commit the version change
-        git add package.json package-lock.json 2>/dev/null || git add package.json
-        git commit -m "chore: bump version to v$NEW_VERSION"
-        
-        # Push the release branch
-        git push origin $RELEASE_BRANCH
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        echo "RELEASE_BRANCH=release/$(date +%Y%m%d-%H%M%S)" >> $GITHUB_ENV
     
     - name: Create Pull Request
       uses: peter-evans/create-pull-request@5e914681df9dc83aa4e4905692ca88beb2f9e91f # v7.0.5
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
         branch: ${{ env.RELEASE_BRANCH }}
+        commit-message: "chore: bump version to ${{ env.NEW_VERSION }}"
         title: "Release ${{ env.NEW_VERSION }}"
         body: |
           # Release ${{ env.NEW_VERSION }}
