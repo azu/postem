@@ -22,6 +22,7 @@ jobs:
       uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
       with:
         fetch-depth: 0
+        token: ${{ secrets.GITHUB_TOKEN }}
     
     - name: Setup Node.js
       uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
@@ -32,22 +33,47 @@ jobs:
     - name: Install dependencies
       run: npm install
     
-    - name: Create tag using npm version
+    - name: Create release branch and update version
       run: |
         # Configure git
         git config --local user.name "github-actions[bot]"
         git config --local user.email "github-actions[bot]@users.noreply.github.com"
         
-        # Use npm version to calculate new version and create tag
+        # Create a new branch for the release
+        RELEASE_BRANCH="release/$(date +%Y%m%d-%H%M%S)"
+        git checkout -b $RELEASE_BRANCH
+        
+        # Update version using npm version
         NEW_VERSION=$(npm version ${{ inputs.version_type }} --git-tag-version=false)
         echo "NEW_VERSION=$NEW_VERSION" >> $GITHUB_ENV
+        echo "RELEASE_BRANCH=$RELEASE_BRANCH" >> $GITHUB_ENV
         
-        # Reset package.json changes to avoid modifying protected branch
-        git checkout -- package.json
+        # Commit the version change
+        git add package.json
+        git commit -m "chore: bump version to $NEW_VERSION"
         
-        # Create and push tag only
-        git tag $NEW_VERSION
-        git push origin $NEW_VERSION
+        # Push the release branch
+        git push origin $RELEASE_BRANCH
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    
+    - name: Create Pull Request
+      uses: peter-evans/create-pull-request@5e914681df9dc83aa4e4905692ca88beb2f9e91f # v7.0.5
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        branch: ${{ env.RELEASE_BRANCH }}
+        title: "chore: Release ${{ env.NEW_VERSION }}"
+        body: |
+          Release ${{ env.NEW_VERSION }} (${{ inputs.version_type }} update)
+          
+          This PR updates the package.json version and will create a release when merged.
+        base: master
+    
+    - name: Create tag and release
+      run: |
+        # Create and push tag
+        git tag ${{ env.NEW_VERSION }}
+        git push origin ${{ env.NEW_VERSION }}
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     
