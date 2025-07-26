@@ -145,7 +145,8 @@
     "publish": {
       "provider": "github",
       "owner": "azu",
-      "repo": "postem"
+      "repo": "postem",
+      "releaseType": "release"
     },
     "mac": {
       "target": [
