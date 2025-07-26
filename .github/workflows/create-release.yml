@@ -1,0 +1,60 @@
+name: Create Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to release (e.g., 2.0.3)'
+        required: true
+        type: string
+
+jobs:
+  create-tag-and-release:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout
+      uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      with:
+        fetch-depth: 0
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+      with:
+        node-version: '22'
+        cache: 'npm'
+    
+    - name: Install dependencies
+      run: npm install
+    
+    - name: Update package.json version
+      run: |
+        npm version ${{ inputs.version }} --no-git-tag-version
+        git config --local user.name "github-actions[bot]"
+        git config --local user.email "github-actions[bot]@users.noreply.github.com"
+        git add package.json
+        git commit -m "chore: bump version to ${{ inputs.version }}"
+    
+    - name: Create and push tag
+      run: |
+        git tag v${{ inputs.version }}
+        git push origin HEAD:master
+        git push origin v${{ inputs.version }}
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    
+    - name: Create GitHub Release
+      uses: actions/create-release@0cb9c9b65d5d1901c1f53e5e66eaf4afd303e70e # v1.1.4
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: v${{ inputs.version }}
+        release_name: Release v${{ inputs.version }}
+        body: |
+          Release v${{ inputs.version }}
+          
+          Changes in this version:
+          - macOS only release (Windows and Linux support removed)
+          - Updated build configuration
+        draft: false
+        prerelease: false
