@@ -39,9 +39,9 @@ function TagSelect({ tags, selectedTags, selectTags, ref }) {
     const customStyles = {
         control: (provided) => ({
             ...provided,
-            padding: "4px 0 4px 0.5em",
+            minHeight: "auto",
+            height: "auto",
             border: "1px solid #aaaaaa",
-            minHeight: "38px",
             borderRadius: "0",
             boxShadow: "none",
             "&:hover": {
@@ -50,12 +50,41 @@ function TagSelect({ tags, selectedTags, selectTags, ref }) {
         }),
         valueContainer: (provided) => ({
             ...provided,
-            padding: "0"
+            padding: "8px 0 8px 0.5em",
+            height: "auto"
         }),
         input: (provided) => ({
             ...provided,
             margin: "0",
-            padding: "0"
+            padding: "0",
+            fontSize: "13px"
+        }),
+        placeholder: (provided) => ({
+            ...provided,
+            margin: "0",
+            fontSize: "13px"
+        }),
+        singleValue: (provided) => ({
+            ...provided,
+            margin: "0",
+            fontSize: "13px"
+        }),
+        multiValue: (provided) => ({
+            ...provided,
+            margin: "2px",
+            fontSize: "13px"
+        }),
+        multiValueLabel: (provided) => ({
+            ...provided,
+            fontSize: "13px"
+        }),
+        option: (provided) => ({
+            ...provided,
+            fontSize: "13px"
+        }),
+        menu: (provided) => ({
+            ...provided,
+            fontSize: "13px"
         }),
         menuPortal: (provided) => ({
             ...provided,
