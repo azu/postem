@@ -1,12 +1,13 @@
 name: Release
 
 on:
-  push:
-    tags:
-      - 'v*.*.*'
+  pull_request:
+    types: [closed]
+    branches: [master]
 
 jobs:
   release:
+    if: github.event.pull_request.merged == true && startsWith(github.event.pull_request.title, 'Release ')
     runs-on: macos-latest
     
     steps:
@@ -28,7 +29,24 @@ jobs:
     - name: Run tests
       run: npm run test:unit
     
-    - name: Build and release
+    - name: Create GitHub tag and release
+      run: |
+        # Get version from package.json
+        VERSION="v$(node -p "require('./package.json').version")"
+        
+        # Create tag
+        git tag $VERSION
+        git push origin $VERSION
+        
+        # Create GitHub release with PR body as release notes
+        gh release create $VERSION \
+          --title "Release $VERSION" \
+          --notes "${{ github.event.pull_request.body }}" \
+          --latest
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    
+    - name: Build and upload assets
       env:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: npm run dist

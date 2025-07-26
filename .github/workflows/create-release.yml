@@ -1,4 +1,4 @@
-name: Create Release
+name: Create Release PR
 
 on:
   workflow_dispatch:
@@ -14,7 +14,7 @@ on:
         default: 'patch'
 
 jobs:
-  create-tag-and-release:
+  create-release-pr:
     runs-on: ubuntu-latest
     
     steps:
@@ -32,6 +32,27 @@ jobs:
     
     - name: Install dependencies
       run: npm install
+    
+    - name: Generate changelog
+      id: changelog
+      run: |
+        # Get the latest tag
+        LATEST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "")
+        
+        if [ -z "$LATEST_TAG" ]; then
+          # If no tags exist, get all commits
+          CHANGELOG=$(gh api repos/${{ github.repository }}/commits --jq '.[] | "- " + .commit.message' | head -20)
+        else
+          # Get commits since the latest tag
+          CHANGELOG=$(gh api repos/${{ github.repository }}/compare/${LATEST_TAG}...HEAD --jq '.commits[] | "- " + .commit.message')
+        fi
+        
+        # Save changelog to environment
+        echo "CHANGELOG<<EOF" >> $GITHUB_ENV
+        echo "$CHANGELOG" >> $GITHUB_ENV
+        echo "EOF" >> $GITHUB_ENV
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     
     - name: Create release branch and update version
       run: |
@@ -62,33 +83,19 @@ jobs:
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
         branch: ${{ env.RELEASE_BRANCH }}
-        title: "chore: Release ${{ env.NEW_VERSION }}"
+        title: "Release ${{ env.NEW_VERSION }}"
         body: |
-          Release ${{ env.NEW_VERSION }} (${{ inputs.version_type }} update)
+          # Release ${{ env.NEW_VERSION }}
           
-          This PR updates the package.json version and will create a release when merged.
+          ## Changes
+          
+          ${{ env.CHANGELOG }}
+          
+          ## Release Type
+          
+          ${{ inputs.version_type }} update
+          
+          ---
+          
+          **Note:** This PR will trigger a release when merged to master.
         base: master
-    
-    - name: Create tag and release
-      run: |
-        # Create and push tag
-        git tag ${{ env.NEW_VERSION }}
-        git push origin ${{ env.NEW_VERSION }}
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    
-    - name: Create GitHub Release
-      uses: actions/create-release@0cb9c9b65d5d1901c1f53e5e66eaf4afd303e70e # v1.1.4
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        tag_name: ${{ env.NEW_VERSION }}
-        release_name: Release ${{ env.NEW_VERSION }}
-        body: |
-          Release ${{ env.NEW_VERSION }} (${{ inputs.version_type }} update)
-          
-          Changes in this version:
-          - macOS only release (Windows and Linux support removed)
-          - Updated build configuration
-        draft: false
-        prerelease: false
