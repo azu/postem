@@ -98,11 +98,23 @@ jobs:
           require('fs').writeFileSync('./package.json', JSON.stringify(pkg, null, 2) + '\n');
         "
         
+        # Update package-lock.json if it exists
+        if [ -f "package-lock.json" ]; then
+          node -e "
+            const lockPkg = require('./package-lock.json');
+            lockPkg.version = '$NEW_VERSION';
+            if (lockPkg.packages && lockPkg.packages['']) {
+              lockPkg.packages[''].version = '$NEW_VERSION';
+            }
+            require('fs').writeFileSync('./package-lock.json', JSON.stringify(lockPkg, null, 2) + '\n');
+          "
+        fi
+        
         echo "NEW_VERSION=v$NEW_VERSION" >> $GITHUB_ENV
         echo "RELEASE_BRANCH=$RELEASE_BRANCH" >> $GITHUB_ENV
         
         # Commit the version change
-        git add package.json
+        git add package.json package-lock.json 2>/dev/null || git add package.json
         git commit -m "chore: bump version to v$NEW_VERSION"
         
         # Push the release branch
