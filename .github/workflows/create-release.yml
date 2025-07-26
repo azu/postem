@@ -39,18 +39,39 @@ jobs:
         # Get the latest tag
         LATEST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "")
         
+        # Calculate new version to use as target for release notes
+        CURRENT_VERSION=$(node -p "require('./package.json').version")
+        if [ "${{ inputs.version_type }}" = "major" ]; then
+          NEW_VERSION=$(echo $CURRENT_VERSION | awk -F. '{print ($1+1)".0.0"}')
+        elif [ "${{ inputs.version_type }}" = "minor" ]; then
+          NEW_VERSION=$(echo $CURRENT_VERSION | awk -F. '{print $1".".($2+1)".0"}')
+        else # patch
+          NEW_VERSION=$(echo $CURRENT_VERSION | awk -F. '{print $1"."$2".".($3+1)}')
+        fi
+        
+        # Generate release notes using GitHub API
         if [ -z "$LATEST_TAG" ]; then
-          # If no tags exist, get all commits
-          CHANGELOG=$(gh api repos/${{ github.repository }}/commits --jq '.[] | "- " + .commit.message' | head -20)
+          # If no previous tag exists, generate notes from first commit
+          FIRST_COMMIT=$(git rev-list --max-parents=0 HEAD)
+          CHANGELOG=$(gh api repos/${{ github.repository }}/releases/generate-notes \
+            -f tag_name="v${NEW_VERSION}" \
+            -f target_commitish="${{ github.sha }}" \
+            -f previous_tag_name="" \
+            --jq '.body')
         else
-          # Get commits since the latest tag
-          CHANGELOG=$(gh api repos/${{ github.repository }}/compare/${LATEST_TAG}...HEAD --jq '.commits[] | "- " + .commit.message')
+          CHANGELOG=$(gh api repos/${{ github.repository }}/releases/generate-notes \
+            -f tag_name="v${NEW_VERSION}" \
+            -f target_commitish="${{ github.sha }}" \
+            -f previous_tag_name="$LATEST_TAG" \
+            --jq '.body')
         fi
         
         # Save changelog to environment
         echo "CHANGELOG<<EOF" >> $GITHUB_ENV
         echo "$CHANGELOG" >> $GITHUB_ENV
         echo "EOF" >> $GITHUB_ENV
+        
+        echo "NEW_VERSION_NUMBER=$NEW_VERSION" >> $GITHUB_ENV
       env:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     
@@ -87,15 +108,11 @@ jobs:
         body: |
           # Release ${{ env.NEW_VERSION }}
           
-          ## Changes
-          
           ${{ env.CHANGELOG }}
           
-          ## Release Type
-          
-          ${{ inputs.version_type }} update
-          
           ---
+          
+          **Release Type:** ${{ inputs.version_type }} update
           
           **Note:** This PR will trigger a release when merged to master.
         base: master
