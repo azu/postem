@@ -8,6 +8,6 @@ jobs:
   merge-gatekeeper:
     runs-on: ubuntu-latest
     steps:
-    - uses: upsidr/merge-gatekeeper@v1
+    - uses: upsidr/merge-gatekeeper@09af7a82c1666d0e64d2bd8c01797a0bcfd3bb5d # v1.2.1
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
