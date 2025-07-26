@@ -5,9 +5,11 @@ import path from "path";
 
 export default function prompt({ title, message, placeholder }, callback) {
     const mainWindow = new BrowserWindow({
-        width: 300, height: 300, webPreferences: {
-            preload: path.join(__dirname, 'preload.js'),
-        },
+        width: 300,
+        height: 300,
+        webPreferences: {
+            preload: path.join(__dirname, "preload.js")
+        }
     });
     const index = {
         html: path.join(__dirname + "/index.html")

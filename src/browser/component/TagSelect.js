@@ -35,6 +35,30 @@ function TagSelect({ tags, selectedTags, selectTags, ref }) {
         selectTags(tags);
     };
 
+    // react-selectのスタイルをTitleInputやURLInputと統一
+    const customStyles = {
+        control: (provided) => ({
+            ...provided,
+            padding: "4px 0 4px 0.5em",
+            border: "1px solid #aaaaaa",
+            minHeight: "38px",
+            borderRadius: "0",
+            boxShadow: "none",
+            "&:hover": {
+                border: "1px solid #aaaaaa"
+            }
+        }),
+        valueContainer: (provided) => ({
+            ...provided,
+            padding: "0"
+        }),
+        input: (provided) => ({
+            ...provided,
+            margin: "0",
+            padding: "0"
+        })
+    };
+
     return (
         <div className="EditorToolbar">
             <h2 className="l-header">Tags</h2>
@@ -47,6 +71,7 @@ function TagSelect({ tags, selectedTags, selectTags, ref }) {
                 isClearable
                 placeholder="Select Tag(s)"
                 onChange={handleChange}
+                styles={customStyles}
             />
         </div>
     );
