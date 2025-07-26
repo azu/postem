@@ -12,18 +12,16 @@ jobs:
     steps:
     - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
     
-    - uses: pnpm/action-setup@eae0cfeb286e66ffb5155f1a79b90583a127a68b # v2.4.1
-    
     - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
       with:
         node-version: '22'
-        cache: 'pnpm'
+        cache: 'npm'
     
     - name: Install dependencies
-      run: pnpm install
+      run: npm install
     
     - name: Run unit tests
-      run: pnpm test:unit
+      run: npm run test:unit
 
   get-playwright-version:
     runs-on: ubuntu-latest
@@ -31,7 +29,6 @@ jobs:
       playwright-version: ${{ steps.playwright-version.outputs.playwright-version }}
     steps:
     - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
-    - uses: pnpm/action-setup@eae0cfeb286e66ffb5155f1a79b90583a127a68b # v2.4.1
     - name: Get Playwright version
       id: playwright-version
       run: |
@@ -47,15 +44,13 @@ jobs:
     steps:
     - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
     
-    - uses: pnpm/action-setup@eae0cfeb286e66ffb5155f1a79b90583a127a68b # v2.4.1
-    
     - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
       with:
         node-version: '22'
-        cache: 'pnpm'
+        cache: 'npm'
     
     - name: Install dependencies
-      run: pnpm install
+      run: npm install
     
     - name: Setup virtual display
       run: |
@@ -68,23 +63,21 @@ jobs:
         DISPLAY: :99
         DBUS_SESSION_BUS_ADDRESS: /dev/null
         XDG_RUNTIME_DIR: /tmp
-      run: pnpm test:integration
+      run: npm run test:integration
 
   build:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
     
-    - uses: pnpm/action-setup@eae0cfeb286e66ffb5155f1a79b90583a127a68b # v2.4.1
-    
     - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
       with:
         node-version: '22'
-        cache: 'pnpm'
+        cache: 'npm'
     
     - name: Install dependencies
-      run: pnpm install
+      run: npm install
     
     - name: Build project
-      run: pnpm run build
+      run: npm run build
 

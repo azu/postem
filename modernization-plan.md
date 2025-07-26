@@ -8,7 +8,7 @@
 - **Babel**: 7.22.5（比較的新しい）
 - **ビルドツール**: Gulp（Parcelは削除）
 - **CSS**: Plain CSS（Sassは削除済み）
-- **パッケージマネージャー**: pnpm 10.14.0
+- **パッケージマネージャー**: npm
 
 ### 主な問題点
 1. **テストが存在しない**
@@ -58,7 +58,7 @@
   - ✅ Linux環境でのヘッドレステスト
   - ✅ Xvfb（仮想フレームバッファ）を使用
 - ✅ プルリクエストでの自動テスト実行
-- ✅ Node.js 22とpnpmキャッシュの活用
+- ✅ Node.js 22とnpmキャッシュの活用
 
 ### フェーズ2: 段階的な依存関係の更新（優先度: 高）
 
@@ -191,14 +191,13 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     
-    - uses: pnpm/action-setup@v2
       with:
         version: 10.14.0
     
     - uses: actions/setup-node@v3
       with:
         node-version: '22'
-        cache: 'pnpm'
+        cache: 'npm'
     
     # Xvfbのセットアップ（Electron用）
     - name: Setup Xvfb
@@ -207,11 +206,11 @@ jobs:
         sudo apt-get install -y xvfb
     
     - name: Install dependencies
-      run: pnpm install
+      run: npm install
     
     - name: Run unit tests
-      run: pnpm test:unit  # Vitest実行
+      run: npm run test:unit  # Vitest実行
     
     - name: Run integration tests
-      run: xvfb-run -a pnpm test:integration
+      run: xvfb-run -a npm run test:integration
 ```

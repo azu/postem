@@ -67,6 +67,7 @@
     "fs-jetpack": "^0.10.3",
     "interop-require": "^1.0.0",
     "js-yaml": "^3.8.4",
+    "jsonfile": "^6.1.0",
     "korefile": "^2.1.1",
     "material-flux": "^1.4.0",
     "minimist": "^1.2.0",
@@ -79,6 +80,7 @@
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "react-select": "^5.8.3",
+    "scheduler": "^0.26.0",
     "slugg": "^1.2.1",
     "spin.js": "^2.3.2",
     "textlint-rule-ja-unnatural-alphabet": "^2.0.1",
@@ -118,12 +120,37 @@
   },
   "build": {
     "appId": "info.efcl.postem",
+    "productName": "Postem",
+    "directories": {
+      "output": "dist",
+      "buildResources": "build"
+    },
+    "files": [
+      "lib/**/*",
+      "css/**/*",
+      "node_modules/**/*",
+      "index.js",
+      "package.json"
+    ],
+    "asar": false,
+    "extraResources": [
+      {
+        "from": "src/services/*/consumer.json",
+        "to": "services",
+        "filter": [
+          "**/*"
+        ]
+      }
+    ],
     "mac": {
       "target": [
         "zip"
       ],
-      "category": "your.app.category.type"
-    }
+      "category": "public.app-category.utilities"
+    },
+    "npmRebuild": true,
+    "nodeGypRebuild": false,
+    "buildDependenciesFromSource": false
   },
   "email": "azuciao@gmail.com",
   "prettier": {
@@ -136,6 +163,5 @@
     "*.{js,jsx,ts,tsx,css}": [
       "prettier --write"
     ]
-  },
-  "packageManager": "pnpm@10.14.0-0+sha512.2cd47a0cbf5f1d1de7693a88307a0ede5be94e0d3b34853d800ee775efbea0650cb562b77605ec80bc8d925f5cd27c4dfe8bb04d3a0b76090784c664450d32d6"
+  }
 }
