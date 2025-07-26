@@ -142,11 +142,32 @@
         ]
       }
     ],
+    "publish": {
+      "provider": "github",
+      "owner": "azu",
+      "repo": "postem"
+    },
     "mac": {
       "target": [
-        "zip"
+        "zip",
+        "dmg"
       ],
       "category": "public.app-category.utilities"
+    },
+    "win": {
+      "target": [
+        "nsis"
+      ]
+    },
+    "linux": {
+      "target": [
+        "AppImage",
+        "deb"
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
     },
     "npmRebuild": true,
     "nodeGypRebuild": false,
