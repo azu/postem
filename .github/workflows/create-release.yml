@@ -32,29 +32,22 @@ jobs:
     - name: Install dependencies
       run: npm install
     
-    - name: Create tag from current version
+    - name: Create tag using npm version
       run: |
-        # Get current version from package.json
-        CURRENT_VERSION=$(node -p "require('./package.json').version")
-        
-        # Calculate new version based on input
-        if [ "${{ inputs.version_type }}" = "major" ]; then
-          NEW_VERSION=$(echo $CURRENT_VERSION | awk -F. '{print ($1+1)".0.0"}')
-        elif [ "${{ inputs.version_type }}" = "minor" ]; then
-          NEW_VERSION=$(echo $CURRENT_VERSION | awk -F. '{print $1".".($2+1)".0"}')
-        else # patch
-          NEW_VERSION=$(echo $CURRENT_VERSION | awk -F. '{print $1"."$2".".($3+1)}')
-        fi
-        
-        echo "NEW_VERSION=v$NEW_VERSION" >> $GITHUB_ENV
-        
         # Configure git
         git config --local user.name "github-actions[bot]"
         git config --local user.email "github-actions[bot]@users.noreply.github.com"
         
-        # Create tag without modifying any files
-        git tag v$NEW_VERSION
-        git push origin v$NEW_VERSION
+        # Use npm version to calculate new version and create tag
+        NEW_VERSION=$(npm version ${{ inputs.version_type }} --git-tag-version=false)
+        echo "NEW_VERSION=$NEW_VERSION" >> $GITHUB_ENV
+        
+        # Reset package.json changes to avoid modifying protected branch
+        git checkout -- package.json
+        
+        # Create and push tag only
+        git tag $NEW_VERSION
+        git push origin $NEW_VERSION
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     
