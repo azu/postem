@@ -9,14 +9,14 @@ function TagSelect({ tags, selectedTags, selectTags, ref }) {
     useImperativeHandle(ref, () => ({
         focus: () => {
             if (selectRef.current) {
-                selectRef.current.focus();
+                selectRef.current.focus({ preventScroll: true });
             }
         }
     }));
 
     useEffect(() => {
         if (selectRef.current) {
-            selectRef.current.focus();
+            selectRef.current.focus({ preventScroll: true });
         }
     }, []);
 
@@ -56,6 +56,10 @@ function TagSelect({ tags, selectedTags, selectTags, ref }) {
             ...provided,
             margin: "0",
             padding: "0"
+        }),
+        menuPortal: (provided) => ({
+            ...provided,
+            zIndex: 9999
         })
     };
 
@@ -72,6 +76,9 @@ function TagSelect({ tags, selectedTags, selectTags, ref }) {
                 placeholder="Select Tag(s)"
                 onChange={handleChange}
                 styles={customStyles}
+                menuPosition="fixed"
+                menuPortalTarget={document.body}
+                menuShouldBlockScroll={false}
             />
         </div>
     );

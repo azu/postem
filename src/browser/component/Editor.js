@@ -1,7 +1,7 @@
 // LICENSE : MIT
 "use strict";
 import { moduleInterop } from "@textlint/module-interop";
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useCallback } from "react";
 import CodeMirror from "@uiw/react-codemirror";
 import { markdown } from "@codemirror/lang-markdown";
 import { languages } from "@codemirror/language-data";
@@ -97,6 +97,10 @@ export default function Editor({ value, onChange, onSubmit, services, toggleServ
                         }
                         return true; // デフォルト動作（改行）をブロック
                     }
+                },
+                {
+                    key: "Tab",
+                    run: () => false // Tabキーのデフォルト動作を無効化
                 }
             ])
         ),
