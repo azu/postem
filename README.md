@@ -17,9 +17,9 @@
 
 ## Installation
 
-アプリに必要な依存を[Yarn](https://yarnpkg.com/)でインストールします。
+アプリに必要な依存をnpmでインストールします。
 
-    yarn install
+    npm install
     
 アプリを起動する前に利用するサービスの設定を`service.js`で定義してください。
 
@@ -57,11 +57,11 @@ cp src/service.example.js src/service.js
 
 Development mode:
 
-    yarn start
+    npm start
     
 Production mode:　`dist/`ディレクトリにバイナリが出力されます。
 
-    yarn run dist
+    npm run dist
     # dist/ にアプリができる
 
 Browser mode: [asocial-bookmark](https://github.com/azu/asocial-bookmark)形式のリポジトリに対応しています。
