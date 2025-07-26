@@ -10,7 +10,8 @@ const getServiceNameList = () => {
     if (process.env.PLAYWRIGHT_TEST === "1" || process.title?.includes("playwright")) {
         return notBundledRequire("../../tests/fixtures/test-services.js");
     } else {
-        return notBundledRequire("../service.js");
+        const serviceModule = notBundledRequire("../service.js");
+        return serviceModule.default || serviceModule;
     }
 };
 const services = getServiceNameList()
