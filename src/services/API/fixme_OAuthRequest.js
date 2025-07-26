@@ -16,7 +16,7 @@ export default class OAuthRequest {
                 Accept: "application/json",
                 Authorization: Authorization
             }
-        }).then(function(response) {
+        }).then(function (response) {
             return response.json();
         });
     }
