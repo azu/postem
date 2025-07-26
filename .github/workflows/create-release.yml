@@ -112,3 +112,5 @@ jobs:
           
           **Note:** This PR will trigger a release when merged to master.
         base: master
+        labels: |
+          Type: Release
