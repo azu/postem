@@ -154,21 +154,6 @@
       ],
       "category": "public.app-category.utilities"
     },
-    "win": {
-      "target": [
-        "nsis"
-      ]
-    },
-    "linux": {
-      "target": [
-        "AppImage",
-        "deb"
-      ]
-    },
-    "nsis": {
-      "oneClick": false,
-      "allowToChangeInstallationDirectory": true
-    },
     "npmRebuild": true,
     "nodeGypRebuild": false,
     "buildDependenciesFromSource": false
