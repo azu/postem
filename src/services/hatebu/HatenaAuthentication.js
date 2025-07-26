@@ -23,7 +23,7 @@ exports.requireAccess = function requireAccess(callback) {
     console.log("requireAccess: request start");
     hatena
         .startRequest()
-        .then(result => {
+        .then((result) => {
             console.log("requireAccess: response result", result);
             var accessToken = result.accessToken;
             var accessTokenSecret = result.accessTokenSecret;
@@ -34,7 +34,7 @@ exports.requireAccess = function requireAccess(callback) {
             storage.set("hatena", credential);
             callback(null, credential);
         })
-        .catch(error => {
+        .catch((error) => {
             callback(error);
         });
 };

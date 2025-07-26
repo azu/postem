@@ -110,7 +110,16 @@ export default function Editor({ value, onChange, onSubmit, services, toggleServ
     return (
         <div className="Editor">
             <h2 className="l-header">Body</h2>
-            <CodeMirror value={value} onChange={onChange} extensions={extensions} theme="light" height="120px" />
+            <CodeMirror
+                value={value}
+                onChange={onChange}
+                extensions={extensions}
+                theme="light"
+                height="120px"
+                basicSetup={{
+                    lineNumbers: false
+                }}
+            />
         </div>
     );
 }

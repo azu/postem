@@ -8,11 +8,8 @@ function isJS(file) {
     var fileExt = path.extname(file.relative);
     return fileExt === ".js";
 }
-gulp.task("build", function() {
+gulp.task("build", function () {
     const babelOptions = JSON.parse(fs.readFileSync("./.babelrc", "utf-8"));
     const babelify = babel(babelOptions);
-    return gulp
-        .src("src/**/*", { base: "src" })
-        .pipe(gulpif(isJS, babelify))
-        .pipe(gulp.dest("lib/"));
+    return gulp.src("src/**/*", { base: "src" }).pipe(gulpif(isJS, babelify)).pipe(gulp.dest("lib/"));
 });
