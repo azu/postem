@@ -46,10 +46,36 @@ jobs:
       env:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     
+    - name: Create self-signed certificate
+      run: |
+        # Create a self-signed certificate for code signing
+        security create-keychain -p keychainpass build.keychain
+        security default-keychain -s build.keychain
+        security unlock-keychain -p keychainpass build.keychain
+        security set-keychain-settings -t 3600 -u build.keychain
+        
+        # Generate self-signed certificate
+        openssl req -x509 -newkey rsa:4096 -keyout private_key.pem -out certificate.pem -days 365 -nodes \
+          -subj "/C=JP/ST=Tokyo/L=Tokyo/O=PostemApp/OU=Development/CN=Postem Self-Signed"
+        
+        # Convert to p12 format and import to keychain
+        openssl pkcs12 -export -out certificate.p12 -inkey private_key.pem -in certificate.pem -passout pass:
+        security import certificate.p12 -k build.keychain -P "" -T /usr/bin/codesign
+        
+        # Set code signing identity
+        echo "CSC_IDENTITY_AUTO_DISCOVERY=false" >> $GITHUB_ENV
+        echo "CSC_KEYCHAIN=build.keychain" >> $GITHUB_ENV
+        echo "CSC_KEY_PASSWORD=" >> $GITHUB_ENV
+        
+        # Get the certificate identity
+        CERT_IDENTITY=$(security find-identity -v -p codesigning build.keychain | grep "Postem Self-Signed" | awk '{print $2}')
+        echo "CSC_NAME=$CERT_IDENTITY" >> $GITHUB_ENV
+
     - name: Build and publish assets
       env:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         PUBLISH_FOR_PULL_REQUEST: true
+        CSC_FOR_PULL_REQUEST: true
       run: |
-        # Build and publish application with electron-builder
+        # Build and publish application with electron-builder (with code signing)
         npx electron-builder --publish always

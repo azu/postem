@@ -2,8 +2,8 @@
 
 [Tombloo](https://github.com/to/tombloo)とか[Tombfix](https://github.com/tombfix/core)のようなクロスポストクライアントアプリ。
 
-:memo: Note: このアプリは個人的な用途で作成されているため、バイナリが配布されていません。
-そのため、手元のElectron環境で動かす前提の作りになっています。(それを修正するPRは歓迎です)
+:memo: Note: このアプリは個人的な用途で作成されています。
+バイナリは[Releases](https://github.com/azu/postem/releases)から利用できます。
 
 ## Features
 
@@ -16,6 +16,21 @@
 <img width="448" alt="image" src="https://github.com/azu/postem/assets/19714/deb060a9-57ad-4bdc-a012-40ab2bb27581">
 
 ## Installation
+
+### バイナリをダウンロード（推奨）
+
+1. [Releases](https://github.com/azu/postem/releases/latest)から最新版をダウンロード
+2. macOSの場合：
+   - `.dmg`ファイルをダウンロード
+   - **重要：** アプリが署名されていないため、初回起動時は以下の手順が必要：
+     ```bash
+     # ダウンロード後、ターミナルで実行（quarantine属性を削除）
+     xattr -d com.apple.quarantine /Applications/Postem.app
+     
+     # または、システム環境設定 > セキュリティとプライバシー で許可
+     ```
+
+### 開発環境でのビルド
 
 アプリに必要な依存をnpmでインストールします。
 
