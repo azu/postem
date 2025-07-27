@@ -24,7 +24,8 @@
   "scripts": {
     "build": "NODE_ENV=production gulp build",
     "predist": "npm run build",
-    "dist": "electron-builder",
+    "clean": "rm -rf ./lib ./dist",
+    "dist": "npm run clean && npm run build && electron-builder",
     "start": "NODE_ENV=development electron .",
     "format": "prettier --write \"**/*.{js,jsx,ts,tsx,css}\"",
     "prepare": "git config --local core.hooksPath .githooks",
