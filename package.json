@@ -142,12 +142,6 @@
         ]
       }
     ],
-    "publish": {
-      "provider": "github",
-      "owner": "azu",
-      "repo": "postem",
-      "releaseType": "release"
-    },
     "mac": {
       "target": [
         "zip",
