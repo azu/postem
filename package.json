@@ -26,7 +26,7 @@
     "predist": "npm run build",
     "clean": "rm -rf ./lib ./dist",
     "dist": "npm run clean && npm run build && electron-builder",
-    "dist:install": "npm run dist && cp -R dist/mac/Postem.app /Applications/",
+    "dist:install": "npm run dist && cp -R dist/mac-arm64/Postem.app /Applications/",
     "start": "NODE_ENV=development electron .",
     "format": "prettier --write \"**/*.{js,jsx,ts,tsx,css}\"",
     "prepare": "git config --local core.hooksPath .githooks",
