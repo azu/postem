@@ -85,6 +85,13 @@ export default function Editor({ value, onChange, onSubmit, services, toggleServ
         };
     }, [services.length, toggleServiceAtIndex, onSubmit]); // Ensure toggleServiceAtIndex and onSubmit are memoized in the parent component
 
+    // 最小高さを設定するテーマ
+    const minHeightTheme = EditorView.theme({
+        "&": { height: "auto" },
+        ".cm-content, .cm-gutter": { minHeight: "120px" },
+        ".cm-scroller": { overflow: "auto" }
+    });
+
     const extensions = [
         // 最高優先度でMod+Enterをオーバーライド
         Prec.highest(
@@ -102,6 +109,7 @@ export default function Editor({ value, onChange, onSubmit, services, toggleServ
         ),
         markdown({ codeLanguages: languages }),
         EditorView.lineWrapping,
+        minHeightTheme,
         textlintLinter ? [textlintLinter, lintGutter()] : []
     ]
         .flat()
@@ -115,7 +123,6 @@ export default function Editor({ value, onChange, onSubmit, services, toggleServ
                 onChange={onChange}
                 extensions={extensions}
                 theme="light"
-                height="120px"
                 basicSetup={{
                     lineNumbers: false
                 }}
