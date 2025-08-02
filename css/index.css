@@ -76,19 +76,16 @@
     color: #333333;
     outline: none;
     margin: 0 -4px;
-    min-height: 3em;
     font-family: Monaco, "Andale Mono", "Lucida Console", "Bitstream Vera Sans Mono", "Courier New", Courier, monospace;
     font-size: 13px;
 }
 
 .Editor .cm-content {
-    min-height: 3em;
     padding: 8px;
     line-height: 1.4;
 }
 
 .Editor .cm-scroller {
-    overflow: auto;
     font-family: inherit;
 }
 
