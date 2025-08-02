@@ -1,7 +1,7 @@
 // LICENSE : MIT
 "use strict";
 import React, { useRef, useEffect, useImperativeHandle } from "react";
-import Select from "react-select";
+import CreatableSelect from "react-select/creatable";
 
 function TagSelect({ tags, selectedTags, selectTags, ref }) {
     const selectRef = useRef(null);
@@ -33,6 +33,14 @@ function TagSelect({ tags, selectedTags, selectTags, ref }) {
     const handleChange = (selectedOptions) => {
         const tags = selectedOptions ? selectedOptions.map((option) => option.value) : [];
         selectTags(tags);
+    };
+
+    const handleCreate = (inputValue) => {
+        const newTag = inputValue.trim();
+        if (newTag) {
+            const updatedTags = [...selectedTags, newTag];
+            selectTags(updatedTags);
+        }
     };
 
     // react-selectのスタイルをTitleInputやURLInputと統一
@@ -95,19 +103,21 @@ function TagSelect({ tags, selectedTags, selectTags, ref }) {
     return (
         <div className="EditorToolbar">
             <h2 className="l-header">Tags</h2>
-            <Select
+            <CreatableSelect
                 ref={selectRef}
                 name="form-field-name"
                 value={selectedOptions}
                 options={options}
                 isMulti
                 isClearable
-                placeholder="Select Tag(s)"
+                placeholder="Select or create tag(s)"
                 onChange={handleChange}
+                onCreateOption={handleCreate}
                 styles={customStyles}
                 menuPosition="fixed"
                 menuPortalTarget={document.body}
                 menuShouldBlockScroll={false}
+                formatCreateLabel={(inputValue) => `Create "${inputValue}"`}
             />
         </div>
     );
