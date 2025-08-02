@@ -99,13 +99,15 @@ class App extends React.Component {
         ipcRenderer.on("resetField", (event) => {
             appContext.ServiceAction.resetField();
         });
-        // Fetch tags from tagService
-        const service = serviceManger.getTagService();
-        if (service) {
-            appContext.ServiceAction.fetchTags(service);
-        } else {
-            console.error("TagService should be available at least one");
-        }
+        // Fetch tags from tagService after services are initialized
+        waitForInitialization().then(() => {
+            const service = serviceManger.getTagService();
+            if (service) {
+                appContext.ServiceAction.fetchTags(service);
+            } else {
+                console.error("TagService should be available at least one");
+            }
+        });
     }
 
     componentWillUnmount() {

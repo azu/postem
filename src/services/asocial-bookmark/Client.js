@@ -76,7 +76,10 @@ export default class Client {
 
     getTags() {
         const asocialBookmark = new AsocialBookmark(this.serviceOptions);
-        return asocialBookmark.getTags();
+        return asocialBookmark.getTags().catch((error) => {
+            console.error("AsocialBookmark getTags error:", error);
+            return [];
+        });
     }
 
     /**
