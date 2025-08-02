@@ -11,7 +11,7 @@ import SubmitButton from "./component/SubmitButton";
 import RelatedListBox from "./component/RelatedListBox";
 import ServiceList from "./component/ServiceList";
 import AppContext from "./AppContext";
-import serviceManger from "./service-instance";
+import serviceManger, { waitForInitialization } from "./service-instance";
 
 const ipcRenderer = require("electron").ipcRenderer;
 const appContext = new AppContext();
@@ -26,9 +26,24 @@ class App extends React.Component {
             },
             appContext.ServiceStore.state
         );
+
+        // サービスの初期化状態は別管理（ServiceStoreの変更で上書きされないように）
+        this._serviceInitialized = false;
     }
 
-    componentDidMount() {
+    async componentDidMount() {
+        // サービスの初期化を待つ
+        try {
+            await waitForInitialization();
+            this._serviceInitialized = true;
+            this.forceUpdate();
+        } catch (error) {
+            console.error("Failed to initialize services:", error);
+            // エラーが発生しても表示（シークレットがフォールバック値になる）
+            this._serviceInitialized = true;
+            this.forceUpdate();
+        }
+
         // ServiceStore の変更を監視（componentDidMountで登録）
         this.unsubscribe = appContext.ServiceStore.onChange(() => {
             let newState = Object.assign({}, this.state, appContext.ServiceStore.state);
@@ -117,6 +132,19 @@ class App extends React.Component {
     }
 
     render() {
+        if (!this._serviceInitialized) {
+            return (
+                <div
+                    className="App"
+                    style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100vh" }}
+                >
+                    <div style={{ textAlign: "center" }}>
+                        <p>Loading...</p>
+                    </div>
+                </div>
+            );
+        }
+
         const { ServiceAction } = appContext;
         const selectTags = ServiceAction.selectTags.bind(ServiceAction);
         const updateTitle = ServiceAction.updateTitle.bind(ServiceAction);
@@ -197,6 +225,8 @@ class App extends React.Component {
 appContext.on("dispatch", ({ eventKey }) => {
     ipcRenderer.send(String(eventKey));
 });
+
+// アプリを即座に起動（初期化はコンポーネント内で処理）
 try {
     const root = createRoot(document.getElementById("js-main"));
     root.render(<App />);

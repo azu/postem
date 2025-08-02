@@ -43,6 +43,13 @@ function createElectronLaunchOptions(additionalArgs = []) {
     return { args, env, timeout: 30000 };
 }
 
+// アプリケーションの初期化完了を待つヘルパー関数
+async function waitForAppInitialization(window) {
+    // ServiceListが表示されることで初期化完了を確認
+    const serviceList = window.locator(".ServiceList");
+    await expect(serviceList).toBeVisible({ timeout: 10000 });
+}
+
 // Test contextを使用してElectronアプリケーションとウィンドウを管理
 const test = baseTest.extend({
     app: async ({}, use) => {
@@ -75,10 +82,44 @@ test.describe("Postem Application", () => {
         // メインコンテナが存在することを確認
         const mainDiv = window.locator("#js-main");
         await expect(mainDiv).toBeVisible();
+
+        // ローディング画面が表示される可能性があるので、アプリが完全に初期化されるまで待つ
+        // ServiceListが表示されることで初期化完了を確認
+        const serviceList = window.locator(".ServiceList");
+        await expect(serviceList).toBeVisible({ timeout: 10000 });
+    });
+
+    test("ローディング画面が表示され、初期化後に消える", async ({ window }) => {
+        // ウィンドウが読み込まれるまで待機
+        await window.waitForLoadState("domcontentloaded");
+
+        // ローディング画面の存在を確認（すぐに確認）
+        const loadingText = window.locator("text=Loading...");
+        const isLoadingVisible = await loadingText.isVisible().catch(() => false);
+
+        // ローディング画面が表示されていた場合
+        if (isLoadingVisible) {
+            console.log("Loading screen was displayed");
+
+            // ServiceListが表示されるまで待つ（初期化完了）
+            const serviceList = window.locator(".ServiceList");
+            await expect(serviceList).toBeVisible({ timeout: 10000 });
+
+            // ローディング画面が消えたことを確認
+            await expect(loadingText).not.toBeVisible();
+        } else {
+            // ローディング画面が表示されなかった場合（高速な初期化）
+            console.log("Loading screen was not displayed (fast initialization)");
+
+            // ServiceListがすでに表示されていることを確認
+            const serviceList = window.locator(".ServiceList");
+            await expect(serviceList).toBeVisible();
+        }
     });
 
     test("エラーハンドリングテスト", async ({ window }) => {
         await window.waitForLoadState("domcontentloaded");
+        await waitForAppInitialization(window);
 
         // DEBUGサービスを選択
         await window.locator(".ServiceList img").first().click();
@@ -105,6 +146,7 @@ test.describe("Postem Application", () => {
 
     test("ウィンドウリサイズ対応テスト", async ({ window }) => {
         await window.waitForLoadState("domcontentloaded");
+        await waitForAppInitialization(window);
 
         // 初期サイズでの要素確認
         await expect(window.locator(".ServiceList")).toBeVisible();
@@ -150,6 +192,7 @@ test.describe("Postem Application", () => {
 
     testWithUrlParams("URLパラメーターからの起動テスト", async ({ windowWithUrlParams }) => {
         await windowWithUrlParams.waitForLoadState("domcontentloaded");
+        await waitForAppInitialization(windowWithUrlParams);
 
         // パラメーターが正しく反映されているかチェック
         // URLフィールドの値を確認
@@ -159,6 +202,7 @@ test.describe("Postem Application", () => {
 
     test("統合ワークフロー: Title + URL + Tag選択 + CodeMirror + Cmd+Enter", async ({ window }) => {
         await window.waitForLoadState("domcontentloaded");
+        await waitForAppInitialization(window);
 
         // 1. DEBUGサービスを選択
         await window.locator(".ServiceList img").first().click();
@@ -225,6 +269,7 @@ test.describe("Postem Application", () => {
 
     test("textlint機能の動作確認テスト", async ({ window }) => {
         await window.waitForLoadState("domcontentloaded");
+        await waitForAppInitialization(window);
 
         // DEBUGサービスを選択
         await window.locator(".ServiceList img").first().click();
