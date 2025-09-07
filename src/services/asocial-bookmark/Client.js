@@ -8,6 +8,7 @@ export default class Client {
      * @param {import("asocial-bookmark").AsocialBookmarkOptions}serviceOptions
      */
     constructor(serviceOptions) {
+        // GitHub tokenを含む設定をそのまま保持
         this.serviceOptions = serviceOptions;
     }
 

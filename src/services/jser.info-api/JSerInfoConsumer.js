@@ -1,6 +1,5 @@
 // LICENSE : MIT
 "use strict";
-const getConsumer = () => {
-    return require("./consumer");
-};
-export default getConsumer();
+// Deprecated: consumer.json is no longer used
+// Configuration is now passed via service options
+export default {};

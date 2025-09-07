@@ -11,12 +11,12 @@ const moment = require("moment");
 const slugg = require("slugg");
 
 // call from client
-export async function savePost(serializedObject, callback) {
+export async function savePost(serializedObject, serviceOptions) {
     if (!serializedObject) {
         throw new Error("no data for saving");
     }
     const item = JSON.parse(serializedObject);
-    return createPostFrom(item, callback);
+    return createPostFrom(item, serviceOptions);
 }
 
 function pickFromMatter(item) {
@@ -60,18 +60,17 @@ function creteSafeSlug(item) {
     return slugForItem;
 }
 
-async function createPostFrom(item) {
+async function createPostFrom(item, serviceOptions) {
     const date = moment.utc(item.date);
     const fileName = date.format("YYYY-MM-DD") + "-" + creteSafeSlug(item) + ".md";
     const fileContent = createPost(item);
-    // sync
-    const consumer = require("./consumer.json");
+    // Use serviceOptions passed from Client
     const korefile = createKoreFile({
         adaptor: createGitHubAdaptor({
-            ref: consumer.github.ref,
-            owner: consumer.github.owner,
-            repo: consumer.github.repo,
-            token: consumer.github.token
+            ref: serviceOptions.github.ref,
+            owner: serviceOptions.github.owner,
+            repo: serviceOptions.github.repo,
+            token: serviceOptions.github.token
         })
     });
     const postPath = path.join("_posts", date.format("YYYY"), fileName);

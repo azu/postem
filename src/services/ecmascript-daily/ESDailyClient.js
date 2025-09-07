@@ -1,14 +1,18 @@
 // LICENSE : MIT
 "use strict";
-const Authentication = require("@electron/remote").require(__dirname + "/ESDailyAuthentication");
 const Committer = require("@electron/remote").require(__dirname + "/ESDailyCommitter");
 export default class HatenaClient {
+    constructor(serviceOptions) {
+        this.serviceOptions = serviceOptions;
+    }
     isLogin() {
-        return Authentication.canAccess();
+        // Always return true since config is now in service options
+        return true;
     }
 
     loginAsync(callback) {
-        Authentication.requireAccess(callback);
+        // No authentication needed, config is in service options
+        return setTimeout(() => callback(), 0);
     }
 
     /**
@@ -31,6 +35,6 @@ export default class HatenaClient {
             tags: tags,
             relatedLinks: relatedItems
         });
-        return Committer.savePost(serializedObject);
+        return Committer.savePost(serializedObject, this.serviceOptions);
     }
 }

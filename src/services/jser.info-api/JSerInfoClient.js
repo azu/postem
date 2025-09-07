@@ -1,10 +1,12 @@
 // LICENSE : MIT
 "use strict";
 import { AsocialBookmark } from "asocial-bookmark";
-import Consumer from "./JSerInfoConsumer.js";
 
 const moment = require("moment");
 export default class JSerInfoClient {
+    constructor(serviceOptions) {
+        this.serviceOptions = serviceOptions;
+    }
     isLogin() {
         return true;
     }
@@ -14,10 +16,7 @@ export default class JSerInfoClient {
     }
 
     getContent(url) {
-        const asocialBookmark = new AsocialBookmark({
-            indexPropertyName: Consumer.indexPropertyName,
-            github: Consumer.github
-        });
+        const asocialBookmark = new AsocialBookmark(this.serviceOptions);
         return asocialBookmark
             .getBookmark({
                 url,
@@ -42,7 +41,7 @@ export default class JSerInfoClient {
     }
 
     getTags() {
-        const asocialBookmark = new AsocialBookmark(Consumer);
+        const asocialBookmark = new AsocialBookmark(this.serviceOptions);
         return asocialBookmark.getTags();
     }
 
@@ -58,10 +57,7 @@ export default class JSerInfoClient {
      */
     postLink(options = {}) {
         const { title, url, viaURL, comment, additionalNote, tags, relatedItems } = options;
-        const asocialBookmark = new AsocialBookmark({
-            indexPropertyName: Consumer.indexPropertyName,
-            github: Consumer.github
-        });
+        const asocialBookmark = new AsocialBookmark(this.serviceOptions);
         const date = new Date();
         const isoDate = moment().utc().toDate();
         return asocialBookmark.updateBookmark({

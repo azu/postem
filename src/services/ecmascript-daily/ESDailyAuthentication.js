@@ -1,17 +1,12 @@
-import * as fs from "fs";
-import path from "path";
+// Deprecated: Authentication is no longer needed
+// Configuration is now passed via service options
 
 exports.canAccess = function () {
-    return fs.existsSync(path.join(__dirname, "consumer.json"));
+    // Always return true since config is in service options
+    return true;
 };
-/*
-Electron bug?
-Return Promise then hand the previous window
-so, handing callback as async way
 
-I think that this limitation is caused by ipc.
- */
 exports.requireAccess = function (callback) {
-    console.error("consumer.jsonを設定してください");
-    callback(new Error("consumer.json is required"));
+    // No authentication needed, config is in service options
+    callback();
 };
