@@ -177,12 +177,11 @@ export default class ServiceStore extends Store {
         });
 
         this.register(keys.claudeCodeInsert, () => {
-            const { claudeCode, comment } = this.state;
+            const { claudeCode } = this.state;
             if (claudeCode.result) {
-                // 結果をコメントに挿入（既存のコメントがあれば改行で追加）
-                const newComment = comment ? `${comment}\n${claudeCode.result}` : claudeCode.result;
+                // 結果でコメントを入れ替え
                 this.setState({
-                    comment: newComment,
+                    comment: claudeCode.result,
                     claudeCode: {
                         status: "idle",
                         url: null,
