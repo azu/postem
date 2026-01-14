@@ -194,8 +194,8 @@ class App extends React.Component {
         const submitPostLink = this.postLink.bind(this);
 
         // Claude Code関連
-        const runClaudeCode = (url, config) => {
-            ServiceAction.runClaudeCode(url, config);
+        const runClaudeCode = (url, title, config) => {
+            ServiceAction.runClaudeCode(url, title, config);
         };
         const insertClaudeCodeResult = () => {
             ServiceAction.insertClaudeCodeResult();
@@ -218,6 +218,7 @@ class App extends React.Component {
                     <URLInput URL={this.state.URL} updateURL={updateURL} />
                     <ClaudeCodeButton
                         url={this.state.URL}
+                        title={this.state.title}
                         claudeCode={this.state.claudeCode}
                         runClaudeCode={runClaudeCode}
                         insertResult={insertClaudeCodeResult}

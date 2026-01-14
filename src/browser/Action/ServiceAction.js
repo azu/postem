@@ -195,7 +195,7 @@ export default class ServiceAction extends Action {
     }
 
     // Claude Code関連アクション
-    runClaudeCode(url, config) {
+    runClaudeCode(url, title, config) {
         if (!config?.enabled) return;
         if (!fs.existsSync(config.cliPath)) return;
         if (!fs.existsSync(config.workDir)) {
@@ -205,11 +205,16 @@ export default class ServiceAction extends Action {
 
         this.dispatch(keys.claudeCodeStart, { url });
 
+        const prompt =
+            typeof config.prompt === "function"
+                ? config.prompt({ url, title })
+                : `${config.prompt}\n\nURL: ${url}\nTitle: ${title}`;
+
         const args = [];
         if (config.mcpConfig) {
             args.push("--mcp-config", JSON.stringify(config.mcpConfig));
         }
-        args.push("--print", "--dangerously-skip-permissions", `${config.prompt}\n\nURL: ${url}`);
+        args.push("--print", "--dangerously-skip-permissions", prompt);
 
         const claudeProcess = spawn(config.cliPath, args, {
             cwd: config.workDir,

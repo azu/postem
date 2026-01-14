@@ -4,6 +4,7 @@ import React, { useEffect, useRef, useCallback } from "react";
 
 export default function ClaudeCodeButton({
     url,
+    title,
     claudeCode,
     runClaudeCode,
     insertResult,
@@ -28,7 +29,7 @@ export default function ClaudeCodeButton({
 
             // 1秒後に実行（入力中の連続変更を避ける）
             debounceTimerRef.current = setTimeout(() => {
-                runClaudeCode(url, claudeCodeConfig);
+                runClaudeCode(url, title, claudeCodeConfig);
             }, 1000);
         }
 
@@ -39,7 +40,7 @@ export default function ClaudeCodeButton({
                 clearTimeout(debounceTimerRef.current);
             }
         };
-    }, [url, claudeCodeConfig, runClaudeCode]);
+    }, [url, title, claudeCodeConfig, runClaudeCode]);
 
     const handleClick = useCallback(() => {
         if (claudeCode.status === "complete") {
@@ -48,10 +49,10 @@ export default function ClaudeCodeButton({
         } else if (claudeCode.status === "idle" || claudeCode.status === "error") {
             // アイドルまたはエラー状態の場合は実行
             if (url && url.startsWith("http")) {
-                runClaudeCode(url, claudeCodeConfig);
+                runClaudeCode(url, title, claudeCodeConfig);
             }
         }
-    }, [claudeCode.status, url, claudeCodeConfig, runClaudeCode, insertResult]);
+    }, [claudeCode.status, url, title, claudeCodeConfig, runClaudeCode, insertResult]);
 
     // 設定が無効またはCLIが設定されていない場合は表示しない
     if (!claudeCodeConfig?.enabled) {
