@@ -14,5 +14,11 @@ export default {
     removeRelatedItem: Symbol("removeRelatedItem"),
     finishEditingRelatedItem: Symbol("finishEditingRelatedItem"),
     enableService: Symbol("enableService"),
-    disableService: Symbol("disableService")
+    disableService: Symbol("disableService"),
+    // Claude Code関連
+    claudeCodeStart: Symbol("claudeCodeStart"),
+    claudeCodeComplete: Symbol("claudeCodeComplete"),
+    claudeCodeError: Symbol("claudeCodeError"),
+    claudeCodeClear: Symbol("claudeCodeClear"),
+    claudeCodeInsert: Symbol("claudeCodeInsert")
 };

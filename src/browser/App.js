@@ -10,8 +10,10 @@ import TitleInput from "./component/TitleInput";
 import SubmitButton from "./component/SubmitButton";
 import RelatedListBox from "./component/RelatedListBox";
 import ServiceList from "./component/ServiceList";
+import ClaudeCodeButton from "./component/ClaudeCodeButton";
+import ClaudeCodePreview from "./component/ClaudeCodePreview";
 import AppContext from "./AppContext";
-import serviceManger, { waitForInitialization } from "./service-instance";
+import serviceManger, { waitForInitialization, getClaudeCodeConfig } from "./service-instance";
 
 const ipcRenderer = require("electron").ipcRenderer;
 const appContext = new AppContext();
@@ -20,6 +22,7 @@ class App extends React.Component {
     constructor(...args) {
         super(...args);
         this._TagSelect = null;
+        this._claudeCodeConfig = getClaudeCodeConfig();
         this.state = Object.assign(
             {
                 initialized: false
@@ -70,7 +73,9 @@ class App extends React.Component {
             const service = serviceManger.getTagService();
             if (service && state.selectedTags.length === 0 && state.comment.length === 0) {
                 appContext.ServiceAction.fetchContent(service, URL)
-                    .then(({ comment, tags, relatedItems }) => {
+                    .then((result) => {
+                        if (!result) return;
+                        const { comment, tags, relatedItems } = result;
                         if (comment) {
                             appContext.ServiceAction.updateComment(comment);
                         }
@@ -187,6 +192,18 @@ class App extends React.Component {
             ServiceAction.addRelatedItem();
         };
         const submitPostLink = this.postLink.bind(this);
+
+        // Claude Code関連
+        const runClaudeCode = (url, config) => {
+            ServiceAction.runClaudeCode(url, config);
+        };
+        const insertClaudeCodeResult = () => {
+            ServiceAction.insertClaudeCodeResult();
+        };
+        const clearClaudeCodeResult = () => {
+            ServiceAction.clearClaudeCodeResult();
+        };
+
         return (
             <div className="App">
                 <ServiceList
@@ -197,7 +214,17 @@ class App extends React.Component {
                     login={login}
                 />
                 <TitleInput title={this.state.title} updateTitle={updateTitle} />
-                <URLInput URL={this.state.URL} updateURL={updateURL} />
+                <div className="URLInputRow">
+                    <URLInput URL={this.state.URL} updateURL={updateURL} />
+                    <ClaudeCodeButton
+                        url={this.state.URL}
+                        claudeCode={this.state.claudeCode}
+                        runClaudeCode={runClaudeCode}
+                        insertResult={insertClaudeCodeResult}
+                        clearResult={clearClaudeCodeResult}
+                        claudeCodeConfig={this._claudeCodeConfig}
+                    />
+                </div>
                 <ViaURLInput URL={this.state.viaURL} updateURL={updateViaURL} />
                 <TagSelect
                     ref={(c) => (this._TagSelect = c)}
@@ -205,12 +232,18 @@ class App extends React.Component {
                     selectTags={selectTags}
                     selectedTags={this.state.selectedTags}
                 />
+                <ClaudeCodePreview
+                    claudeCode={this.state.claudeCode}
+                    insertResult={insertClaudeCodeResult}
+                    clearResult={clearClaudeCodeResult}
+                />
                 <Editor
                     value={this.state.comment}
                     onChange={updateComment}
                     onSubmit={submitPostLink}
                     services={services}
                     toggleServiceAtIndex={toggleServiceAtIndex}
+                    onInsertClaudeCode={insertClaudeCodeResult}
                 />
                 <RelatedListBox
                     relatedItems={this.state.relatedItems}

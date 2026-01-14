@@ -8,6 +8,8 @@ import notie from "notie";
 import { show as LoadingShow, dismiss as LoadingDismiss } from "../view-util/Loading";
 import RelatedItemModel from "../models/RelatedItemModel";
 import serviceInstance from "../service-instance";
+import { spawn } from "child_process";
+import fs from "fs";
 
 export default class ServiceAction extends Action {
     fetchTags(service) {
@@ -190,5 +192,61 @@ export default class ServiceAction extends Action {
 
     resetField() {
         this.dispatch(keys.resetField);
+    }
+
+    // Claude Code関連アクション
+    runClaudeCode(url, config) {
+        if (!config?.enabled) return;
+        if (!fs.existsSync(config.cliPath)) return;
+        if (!fs.existsSync(config.workDir)) {
+            this.dispatch(keys.claudeCodeError, { url, error: `WorkDir not found: ${config.workDir}` });
+            return;
+        }
+
+        this.dispatch(keys.claudeCodeStart, { url });
+
+        const args = [];
+        if (config.mcpConfig) {
+            args.push("--mcp-config", JSON.stringify(config.mcpConfig));
+        }
+        args.push("--print", "--dangerously-skip-permissions", `${config.prompt}\n\nURL: ${url}`);
+
+        const claudeProcess = spawn(config.cliPath, args, {
+            cwd: config.workDir,
+            env: {
+                ...process.env,
+                PATH: "/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:" + process.env.PATH
+            },
+            shell: false,
+            stdio: ["ignore", "pipe", "pipe"]
+        });
+
+        let stdout = "";
+        let stderr = "";
+
+        claudeProcess.stdout.on("data", (data) => (stdout += data.toString()));
+        claudeProcess.stderr.on("data", (data) => (stderr += data.toString()));
+
+        claudeProcess.on("close", (code) => {
+            if (code === 0 && stdout) {
+                const match = stdout.match(/```(?:markdown)?\s*([\s\S]*?)```/);
+                const result = match ? match[1].trim() : stdout.trim();
+                this.dispatch(keys.claudeCodeComplete, { url, result });
+            } else {
+                this.dispatch(keys.claudeCodeError, { url, error: stderr || `Exit code: ${code}` });
+            }
+        });
+
+        claudeProcess.on("error", (error) => {
+            this.dispatch(keys.claudeCodeError, { url, error: error.message });
+        });
+    }
+
+    clearClaudeCodeResult() {
+        this.dispatch(keys.claudeCodeClear);
+    }
+
+    insertClaudeCodeResult() {
+        this.dispatch(keys.claudeCodeInsert);
     }
 }

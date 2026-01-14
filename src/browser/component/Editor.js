@@ -58,7 +58,7 @@ const textlintLinter = createTextlintLinter();
 
 const Combokeys = require("combokeys");
 
-export default function Editor({ value, onChange, onSubmit, services, toggleServiceAtIndex }) {
+export default function Editor({ value, onChange, onSubmit, services, toggleServiceAtIndex, onInsertClaudeCode }) {
     const combokeysRef = useRef(null);
 
     useEffect(() => {
@@ -78,12 +78,19 @@ export default function Editor({ value, onChange, onSubmit, services, toggleServ
             toggleServiceAtIndex(services.length - 1);
         });
 
+        // Cmd+Shift+J でClaude Codeの結果を挿入
+        combokeysRef.current.bindGlobal(`command+shift+j`, () => {
+            if (onInsertClaudeCode) {
+                onInsertClaudeCode();
+            }
+        });
+
         return () => {
             if (combokeysRef.current) {
                 combokeysRef.current.detach();
             }
         };
-    }, [services.length, toggleServiceAtIndex, onSubmit]); // Ensure toggleServiceAtIndex and onSubmit are memoized in the parent component
+    }, [services.length, toggleServiceAtIndex, onSubmit, onInsertClaudeCode]); // Ensure toggleServiceAtIndex and onSubmit are memoized in the parent component
 
     // 最小高さを設定するテーマ
     const minHeightTheme = EditorView.theme({
