@@ -75,5 +75,19 @@ export async function waitForInitialization() {
     return initializeManager();
 }
 
+// Claude Code設定を取得
+export function getClaudeCodeConfig() {
+    try {
+        if (process.env.PLAYWRIGHT_TEST === "1" || process.title?.includes("playwright")) {
+            return { enabled: false };
+        }
+        const serviceModule = notBundledRequire("../service.js");
+        return serviceModule.claudeCodeConfig || { enabled: false };
+    } catch (error) {
+        console.error("Failed to load Claude Code config:", error);
+        return { enabled: false };
+    }
+}
+
 // デフォルトエクスポートはmanagerのままだが、使用前に初期化が必要
 export default manager;

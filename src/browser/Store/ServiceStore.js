@@ -18,7 +18,14 @@ export default class ServiceStore extends Store {
             tags: ServiceStorage.get("tags") || [],
             selectedTags: [],
             relatedItems: [],
-            enabledServiceIDs: []
+            enabledServiceIDs: [],
+            // Claude Code関連
+            claudeCode: {
+                status: "idle", // idle | loading | complete | error
+                url: null,
+                result: null,
+                error: null
+            }
         };
         this.register(keys.fetchTags, (tags) => {
             if (tags.length > 0) {
@@ -75,7 +82,13 @@ export default class ServiceStore extends Store {
                 quote: "",
                 selectedTags: [],
                 relatedItems: [],
-                enabledServiceIDs: checkedServicesByDefault
+                enabledServiceIDs: checkedServicesByDefault,
+                claudeCode: {
+                    status: "idle",
+                    url: null,
+                    result: null,
+                    error: null
+                }
             });
         };
         this.register(keys.resetField, resetState);
@@ -117,5 +130,67 @@ export default class ServiceStore extends Store {
         };
         this.register(keys.editRelatedItem, updateRelatedItem);
         this.register(keys.finishEditingRelatedItem, updateRelatedItem);
+
+        // Claude Code関連
+        this.register(keys.claudeCodeStart, ({ url }) => {
+            this.setState({
+                claudeCode: {
+                    status: "loading",
+                    url,
+                    result: null,
+                    error: null
+                }
+            });
+        });
+
+        this.register(keys.claudeCodeComplete, ({ url, result }) => {
+            this.setState({
+                claudeCode: {
+                    status: "complete",
+                    url,
+                    result,
+                    error: null
+                }
+            });
+        });
+
+        this.register(keys.claudeCodeError, ({ url, error }) => {
+            this.setState({
+                claudeCode: {
+                    status: "error",
+                    url,
+                    result: null,
+                    error
+                }
+            });
+        });
+
+        this.register(keys.claudeCodeClear, () => {
+            this.setState({
+                claudeCode: {
+                    status: "idle",
+                    url: null,
+                    result: null,
+                    error: null
+                }
+            });
+        });
+
+        this.register(keys.claudeCodeInsert, () => {
+            const { claudeCode, comment } = this.state;
+            if (claudeCode.result) {
+                // 結果をコメントに挿入（既存のコメントがあれば改行で追加）
+                const newComment = comment ? `${comment}\n${claudeCode.result}` : claudeCode.result;
+                this.setState({
+                    comment: newComment,
+                    claudeCode: {
+                        status: "idle",
+                        url: null,
+                        result: null,
+                        error: null
+                    }
+                });
+            }
+        });
     }
 }

@@ -9,6 +9,10 @@ import { show as LoadingShow, dismiss as LoadingDismiss } from "../view-util/Loa
 import RelatedItemModel from "../models/RelatedItemModel";
 import serviceInstance from "../service-instance";
 
+const { spawn } = require("child_process");
+const fs = require("fs");
+const path = require("path");
+
 export default class ServiceAction extends Action {
     fetchTags(service) {
         const client = serviceInstance.getClient(service);
@@ -190,5 +194,135 @@ export default class ServiceAction extends Action {
 
     resetField() {
         this.dispatch(keys.resetField);
+    }
+
+    // Claude Code関連アクション
+    runClaudeCode(url, config) {
+        if (!config || !config.enabled) {
+            console.log("[ClaudeCode] Disabled or no config");
+            return;
+        }
+
+        // CLIが存在するかチェック
+        const cliPath = config.cliPath;
+        if (!fs.existsSync(cliPath)) {
+            console.warn(`[ClaudeCode] CLI not found at ${cliPath}`);
+            return;
+        }
+
+        console.log(`[ClaudeCode] Starting for URL: ${url}`);
+        console.log(`[ClaudeCode] CLI: ${cliPath}`);
+        console.log(`[ClaudeCode] WorkDir: ${config.workDir}`);
+
+        const workDir = config.workDir;
+
+        // 作業ディレクトリの存在確認
+        if (!fs.existsSync(workDir)) {
+            console.error(`[ClaudeCode] WorkDir does not exist: ${workDir}`);
+            this.dispatch(keys.claudeCodeError, { url, error: `WorkDir does not exist: ${workDir}` });
+            return;
+        }
+        console.log(`[ClaudeCode] WorkDir exists: OK`);
+
+        this.dispatch(keys.claudeCodeStart, { url });
+
+        // 設定からプロンプトを使用
+        const prompt = `${config.prompt}\n\nURL: ${url}`;
+
+        // Claude Code CLIを--print付きで実行（ワンショットモード）
+        // ツール許可オプションを追加
+        const args = [];
+
+        // MCP設定がある場合は追加
+        if (config.mcpConfig) {
+            const mcpJson = JSON.stringify(config.mcpConfig);
+            args.push("--mcp-config", mcpJson);
+            console.log(`[ClaudeCode] MCP config: ${mcpJson.slice(0, 100)}...`);
+        }
+
+        args.push("--print", "--dangerously-skip-permissions", prompt);
+        console.log(
+            `[ClaudeCode] Spawning: ${cliPath} ${
+                config.mcpConfig ? "--mcp-config <json> " : ""
+            }--print --dangerously-skip-permissions <prompt>`
+        );
+        console.log(`[ClaudeCode] Prompt length: ${prompt.length} chars`);
+        console.log(`[ClaudeCode] Prompt (last 200 chars): ...${prompt.slice(-200)}`);
+
+        const spawnEnv = {
+            ...process.env,
+            HOME: process.env.HOME,
+            PATH: "/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:" + process.env.PATH,
+            TERM: "xterm-256color"
+        };
+        console.log(`[ClaudeCode] HOME: ${spawnEnv.HOME}`);
+
+        const claudeProcess = spawn(cliPath, args, {
+            cwd: workDir,
+            env: spawnEnv,
+            shell: false,
+            stdio: ["ignore", "pipe", "pipe"]
+        });
+
+        console.log(`[ClaudeCode] Process started (PID: ${claudeProcess.pid})`);
+
+        // stdinを閉じる（claudeがstdinを待たないように）
+        if (claudeProcess.stdin) {
+            claudeProcess.stdin.end();
+        }
+
+        let stdout = "";
+        let stderr = "";
+
+        claudeProcess.stdout.on("data", (data) => {
+            const chunk = data.toString();
+            stdout += chunk;
+            // 進捗表示（最初の100文字だけ表示）
+            const preview = chunk.length > 100 ? chunk.slice(0, 100) + "..." : chunk;
+            console.log(`[ClaudeCode] stdout: ${preview.replace(/\n/g, "\\n")}`);
+        });
+
+        claudeProcess.stderr.on("data", (data) => {
+            const chunk = data.toString();
+            stderr += chunk;
+            console.log(`[ClaudeCode] stderr: ${chunk.replace(/\n/g, "\\n")}`);
+        });
+
+        claudeProcess.on("close", (code) => {
+            console.log(`[ClaudeCode] Process exited with code: ${code}`);
+            if (code === 0 && stdout) {
+                // 出力から説明文を抽出
+                const result = this._extractDescription(stdout);
+                console.log(`[ClaudeCode] Success! Result length: ${result.length}`);
+                console.log(`[ClaudeCode] Result preview: ${result.slice(0, 200)}...`);
+                this.dispatch(keys.claudeCodeComplete, { url, result });
+            } else {
+                console.error("[ClaudeCode] Error:", stderr || `Exit code: ${code}`);
+                this.dispatch(keys.claudeCodeError, { url, error: stderr || `Exit code: ${code}` });
+            }
+        });
+
+        claudeProcess.on("error", (error) => {
+            console.error("[ClaudeCode] Spawn error:", error);
+            this.dispatch(keys.claudeCodeError, { url, error: error.message });
+        });
+    }
+
+    _extractDescription(output) {
+        // 出力からマークダウンコードブロック内の説明文を抽出
+        const codeBlockMatch = output.match(/```(?:markdown)?\s*([\s\S]*?)```/);
+        if (codeBlockMatch) {
+            return codeBlockMatch[1].trim();
+        }
+        // コードブロックがない場合はそのまま返す
+        return output.trim();
+    }
+
+    clearClaudeCodeResult() {
+        this.dispatch(keys.claudeCodeClear);
+    }
+
+    insertClaudeCodeResult() {
+        this.dispatch(keys.claudeCodeInsert);
     }
 }
