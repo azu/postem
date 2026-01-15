@@ -9,7 +9,9 @@ export default function ClaudeCodeButton({
     runClaudeCode,
     insertResult,
     clearResult,
-    claudeCodeConfig
+    claudeCodeConfig,
+    relatedItems = [],
+    availableTags = []
 }) {
     const prevUrlRef = useRef(url);
     const debounceTimerRef = useRef(null);
@@ -29,7 +31,7 @@ export default function ClaudeCodeButton({
 
             // 1秒後に実行（入力中の連続変更を避ける）
             debounceTimerRef.current = setTimeout(() => {
-                runClaudeCode(url, title, claudeCodeConfig);
+                runClaudeCode(url, title, claudeCodeConfig, relatedItems, availableTags);
             }, 1000);
         }
 
@@ -40,7 +42,7 @@ export default function ClaudeCodeButton({
                 clearTimeout(debounceTimerRef.current);
             }
         };
-    }, [url, title, claudeCodeConfig, runClaudeCode]);
+    }, [url, title, claudeCodeConfig, runClaudeCode, relatedItems, availableTags]);
 
     const handleClick = useCallback(() => {
         if (claudeCode.status === "complete") {
@@ -49,10 +51,10 @@ export default function ClaudeCodeButton({
         } else if (claudeCode.status === "idle" || claudeCode.status === "error") {
             // アイドルまたはエラー状態の場合は実行
             if (url && url.startsWith("http")) {
-                runClaudeCode(url, title, claudeCodeConfig);
+                runClaudeCode(url, title, claudeCodeConfig, relatedItems, availableTags);
             }
         }
-    }, [claudeCode.status, url, title, claudeCodeConfig, runClaudeCode, insertResult]);
+    }, [claudeCode.status, url, title, claudeCodeConfig, runClaudeCode, insertResult, relatedItems, availableTags]);
 
     // 設定が無効またはCLIが設定されていない場合は表示しない
     if (!claudeCodeConfig?.enabled) {
@@ -70,7 +72,7 @@ export default function ClaudeCodeButton({
                 );
             case "complete":
                 return (
-                    <span className="ClaudeCodeButton-complete" title={claudeCode.result}>
+                    <span className="ClaudeCodeButton-complete" title={claudeCode.comment}>
                         AI ✓
                     </span>
                 );

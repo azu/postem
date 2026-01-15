@@ -23,7 +23,8 @@ export default class ServiceStore extends Store {
             claudeCode: {
                 status: "idle", // idle | loading | complete | error
                 url: null,
-                result: null,
+                comment: null,
+                tags: [],
                 error: null
             }
         };
@@ -86,7 +87,8 @@ export default class ServiceStore extends Store {
                 claudeCode: {
                     status: "idle",
                     url: null,
-                    result: null,
+                    comment: null,
+                    tags: [],
                     error: null
                 }
             });
@@ -137,18 +139,20 @@ export default class ServiceStore extends Store {
                 claudeCode: {
                     status: "loading",
                     url,
-                    result: null,
+                    comment: null,
+                    tags: [],
                     error: null
                 }
             });
         });
 
-        this.register(keys.claudeCodeComplete, ({ url, result }) => {
+        this.register(keys.claudeCodeComplete, ({ url, comment, tags }) => {
             this.setState({
                 claudeCode: {
                     status: "complete",
                     url,
-                    result,
+                    comment,
+                    tags: tags || [],
                     error: null
                 }
             });
@@ -159,7 +163,8 @@ export default class ServiceStore extends Store {
                 claudeCode: {
                     status: "error",
                     url,
-                    result: null,
+                    comment: null,
+                    tags: [],
                     error
                 }
             });
@@ -170,22 +175,29 @@ export default class ServiceStore extends Store {
                 claudeCode: {
                     status: "idle",
                     url: null,
-                    result: null,
+                    comment: null,
+                    tags: [],
                     error: null
                 }
             });
         });
 
         this.register(keys.claudeCodeInsert, () => {
-            const { claudeCode } = this.state;
-            if (claudeCode.result) {
-                // 結果でコメントを入れ替え
+            const { claudeCode, selectedTags } = this.state;
+            if (claudeCode.comment) {
+                // タグをマージ（重複排除）
+                const newTags = claudeCode.tags || [];
+                const mergedTags = [...new Set([...selectedTags, ...newTags])];
+
+                // 結果でコメントを入れ替え、タグも追加
                 this.setState({
-                    comment: claudeCode.result,
+                    comment: claudeCode.comment,
+                    selectedTags: mergedTags,
                     claudeCode: {
                         status: "idle",
                         url: null,
-                        result: null,
+                        comment: null,
+                        tags: [],
                         error: null
                     }
                 });

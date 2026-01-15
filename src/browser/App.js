@@ -187,6 +187,25 @@ class App extends React.Component {
         };
         const finishEditing = (relatedItem, value) => {
             ServiceAction.finishEditingRelatedItem(relatedItem, value);
+
+            // 関連URL追加時に再推論
+            if (
+                this._claudeCodeConfig?.enabled &&
+                this.state.claudeCode.status !== "loading" &&
+                this.state.URL?.startsWith("http")
+            ) {
+                // 少し遅延を入れてstateが更新されてから実行
+                setTimeout(() => {
+                    const updatedRelatedItems = appContext.ServiceStore.state.relatedItems;
+                    ServiceAction.runClaudeCode(
+                        this.state.URL,
+                        this.state.title,
+                        this._claudeCodeConfig,
+                        updatedRelatedItems,
+                        this.state.tags
+                    );
+                }, 100);
+            }
         };
         const addItem = () => {
             ServiceAction.addRelatedItem();
@@ -194,8 +213,8 @@ class App extends React.Component {
         const submitPostLink = this.postLink.bind(this);
 
         // Claude Code関連
-        const runClaudeCode = (url, title, config) => {
-            ServiceAction.runClaudeCode(url, title, config);
+        const runClaudeCode = (url, title, config, relatedItems = [], availableTags = []) => {
+            ServiceAction.runClaudeCode(url, title, config, relatedItems, availableTags);
         };
         const insertClaudeCodeResult = () => {
             ServiceAction.insertClaudeCodeResult();
@@ -224,6 +243,8 @@ class App extends React.Component {
                         insertResult={insertClaudeCodeResult}
                         clearResult={clearClaudeCodeResult}
                         claudeCodeConfig={this._claudeCodeConfig}
+                        relatedItems={this.state.relatedItems}
+                        availableTags={this.state.tags}
                     />
                 </div>
                 <ViaURLInput URL={this.state.viaURL} updateURL={updateViaURL} />
