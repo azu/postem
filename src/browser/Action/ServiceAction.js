@@ -214,6 +214,7 @@ export default class ServiceAction extends Action {
         if (config.mcpConfig) {
             args.push("--mcp-config", JSON.stringify(config.mcpConfig));
         }
+        args.push("--output-format", "json");
         args.push("--print", "--dangerously-skip-permissions", prompt);
 
         const claudeProcess = spawn(config.cliPath, args, {
@@ -234,25 +235,28 @@ export default class ServiceAction extends Action {
 
         claudeProcess.on("close", (code) => {
             if (code === 0 && stdout) {
-                // JSONコードブロックを抽出
-                const jsonMatch = stdout.match(/```(?:json)?\s*([\s\S]*?)```/);
                 let parsedResult = { comment: "", tags: [] };
 
-                if (jsonMatch) {
+                try {
+                    // CLIのJSON出力をパース
+                    const cliOutput = JSON.parse(stdout);
+                    const resultText = cliOutput.result || "";
+
+                    // resultの中身をJSONとしてパース
                     try {
-                        parsedResult = JSON.parse(jsonMatch[1].trim());
-                    } catch (e) {
-                        // フォールバック: 従来のmarkdown形式
-                        const markdownMatch = stdout.match(/```(?:markdown)?\s*([\s\S]*?)```/);
-                        parsedResult.comment = markdownMatch ? markdownMatch[1].trim() : stdout.trim();
+                        parsedResult = JSON.parse(resultText);
+                    } catch {
+                        // フォールバック: resultをそのままcommentとして使用
+                        parsedResult.comment = resultText;
                     }
-                } else {
+                } catch {
+                    // CLIのJSON出力パース失敗時のフォールバック
                     parsedResult.comment = stdout.trim();
                 }
 
                 this.dispatch(keys.claudeCodeComplete, {
                     url,
-                    comment: parsedResult.comment,
+                    comment: parsedResult.comment || "",
                     tags: Array.isArray(parsedResult.tags) ? parsedResult.tags : []
                 });
             } else {
