@@ -195,7 +195,7 @@ export default class ServiceAction extends Action {
     }
 
     // Claude Code関連アクション
-    runClaudeCode(url, title, config) {
+    runClaudeCode(url, title, config, relatedItems = [], availableTags = []) {
         if (!config?.enabled) return;
         if (!fs.existsSync(config.cliPath)) return;
         if (!fs.existsSync(config.workDir)) {
@@ -207,7 +207,7 @@ export default class ServiceAction extends Action {
 
         const prompt =
             typeof config.prompt === "function"
-                ? config.prompt({ url, title })
+                ? config.prompt({ url, title, relatedItems, availableTags })
                 : `${config.prompt}\n\nURL: ${url}\nTitle: ${title}`;
 
         const args = [];
@@ -234,9 +234,27 @@ export default class ServiceAction extends Action {
 
         claudeProcess.on("close", (code) => {
             if (code === 0 && stdout) {
-                const match = stdout.match(/```(?:markdown)?\s*([\s\S]*?)```/);
-                const result = match ? match[1].trim() : stdout.trim();
-                this.dispatch(keys.claudeCodeComplete, { url, result });
+                // JSONコードブロックを抽出
+                const jsonMatch = stdout.match(/```(?:json)?\s*([\s\S]*?)```/);
+                let parsedResult = { comment: "", tags: [] };
+
+                if (jsonMatch) {
+                    try {
+                        parsedResult = JSON.parse(jsonMatch[1].trim());
+                    } catch (e) {
+                        // フォールバック: 従来のmarkdown形式
+                        const markdownMatch = stdout.match(/```(?:markdown)?\s*([\s\S]*?)```/);
+                        parsedResult.comment = markdownMatch ? markdownMatch[1].trim() : stdout.trim();
+                    }
+                } else {
+                    parsedResult.comment = stdout.trim();
+                }
+
+                this.dispatch(keys.claudeCodeComplete, {
+                    url,
+                    comment: parsedResult.comment,
+                    tags: Array.isArray(parsedResult.tags) ? parsedResult.tags : []
+                });
             } else {
                 this.dispatch(keys.claudeCodeError, { url, error: stderr || `Exit code: ${code}` });
             }

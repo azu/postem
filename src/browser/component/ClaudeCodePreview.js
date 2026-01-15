@@ -21,7 +21,7 @@ export default function ClaudeCodePreview({ claudeCode, insertResult, clearResul
         );
     }
 
-    if (claudeCode.status === "complete" && claudeCode.result) {
+    if (claudeCode.status === "complete" && claudeCode.comment) {
         return (
             <div className="ClaudeCodePreview ClaudeCodePreview--complete">
                 <div className="ClaudeCodePreview-header">
@@ -32,8 +32,11 @@ export default function ClaudeCodePreview({ claudeCode, insertResult, clearResul
                     </button>
                 </div>
                 <div className="ClaudeCodePreview-content" onClick={insertResult} title="クリックで挿入">
-                    {claudeCode.result}
+                    {claudeCode.comment}
                 </div>
+                {claudeCode.tags && claudeCode.tags.length > 0 && (
+                    <div className="ClaudeCodePreview-tags">Tags: {claudeCode.tags.join(", ")}</div>
+                )}
             </div>
         );
     }
