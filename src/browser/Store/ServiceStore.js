@@ -25,7 +25,8 @@ export default class ServiceStore extends Store {
                 url: null,
                 comment: null,
                 tags: [],
-                error: null
+                error: null,
+                startedAt: null
             }
         };
         this.register(keys.fetchTags, (tags) => {
@@ -89,7 +90,8 @@ export default class ServiceStore extends Store {
                     url: null,
                     comment: null,
                     tags: [],
-                    error: null
+                    error: null,
+                    startedAt: null
                 }
             });
         };
@@ -141,7 +143,8 @@ export default class ServiceStore extends Store {
                     url,
                     comment: null,
                     tags: [],
-                    error: null
+                    error: null,
+                    startedAt: Date.now()
                 }
             });
         });
@@ -153,7 +156,8 @@ export default class ServiceStore extends Store {
                     url,
                     comment,
                     tags: tags || [],
-                    error: null
+                    error: null,
+                    startedAt: null
                 }
             });
         });
@@ -165,7 +169,8 @@ export default class ServiceStore extends Store {
                     url,
                     comment: null,
                     tags: [],
-                    error
+                    error,
+                    startedAt: null
                 }
             });
         });
@@ -177,7 +182,8 @@ export default class ServiceStore extends Store {
                     url: null,
                     comment: null,
                     tags: [],
-                    error: null
+                    error: null,
+                    startedAt: null
                 }
             });
         });
@@ -198,7 +204,8 @@ export default class ServiceStore extends Store {
                         url: null,
                         comment: null,
                         tags: [],
-                        error: null
+                        error: null,
+                        startedAt: null
                     }
                 });
             }

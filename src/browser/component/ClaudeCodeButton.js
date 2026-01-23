@@ -1,6 +1,6 @@
 // LICENSE : MIT
 "use strict";
-import React, { useEffect, useRef, useCallback } from "react";
+import React, { useEffect, useRef, useCallback, useState } from "react";
 
 export default function ClaudeCodeButton({
     url,
@@ -15,6 +15,7 @@ export default function ClaudeCodeButton({
 }) {
     const prevUrlRef = useRef(url);
     const debounceTimerRef = useRef(null);
+    const [elapsed, setElapsed] = useState(0);
 
     // URLが変更されたら自動でClaude Codeを実行（デバウンス付き）
     useEffect(() => {
@@ -44,6 +45,19 @@ export default function ClaudeCodeButton({
         };
     }, [url, title, claudeCodeConfig, runClaudeCode, relatedItems, availableTags]);
 
+    // 経過時間タイマー
+    useEffect(() => {
+        if (claudeCode.status !== "loading" || !claudeCode.startedAt) {
+            setElapsed(0);
+            return;
+        }
+        setElapsed(Math.floor((Date.now() - claudeCode.startedAt) / 1000));
+        const timer = setInterval(() => {
+            setElapsed(Math.floor((Date.now() - claudeCode.startedAt) / 1000));
+        }, 1000);
+        return () => clearInterval(timer);
+    }, [claudeCode.status, claudeCode.startedAt]);
+
     const handleClick = useCallback(() => {
         if (claudeCode.status === "complete") {
             // 結果がある場合は挿入
@@ -67,7 +81,7 @@ export default function ClaudeCodeButton({
                 return (
                     <span className="ClaudeCodeButton-loading">
                         <span className="ClaudeCodeButton-spinner"></span>
-                        AI
+                        AI {elapsed}s
                     </span>
                 );
             case "complete":
@@ -97,7 +111,7 @@ export default function ClaudeCodeButton({
                 claudeCode.status === "complete"
                     ? "Cmd+Shift+J で挿入"
                     : claudeCode.status === "loading"
-                    ? "実行中..."
+                    ? `実行中... ${elapsed}s`
                     : "Claude Codeで説明文を生成"
             }
         >

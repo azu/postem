@@ -234,7 +234,6 @@ export default class ServiceAction extends Action {
 
         claudeProcess.on("close", (code) => {
             if (code === 0 && stdout) {
-                // JSONコードブロックを抽出
                 const jsonMatch = stdout.match(/```(?:json)?\s*([\s\S]*?)```/);
                 let parsedResult = { comment: "", tags: [] };
 
@@ -242,7 +241,6 @@ export default class ServiceAction extends Action {
                     try {
                         parsedResult = JSON.parse(jsonMatch[1].trim());
                     } catch (e) {
-                        // フォールバック: 従来のmarkdown形式
                         const markdownMatch = stdout.match(/```(?:markdown)?\s*([\s\S]*?)```/);
                         parsedResult.comment = markdownMatch ? markdownMatch[1].trim() : stdout.trim();
                     }
