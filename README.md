@@ -124,6 +124,7 @@ export const claudeCodeConfig = {
     enabled: true,
     cliPath: process.env.CLAUDE_CODE_CLI_PATH || `${process.env.HOME}/.local/bin/claude`,
     workDir: "/path/to/work/dir",
+    model: "claude-sonnet-4-5-20250929", // オプション: 使用するモデル
     mcpConfig: {
         mcpServers: {
             // HTTP MCP Server
@@ -153,6 +154,7 @@ export const claudeCodeConfig = {
 | `enabled` | 機能の有効/無効 |
 | `cliPath` | Claude Code CLIのパス |
 | `workDir` | 作業ディレクトリ（MCPサーバーの実行に影響） |
+| `model` | 使用するモデル（オプション、例: `claude-sonnet-4-5-20250929`） |
 | `mcpConfig` | MCPサーバー設定（オプション） |
 | `prompt` | Claude Codeに渡すプロンプト（文字列または`({ url, title }) => string`形式の関数） |
 

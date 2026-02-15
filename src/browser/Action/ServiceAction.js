@@ -211,6 +211,9 @@ export default class ServiceAction extends Action {
                 : `${config.prompt}\n\nURL: ${url}\nTitle: ${title}`;
 
         const args = [];
+        if (config.model) {
+            args.push("--model", config.model);
+        }
         if (config.mcpConfig) {
             args.push("--mcp-config", JSON.stringify(config.mcpConfig));
         }
