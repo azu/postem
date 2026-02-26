@@ -59,7 +59,13 @@ export default function ClaudeCodeButton({
     }, [claudeCode.status, claudeCode.startedAt]);
 
     const handleClick = useCallback(() => {
-        if (claudeCode.status === "complete") {
+        if (claudeCode.status === "loading") {
+            // loading中のクリックでやり直し
+            clearResult();
+            if (url && url.startsWith("http")) {
+                runClaudeCode(url, title, claudeCodeConfig, relatedItems, availableTags);
+            }
+        } else if (claudeCode.status === "complete") {
             // 結果がある場合は挿入
             insertResult();
         } else if (claudeCode.status === "idle" || claudeCode.status === "error") {
@@ -68,7 +74,17 @@ export default function ClaudeCodeButton({
                 runClaudeCode(url, title, claudeCodeConfig, relatedItems, availableTags);
             }
         }
-    }, [claudeCode.status, url, title, claudeCodeConfig, runClaudeCode, insertResult, relatedItems, availableTags]);
+    }, [
+        claudeCode.status,
+        url,
+        title,
+        claudeCodeConfig,
+        runClaudeCode,
+        insertResult,
+        clearResult,
+        relatedItems,
+        availableTags
+    ]);
 
     // 設定が無効またはCLIが設定されていない場合は表示しない
     if (!claudeCodeConfig?.enabled) {
@@ -106,12 +122,11 @@ export default function ClaudeCodeButton({
             type="button"
             className={`ClaudeCodeButton ClaudeCodeButton--${claudeCode.status}`}
             onClick={handleClick}
-            disabled={claudeCode.status === "loading"}
             title={
                 claudeCode.status === "complete"
                     ? "Cmd+Shift+J で挿入"
                     : claudeCode.status === "loading"
-                    ? `実行中... ${elapsed}s`
+                    ? `実行中... ${elapsed}s（クリックでやり直し）`
                     : "Claude Codeで説明文を生成"
             }
         >

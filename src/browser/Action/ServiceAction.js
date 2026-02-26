@@ -12,6 +12,9 @@ import { spawn } from "child_process";
 import fs from "fs";
 
 export default class ServiceAction extends Action {
+    _claudeProcess = null;
+    _claudeRunId = 0;
+
     fetchTags(service) {
         const client = serviceInstance.getClient(service);
         if (!client.isLogin()) {
@@ -203,6 +206,13 @@ export default class ServiceAction extends Action {
             return;
         }
 
+        // 前のプロセスを停止
+        if (this._claudeProcess) {
+            this._claudeProcess.kill();
+            this._claudeProcess = null;
+        }
+
+        const runId = ++this._claudeRunId;
         this.dispatch(keys.claudeCodeStart, { url });
 
         const prompt =
@@ -228,6 +238,7 @@ export default class ServiceAction extends Action {
             shell: false,
             stdio: ["ignore", "pipe", "pipe"]
         });
+        this._claudeProcess = claudeProcess;
 
         let stdout = "";
         let stderr = "";
@@ -236,6 +247,12 @@ export default class ServiceAction extends Action {
         claudeProcess.stderr.on("data", (data) => (stderr += data.toString()));
 
         claudeProcess.on("close", (code) => {
+            if (this._claudeProcess === claudeProcess) {
+                this._claudeProcess = null;
+            }
+            // 古い実行の結果は無視
+            if (runId !== this._claudeRunId) return;
+
             if (code === 0 && stdout) {
                 const jsonMatch = stdout.match(/```(?:json)?\s*([\s\S]*?)```/);
                 let parsedResult = { comment: "", tags: [] };
@@ -262,6 +279,11 @@ export default class ServiceAction extends Action {
         });
 
         claudeProcess.on("error", (error) => {
+            if (this._claudeProcess === claudeProcess) {
+                this._claudeProcess = null;
+            }
+            // 古い実行の結果は無視
+            if (runId !== this._claudeRunId) return;
             this.dispatch(keys.claudeCodeError, { url, error: error.message });
         });
     }
