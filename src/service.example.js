@@ -27,7 +27,7 @@ module.exports = [
 // module.exports.aiConfig = {
 //     enabled: true,
 //     type: "codex",
-//     cliPath: process.env.CODEX_CLI_PATH || "codex",
+//     cliPath: process.env.CODEX_CLI_PATH || `${process.env.HOME}/.local/bin/codex`,
 //     workDir: process.env.CODEX_WORK_DIR || process.cwd(),
 //     profile: "postem",
 //     model: "gpt-5.4",

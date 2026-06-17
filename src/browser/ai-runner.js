@@ -4,7 +4,17 @@ import fs from "fs";
 import os from "os";
 import path from "path";
 
-const DEFAULT_PATH = "/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin";
+const getDefaultPath = () => {
+    const paths = [
+        process.env.HOME ? `${process.env.HOME}/.local/bin` : null,
+        "/Applications/Codex.app/Contents/Resources",
+        "/opt/homebrew/bin",
+        "/usr/local/bin",
+        "/usr/bin",
+        "/bin"
+    ];
+    return paths.filter(Boolean).join(":");
+};
 export const DEFAULT_OUTPUT_SCHEMA = {
     type: "object",
     properties: {
@@ -228,7 +238,7 @@ export const getAICommand = (config) => {
 export const getSpawnEnv = () => {
     return {
         ...process.env,
-        PATH: `${DEFAULT_PATH}:${process.env.PATH || ""}`
+        PATH: `${getDefaultPath()}:${process.env.PATH || ""}`
     };
 };
 

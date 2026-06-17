@@ -123,7 +123,7 @@ location.href = `postem://?url=${encodeURIComponent(window.top.location.href)}&t
 export const aiConfig = {
     enabled: true,
     type: "codex",
-    cliPath: process.env.CODEX_CLI_PATH || "codex",
+    cliPath: process.env.CODEX_CLI_PATH || `${process.env.HOME}/.local/bin/codex`,
     workDir: "/path/to/work/dir",
     profile: "postem", // オプション: ~/.codex/postem.config.toml を重ねる
     model: "gpt-5.4", // オプション
@@ -196,7 +196,7 @@ export const aiConfig = {
 | ------------ | ------------------------------------------------------------------------------------------------------- |
 | `enabled`    | 機能の有効/無効                                                                                         |
 | `type`       | 実行する CLI の種類（`codex`または`claude`）                                                            |
-| `cliPath`    | CLI のパス。`codex`では省略時に`codex`                                                                  |
+| `cliPath`    | CLI のパス。packaged app では shell の PATH を継承しないことがあるため、絶対パス推奨                    |
 | `workDir`    | 作業ディレクトリ                                                                                        |
 | `profile`    | Codex profile 名。`type: "codex"`のみ                                                                   |
 | `model`      | 使用するモデル（オプション）                                                                            |
