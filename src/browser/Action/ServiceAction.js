@@ -10,6 +10,18 @@ import RelatedItemModel from "../models/RelatedItemModel";
 import serviceInstance from "../service-instance";
 import { spawn } from "child_process";
 import fs from "fs";
+import {
+    buildClaudeArgs,
+    buildCodexArgs,
+    buildPrompt,
+    getAICommand,
+    getSpawnEnv,
+    prepareCodexConfig,
+    formatCodexJsonEventLog,
+    parseCodexJsonLine,
+    parseCodexJsonLines,
+    parseAIOutput
+} from "../ai-runner";
 
 export default class ServiceAction extends Action {
     _claudeProcess = null;
@@ -197,10 +209,18 @@ export default class ServiceAction extends Action {
         this.dispatch(keys.resetField);
     }
 
-    // Claude Code関連アクション
+    // AI生成関連アクション
     runClaudeCode(url, title, config, relatedItems = [], availableTags = []) {
         if (!config?.enabled) return;
-        if (!fs.existsSync(config.cliPath)) return;
+        if (config.configError) {
+            this.dispatch(keys.claudeCodeError, { url, error: config.configError });
+            return;
+        }
+        const command = getAICommand(config);
+        if (command.includes("/") && !fs.existsSync(command)) {
+            this.dispatch(keys.claudeCodeError, { url, error: `CLI not found: ${command}` });
+            return;
+        }
         if (!fs.existsSync(config.workDir)) {
             this.dispatch(keys.claudeCodeError, { url, error: `WorkDir not found: ${config.workDir}` });
             return;
@@ -215,76 +235,124 @@ export default class ServiceAction extends Action {
         const runId = ++this._claudeRunId;
         this.dispatch(keys.claudeCodeStart, { url });
 
-        const prompt =
-            typeof config.prompt === "function"
-                ? config.prompt({ url, title, relatedItems, availableTags })
-                : `${config.prompt}\n\nURL: ${url}\nTitle: ${title}`;
-
-        const args = [];
-        if (config.model) {
-            args.push("--model", config.model);
+        const prompt = buildPrompt({ config, url, title, relatedItems, availableTags });
+        let args;
+        let runConfig;
+        try {
+            runConfig = config.type === "codex" ? prepareCodexConfig(config) : config;
+            args = runConfig.type === "codex" ? buildCodexArgs(runConfig) : buildClaudeArgs(runConfig, prompt);
+        } catch (error) {
+            this.dispatch(keys.claudeCodeError, { url, error: error.message });
+            return;
         }
-        if (config.mcpConfig) {
-            args.push("--mcp-config", JSON.stringify(config.mcpConfig));
-        }
-        args.push("--print", "--dangerously-skip-permissions", prompt);
 
-        const claudeProcess = spawn(config.cliPath, args, {
+        const aiProcess = spawn(command, args, {
             cwd: config.workDir,
-            env: {
-                ...process.env,
-                PATH: "/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:" + process.env.PATH
-            },
+            env: getSpawnEnv(),
             shell: false,
-            stdio: ["ignore", "pipe", "pipe"]
+            stdio: config.type === "codex" ? ["pipe", "pipe", "pipe"] : ["ignore", "pipe", "pipe"]
         });
-        this._claudeProcess = claudeProcess;
+        this._claudeProcess = aiProcess;
+
+        if (config.type === "codex") {
+            aiProcess.stdin.write(prompt);
+            aiProcess.stdin.end();
+        }
 
         let stdout = "";
         let stderr = "";
+        let codexJsonLineBuffer = "";
+        let settled = false;
+        const timeoutMs = Number.isFinite(runConfig.timeoutMs) ? runConfig.timeoutMs : 120000;
+        const timeout =
+            timeoutMs > 0
+                ? setTimeout(() => {
+                      if (settled || runId !== this._claudeRunId) return;
+                      settled = true;
+                      if (this._claudeProcess === aiProcess) {
+                          this._claudeProcess = null;
+                      }
+                      aiProcess.kill();
+                      this.dispatch(keys.claudeCodeError, {
+                          url,
+                          error: `AI generation timed out after ${Math.round(timeoutMs / 1000)}s`
+                      });
+                  }, timeoutMs)
+                : null;
+        const clearRunTimeout = () => {
+            if (timeout) {
+                clearTimeout(timeout);
+            }
+        };
+        const completeWithStdout = () => {
+            if (settled || runId !== this._claudeRunId) return;
+            const parsedResult = parseAIOutput(stdout);
+            settled = true;
+            clearRunTimeout();
+            this.dispatch(keys.claudeCodeComplete, {
+                url,
+                comment: parsedResult.comment,
+                tags: Array.isArray(parsedResult.tags) ? parsedResult.tags : []
+            });
+        };
+        const failWithError = (error) => {
+            if (settled || runId !== this._claudeRunId) return;
+            settled = true;
+            clearRunTimeout();
+            this.dispatch(keys.claudeCodeError, { url, error });
+        };
 
-        claudeProcess.stdout.on("data", (data) => (stdout += data.toString()));
-        claudeProcess.stderr.on("data", (data) => (stderr += data.toString()));
+        aiProcess.stdout.on("data", (data) => {
+            const chunk = data.toString();
+            stdout += chunk;
+            if (runConfig.type !== "codex" || runConfig.json === false) {
+                return;
+            }
+            codexJsonLineBuffer += chunk;
+            const lines = codexJsonLineBuffer.split(/\r?\n/);
+            codexJsonLineBuffer = lines.pop() || "";
+            if (runConfig.logEvents) {
+                lines.forEach((line) => {
+                    const event = parseCodexJsonLine(line);
+                    const log = formatCodexJsonEventLog(event);
+                    if (log) {
+                        console.log(`[postem:codex] ${log}`, event);
+                    }
+                });
+            }
+            const codexJsonLines = parseCodexJsonLines(stdout);
+            if (codexJsonLines.failed) {
+                failWithError(codexJsonLines.error || "Codex execution failed");
+                return;
+            }
+            if (codexJsonLines.completed && codexJsonLines.finalMessage) {
+                completeWithStdout();
+            }
+        });
+        aiProcess.stderr.on("data", (data) => (stderr += data.toString()));
 
-        claudeProcess.on("close", (code) => {
-            if (this._claudeProcess === claudeProcess) {
+        aiProcess.on("close", (code) => {
+            if (this._claudeProcess === aiProcess) {
                 this._claudeProcess = null;
             }
             // 古い実行の結果は無視
             if (runId !== this._claudeRunId) return;
+            if (settled) return;
 
             if (code === 0 && stdout) {
-                const jsonMatch = stdout.match(/```(?:json)?\s*([\s\S]*?)```/);
-                let parsedResult = { comment: "", tags: [] };
-
-                if (jsonMatch) {
-                    try {
-                        parsedResult = JSON.parse(jsonMatch[1].trim());
-                    } catch (e) {
-                        const markdownMatch = stdout.match(/```(?:markdown)?\s*([\s\S]*?)```/);
-                        parsedResult.comment = markdownMatch ? markdownMatch[1].trim() : stdout.trim();
-                    }
-                } else {
-                    parsedResult.comment = stdout.trim();
-                }
-
-                this.dispatch(keys.claudeCodeComplete, {
-                    url,
-                    comment: parsedResult.comment,
-                    tags: Array.isArray(parsedResult.tags) ? parsedResult.tags : []
-                });
+                completeWithStdout();
             } else {
-                this.dispatch(keys.claudeCodeError, { url, error: stderr || `Exit code: ${code}` });
+                failWithError(stderr || `Exit code: ${code}`);
             }
         });
 
-        claudeProcess.on("error", (error) => {
-            if (this._claudeProcess === claudeProcess) {
+        aiProcess.on("error", (error) => {
+            if (this._claudeProcess === aiProcess) {
                 this._claudeProcess = null;
             }
             // 古い実行の結果は無視
             if (runId !== this._claudeRunId) return;
-            this.dispatch(keys.claudeCodeError, { url, error: error.message });
+            failWithError(error.message);
         });
     }
 

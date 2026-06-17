@@ -13,7 +13,7 @@ import ServiceList from "./component/ServiceList";
 import ClaudeCodeButton from "./component/ClaudeCodeButton";
 import ClaudeCodePreview from "./component/ClaudeCodePreview";
 import AppContext from "./AppContext";
-import serviceManger, { waitForInitialization, getClaudeCodeConfig } from "./service-instance";
+import serviceManger, { waitForInitialization, getAIConfig } from "./service-instance";
 
 const ipcRenderer = require("electron").ipcRenderer;
 const appContext = new AppContext();
@@ -22,7 +22,7 @@ class App extends React.Component {
     constructor(...args) {
         super(...args);
         this._TagSelect = null;
-        this._claudeCodeConfig = getClaudeCodeConfig();
+        this._aiConfig = getAIConfig();
         this.state = Object.assign(
             {
                 initialized: false
@@ -190,7 +190,7 @@ class App extends React.Component {
 
             // 関連URL追加時に再推論
             if (
-                this._claudeCodeConfig?.enabled &&
+                this._aiConfig?.enabled &&
                 this.state.claudeCode.status !== "loading" &&
                 this.state.URL?.startsWith("http")
             ) {
@@ -200,7 +200,7 @@ class App extends React.Component {
                     ServiceAction.runClaudeCode(
                         this.state.URL,
                         this.state.title,
-                        this._claudeCodeConfig,
+                        this._aiConfig,
                         updatedRelatedItems,
                         this.state.tags
                     );
@@ -242,7 +242,7 @@ class App extends React.Component {
                         runClaudeCode={runClaudeCode}
                         insertResult={insertClaudeCodeResult}
                         clearResult={clearClaudeCodeResult}
-                        claudeCodeConfig={this._claudeCodeConfig}
+                        aiConfig={this._aiConfig}
                         relatedItems={this.state.relatedItems}
                         availableTags={this.state.tags}
                     />

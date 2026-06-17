@@ -9,20 +9,33 @@ export default function ClaudeCodeButton({
     runClaudeCode,
     insertResult,
     clearResult,
-    claudeCodeConfig,
+    aiConfig,
     relatedItems = [],
     availableTags = []
 }) {
     const prevUrlRef = useRef(url);
     const debounceTimerRef = useRef(null);
+    const latestRunParamsRef = useRef({
+        title,
+        aiConfig,
+        runClaudeCode,
+        relatedItems,
+        availableTags
+    });
     const [elapsed, setElapsed] = useState(0);
 
-    // URLが変更されたら自動でClaude Codeを実行（デバウンス付き）
     useEffect(() => {
-        if (!claudeCodeConfig?.enabled) {
-            return;
-        }
+        latestRunParamsRef.current = {
+            title,
+            aiConfig,
+            runClaudeCode,
+            relatedItems,
+            availableTags
+        };
+    }, [title, aiConfig, runClaudeCode, relatedItems, availableTags]);
 
+    // URLが変更されたら自動でAI生成を実行（デバウンス付き）
+    useEffect(() => {
         // URLが変更され、有効なURLの場合のみ実行
         if (url && url !== prevUrlRef.current && url.startsWith("http")) {
             // 前回のタイマーをクリア
@@ -32,18 +45,23 @@ export default function ClaudeCodeButton({
 
             // 1秒後に実行（入力中の連続変更を避ける）
             debounceTimerRef.current = setTimeout(() => {
-                runClaudeCode(url, title, claudeCodeConfig, relatedItems, availableTags);
+                const { title, aiConfig, runClaudeCode, relatedItems, availableTags } = latestRunParamsRef.current;
+                if (aiConfig?.enabled) {
+                    runClaudeCode(url, title, aiConfig, relatedItems, availableTags);
+                }
             }, 1000);
         }
 
         prevUrlRef.current = url;
+    }, [url]);
 
+    useEffect(() => {
         return () => {
             if (debounceTimerRef.current) {
                 clearTimeout(debounceTimerRef.current);
             }
         };
-    }, [url, title, claudeCodeConfig, runClaudeCode, relatedItems, availableTags]);
+    }, []);
 
     // 経過時間タイマー
     useEffect(() => {
@@ -63,7 +81,7 @@ export default function ClaudeCodeButton({
             // loading中のクリックでやり直し
             clearResult();
             if (url && url.startsWith("http")) {
-                runClaudeCode(url, title, claudeCodeConfig, relatedItems, availableTags);
+                runClaudeCode(url, title, aiConfig, relatedItems, availableTags);
             }
         } else if (claudeCode.status === "complete") {
             // 結果がある場合は挿入
@@ -71,14 +89,14 @@ export default function ClaudeCodeButton({
         } else if (claudeCode.status === "idle" || claudeCode.status === "error") {
             // アイドルまたはエラー状態の場合は実行
             if (url && url.startsWith("http")) {
-                runClaudeCode(url, title, claudeCodeConfig, relatedItems, availableTags);
+                runClaudeCode(url, title, aiConfig, relatedItems, availableTags);
             }
         }
     }, [
         claudeCode.status,
         url,
         title,
-        claudeCodeConfig,
+        aiConfig,
         runClaudeCode,
         insertResult,
         clearResult,
@@ -86,8 +104,8 @@ export default function ClaudeCodeButton({
         availableTags
     ]);
 
-    // 設定が無効またはCLIが設定されていない場合は表示しない
-    if (!claudeCodeConfig?.enabled) {
+    // 設定が無効の場合は表示しない
+    if (!aiConfig?.enabled) {
         return null;
     }
 
@@ -127,7 +145,7 @@ export default function ClaudeCodeButton({
                     ? "Cmd+Shift+J で挿入"
                     : claudeCode.status === "loading"
                     ? `実行中... ${elapsed}s（クリックでやり直し）`
-                    : "Claude Codeで説明文を生成"
+                    : "AIで説明文を生成"
             }
         >
             {getButtonContent()}

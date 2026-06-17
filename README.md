@@ -12,7 +12,7 @@
 - 独自に対応サービスを追加可能
 - 入力欄は[textlint](https://github.com/textlint/textlint "textlint")でのリアルタイムLint
 - URLスキームを使ってブラウザから起動できる
-- Claude Code連携によるAI説明文生成
+- Codex/Claude CLI連携によるAI説明文生成
 
 <img width="448" alt="image" src="https://github.com/azu/postem/assets/19714/deb060a9-57ad-4bdc-a012-40ab2bb27581">
 
@@ -21,7 +21,7 @@
 アプリに必要な依存をnpmでインストールします。
 
     npm install
-    
+
 アプリを起動する前に利用するサービスの設定を`service.js`で定義してください。
 
 ## サポートしているサービス
@@ -59,7 +59,7 @@ cp src/service.example.js src/service.js
 Development mode:
 
     npm start
-    
+
 Production mode:　`dist/`ディレクトリにバイナリが出力されます。
 
     npm run dist
@@ -111,63 +111,118 @@ postem://
 location.href = `postem://?url=${encodeURIComponent(window.top.location.href)}&title=${encodeURIComponent(window.top.document.title)}`
 ```
 
-## Claude Code連携
+## AI 説明文生成
 
-[Claude Code](https://docs.anthropic.com/en/docs/claude-code)を使ってURLから説明文を自動生成できます。
+[Codex CLI](https://developers.openai.com/codex/noninteractive)または Claude CLI を使って URL から説明文を自動生成できます。
 
 ### 設定
 
-`service.js`に`claudeCodeConfig`をexportします。
+`service.js`に`aiConfig`を export します。`claudeCodeConfig`はサポートしていません。
 
 ```javascript
-export const claudeCodeConfig = {
+export const aiConfig = {
     enabled: true,
+    type: "codex",
+    cliPath: process.env.CODEX_CLI_PATH || "codex",
+    workDir: "/path/to/work/dir",
+    profile: "postem", // オプション: ~/.codex/postem.config.toml を重ねる
+    model: "gpt-5.4", // オプション
+    outputSchema: true, // オプション: comment/tags のJSON Schemaを一時ファイルに生成して渡す
+    timeoutMs: 120000, // オプション: AI生成全体のtimeout
+    logEvents: true, // オプション: codex exec --json の進行イベントをconsoleに出す
+    mcpServers: {
+        // HTTP MCP Server
+        "example-http": {
+            url: "https://example.com/mcp",
+            required: true,
+            default_tools_approval_mode: "approve",
+            enabled_tools: ["example_tool"]
+        },
+        // stdio MCP Server
+        "example-stdio": {
+            command: "npx",
+            args: ["some-mcp-server"],
+            cwd: "/path/to/cwd",
+            env: {},
+            default_tools_approval_mode: "approve",
+            enabled_tools: ["lintText"]
+        }
+    },
+    // 任意のcodex -c key=value override
+    config: {
+        model_reasoning_effort: "medium",
+        model_verbosity: "low",
+        default_permissions: "postem-no-files",
+        "permissions.postem-no-files": {
+            filesystem: {
+                "/": "deny",
+                ":workspace_roots": {
+                    ".": "deny"
+                }
+            }
+        },
+        "features.shell_tool": false,
+        "mcp_servers.example-stdio.tool_timeout_sec": 120
+    },
+    // 文字列または関数
+    prompt: ({ url, title }) => `以下のURLの内容を要約してください。\n\nURL: ${url}\nTitle: ${title}`
+};
+```
+
+Claude CLI を使う場合は`type: "claude"`にします。
+
+```javascript
+export const aiConfig = {
+    enabled: true,
+    type: "claude",
     cliPath: process.env.CLAUDE_CODE_CLI_PATH || `${process.env.HOME}/.local/bin/claude`,
     workDir: "/path/to/work/dir",
-    model: "claude-sonnet-4-5-20250929", // オプション: 使用するモデル
+    model: "claude-sonnet-4-5-20250929",
     mcpConfig: {
         mcpServers: {
-            // HTTP MCP Server
             "example-http": {
                 url: "https://example.com/mcp",
                 type: "http"
-            },
-            // stdio MCP Server
-            "example-stdio": {
-                type: "stdio",
-                command: "npx",
-                args: ["some-mcp-server"],
-                cwd: "/path/to/cwd",
-                env: {}
             }
         }
     },
-    // 文字列または関数
-    prompt: ({ url, title }) => `以下のURLの内容を要約してください\n\nURL: ${url}\nTitle: ${title}`
+    prompt: ({ url, title }) => `以下のURLの内容を要約してください。\n\nURL: ${url}\nTitle: ${title}`
 };
 ```
 
 ### 設定項目
 
-| 項目 | 説明 |
-|------|------|
-| `enabled` | 機能の有効/無効 |
-| `cliPath` | Claude Code CLIのパス |
-| `workDir` | 作業ディレクトリ（MCPサーバーの実行に影響） |
-| `model` | 使用するモデル（オプション、例: `claude-sonnet-4-5-20250929`） |
-| `mcpConfig` | MCPサーバー設定（オプション） |
-| `prompt` | Claude Codeに渡すプロンプト（文字列または`({ url, title }) => string`形式の関数） |
+| 項目         | 説明                                                                                                    |
+| ------------ | ------------------------------------------------------------------------------------------------------- |
+| `enabled`    | 機能の有効/無効                                                                                         |
+| `type`       | 実行する CLI の種類（`codex`または`claude`）                                                            |
+| `cliPath`    | CLI のパス。`codex`では省略時に`codex`                                                                  |
+| `workDir`    | 作業ディレクトリ                                                                                        |
+| `profile`    | Codex profile 名。`type: "codex"`のみ                                                                   |
+| `model`      | 使用するモデル（オプション）                                                                            |
+| `outputSchema` | Codex の出力 JSON Schema。`true`、JSON Schema オブジェクト、または schema ファイルパスを指定できます。`type: "codex"`のみ |
+| `timeoutMs` | AI 生成全体の timeout。省略時は `120000`。`0`以下で無効化 |
+| `logEvents` | Codex JSONL イベントを console に出す。`type: "codex"`のみ |
+| `mcpServers` | Codex MCP サーバー設定。`type: "codex"`のみ                                                             |
+| `config`     | Codex の`-c key=value` override。`type: "codex"`のみ                                                    |
+| `mcpConfig`  | Claude CLI の MCP サーバー設定。`type: "claude"`のみ                                                    |
+| `prompt`     | CLI に渡すプロンプト（文字列または`({ url, title, relatedItems, availableTags }) => string`形式の関数） |
 
 ### 使い方
 
-1. URLを入力すると自動でClaude Codeが実行されます（1秒のデバウンス付き）
+1. URL を入力すると自動で AI 生成が実行されます（1 秒のデバウンス付き）
 2. 結果はプレビューエリアに表示されます
 3. <kbd>Cmd+Shift+J</kbd>またはクリックで結果をコメント欄に挿入します
 
 ### 注意事項
 
-- Claude Code CLIが事前にインストール・認証されている必要があります
-- `--dangerously-skip-permissions`フラグを使用するため、MCPツールは自動承認されます
+-   `type: "codex"`では Codex CLI が事前にインストール・認証されている必要があります
+-   Codex の MCP は`mcpServers`から`codex exec -c mcp_servers...`へ変換されます
+-   Codex の永続的な MCP 設定は`~/.codex/config.toml`や`~/.codex/<profile>.config.toml`にも定義できます
+-   `outputSchema: true`では`comment`と`tags`を返す JSON Schema を一時ファイルに生成し、`codex exec --output-schema`へ渡します
+-   `type: "codex"`では`codex exec --json`の`turn.completed`を見て、プロセスの終了待ちに依存せず結果を反映します
+-   説明文生成ではローカルファイルの読み取りや shell 実行は不要なため、`default_permissions`で filesystem を deny し、`"features.shell_tool": false`を指定することを推奨します
+-   `type: "codex"`では`mcpConfig`は使えません。`type: "claude"`では`mcpServers`と`config`は使えません
 
 ## Contributing
 

@@ -2,6 +2,7 @@
 "use strict";
 // service
 import ServiceManger from "./service-manager";
+import { normalizeAIConfig } from "./ai-runner";
 
 // FIXME: use IPC
 const notBundledRequire = require;
@@ -75,17 +76,17 @@ export async function waitForInitialization() {
     return initializeManager();
 }
 
-// Claude Code設定を取得
-export function getClaudeCodeConfig() {
+// AI生成設定を取得
+export function getAIConfig() {
     try {
         if (process.env.PLAYWRIGHT_TEST === "1" || process.title?.includes("playwright")) {
             return { enabled: false };
         }
         const serviceModule = notBundledRequire("../service.js");
-        return serviceModule.claudeCodeConfig || { enabled: false };
+        return normalizeAIConfig(serviceModule);
     } catch (error) {
-        console.error("Failed to load Claude Code config:", error);
-        return { enabled: false };
+        console.error("Failed to load AI config:", error);
+        return { enabled: true, type: "error", configError: error.message };
     }
 }
 

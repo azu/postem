@@ -78,7 +78,7 @@ export default function Editor({ value, onChange, onSubmit, services, toggleServ
             toggleServiceAtIndex(services.length - 1);
         });
 
-        // Cmd+Shift+J でClaude Codeの結果を挿入
+        // Cmd+Shift+J でAI生成の結果を挿入
         combokeysRef.current.bindGlobal(`command+shift+j`, () => {
             if (onInsertClaudeCode) {
                 onInsertClaudeCode();
