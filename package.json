@@ -94,7 +94,8 @@
     "textlint-rule-no-mix-dearu-desumasu": "^6.0.3",
     "textlint-rule-no-nfd": "^2.0.2",
     "textlint-rule-proofdict": "2.0.4",
-    "textlint-rule-sentence-length": "^5.2.0"
+    "textlint-rule-sentence-length": "^5.2.0",
+    "twitter-text": "^3.1.0"
   },
   "devDependencies": {
     "@babel/core": "^7.22.5",
