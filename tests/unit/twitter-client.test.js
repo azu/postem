@@ -47,10 +47,11 @@ describe("TwitterClient", () => {
         });
 
         expect(tweetWeight(status)).toBe(140);
-        expect(status).toContain('"Title" https://example.com');
+        expect(status).not.toContain('"Title"');
+        expect(status).toContain("https://example.com");
     });
 
-    it("counts URLs with X weighted length when truncating comment", () => {
+    it("prioritizes long comments and URLs over title when truncating", () => {
         const status = buildTwitterStatus({
             comment:
                 "FlowをOCamlからRustへ移植した話。\n" +
@@ -61,8 +62,25 @@ describe("TwitterClient", () => {
 
         expect(tweetWeight(status)).toBeLessThanOrEqual(MAX_TWEET_WEIGHT);
         expect(status).toContain("AIを使った行ごとの移植、OCamlとRustの違い、");
-        expect(status).toContain('"Flow has been ported to Rust | Flow"');
+        expect(status).not.toContain('"Flow has been ported to Rust | Flow"');
         expect(status).toContain("https://medium.com/flow-type/flows-ocaml-to-rust-port-78b95bcf49e9");
+    });
+
+    it("does not leave dangling inline code when truncating X post text", () => {
+        const status = buildTwitterStatus({
+            comment:
+                "Next.js 16.3 Previewリリース。\n" +
+                "Next.js 16.3で試験的な機能として追加されるInstant Navigationsについて。\n" +
+                "`cacheComponents`と`partialPrefetching`オプションによって、Instant routeごとに一度キャッシュが作られ、ページナビゲーションが即時的に表示できる仕組みについて",
+            title: "Next.js 16.3: Instant Navigations | Next.js",
+            url: "https://nextjs.org/blog/next-16-3-instant-navigations"
+        });
+
+        expect(tweetWeight(status)).toBeLessThanOrEqual(MAX_TWEET_WEIGHT);
+        expect(status).toBe(
+            "Next.js 16.3 Previewリリース。\n" +
+                "Next.js 16.3で試験的な機能として追加されるInstant Navigationsについて。 https://nextjs.org/blog/next-16-3-instant-navigations"
+        );
     });
 
     it("truncates the whole X post text when non-comment parts exceed 140 weighted characters", () => {

@@ -34,6 +34,18 @@ const truncateByTweetWeight = (str, maxWeight) => {
     return result;
 };
 
+const trimDanglingInlineCode = (str) => {
+    const backtickCount = (str.match(/`/g) || []).length;
+    if (backtickCount % 2 === 0) {
+        return str;
+    }
+    return str.slice(0, str.lastIndexOf("`")).trimEnd();
+};
+
+const truncateCommentByTweetWeight = (str, maxWeight) => {
+    return trimDanglingInlineCode(truncateByTweetWeight(str, maxWeight)).trimEnd();
+};
+
 export const buildTwitterStatus = ({ title, url, comment, quote }) => {
     const parts = { comment: comment || "", quote: quote || "", title: title || "", url: url || "" };
     const status = buildStatus(parts);
@@ -41,17 +53,23 @@ export const buildTwitterStatus = ({ title, url, comment, quote }) => {
         return status;
     }
 
-    const statusWithoutComment = buildStatus({ ...parts, comment: "" });
+    const preferredParts = parts.comment ? { ...parts, title: "" } : parts;
+    const preferredStatus = buildStatus(preferredParts);
+    if (tweetWeight(preferredStatus) <= MAX_TWEET_WEIGHT) {
+        return preferredStatus;
+    }
+
+    const statusWithoutComment = buildStatus({ ...preferredParts, comment: "" });
     const separatorWeight = statusWithoutComment.length > 0 ? tweetWeight(" ") : 0;
     const availableCommentWeight = MAX_TWEET_WEIGHT - tweetWeight(statusWithoutComment) - separatorWeight;
-    if (parts.comment && availableCommentWeight > 0) {
+    if (preferredParts.comment && availableCommentWeight > 0) {
         return buildStatus({
-            ...parts,
-            comment: truncateByTweetWeight(parts.comment, availableCommentWeight)
+            ...preferredParts,
+            comment: truncateCommentByTweetWeight(preferredParts.comment, availableCommentWeight)
         });
     }
 
-    return truncateByTweetWeight(status, MAX_TWEET_WEIGHT);
+    return truncateByTweetWeight(preferredStatus, MAX_TWEET_WEIGHT);
 };
 
 export default class TwitterClient {
