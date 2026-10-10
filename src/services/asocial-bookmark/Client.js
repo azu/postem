@@ -58,7 +58,7 @@ export default class Client {
                 };
             })
             .catch((error) => {
-                return fetch(`https://jser-product-name.deno.dev/?url=${url}`)
+                return fetch(`https://product-name.jser.workers.dev/?url=${url}`)
                     .then((res) => res.json())
                     .then((json) => {
                         // { name, url }
