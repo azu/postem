@@ -6,6 +6,7 @@ import windowStateKeeper from "electron-window-state";
 import path from "path";
 import keys from "../browser/Action/ServiceActionConst";
 import WebMessenger from "./WebMessenger";
+import { fetchPageTitle } from "./fetch-page-title";
 
 const ipcMain = require("electron").ipcMain;
 
@@ -164,5 +165,7 @@ export default class Application {
         ipcMain.on(postLinkSym, () => {
             hideWindow();
         });
+        ipcMain.removeHandler("fetchRelatedTitle");
+        ipcMain.handle("fetchRelatedTitle", (event, url) => fetchPageTitle(url));
     }
 }

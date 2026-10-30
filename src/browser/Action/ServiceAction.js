@@ -187,8 +187,8 @@ export default class ServiceAction extends Action {
 
     addRelatedItem({ title, URL } = {}) {
         const relatedItem = new RelatedItemModel({
-            title: title || "Dummy",
-            URL: URL || "http://example.com/"
+            title: title || "",
+            URL: URL || ""
         });
         if (title && URL) {
             relatedItem.finishEditing();
@@ -197,7 +197,7 @@ export default class ServiceAction extends Action {
     }
 
     finishEditingRelatedItem(item, value) {
-        if (!value) {
+        if (!value.URL) {
             return this.dispatch(keys.removeRelatedItem, item);
         }
         item.updateWithValue(value);

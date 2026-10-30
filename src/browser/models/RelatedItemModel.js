@@ -9,16 +9,11 @@ export default class RelatedItem {
         this.isEditing = true;
     }
 
-    updateWithValue(value) {
-        try {
-            const parsedValue = JSON.parse(value);
-            const title = parsedValue.TITLE || parsedValue.title;
-            const URL = parsedValue.URL || parsedValue.url;
-            if (title && URL) {
-                this.title = title;
-                this.URL = URL;
-            }
-        } catch (error) {}
+    updateWithValue({ title, URL }) {
+        if (title && URL) {
+            this.title = title;
+            this.URL = URL;
+        }
     }
 
     startEditing() {

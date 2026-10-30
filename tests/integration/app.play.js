@@ -1,6 +1,7 @@
 const { test: baseTest, expect } = require("@playwright/test");
 const { _electron: electron } = require("playwright");
 const path = require("path");
+const { createServer } = require("node:http");
 
 // Electron起動オプションを生成する関数
 function createElectronLaunchOptions(additionalArgs = []) {
@@ -72,6 +73,30 @@ const test = baseTest.extend({
 });
 
 test.describe("Postem Application", () => {
+    test("Related URLからタイトルを自動取得して保存する", async ({ window }) => {
+        const server = createServer((request, response) => {
+            response.writeHead(200, { "Content-Type": "text/html; charset=utf-8" });
+            response.end("<html><head><title>関連記事 &amp; ニュース</title></head></html>");
+        });
+        await new Promise((resolve) => server.listen(0, "127.0.0.1", resolve));
+        try {
+            await waitForAppInitialization(window);
+            await window.locator(".RelatedListBox-Add").click();
+            const relatedURL = `http://127.0.0.1:${server.address().port}/article`;
+            await window.getByPlaceholder("Related URL or JSON").fill(relatedURL);
+            await expect(window.locator(".RelatedItem a")).toHaveText("関連記事 & ニュース");
+            await expect(window.locator(".RelatedItem a")).toHaveAttribute("href", relatedURL);
+            await window.locator(".RelatedItem a").click();
+            await window
+                .getByPlaceholder("Related URL or JSON")
+                .fill(JSON.stringify({ title: "手入力のタイトル", URL: relatedURL }));
+            await window.getByPlaceholder("Related URL or JSON").press("Enter");
+            await expect(window.locator(".RelatedItem a")).toHaveText("手入力のタイトル");
+        } finally {
+            await new Promise((resolve) => server.close(resolve));
+        }
+    });
+
     test("アプリケーションが正常に起動する", async ({ window }) => {
         // ウィンドウが存在することを確認
         expect(window).toBeTruthy();

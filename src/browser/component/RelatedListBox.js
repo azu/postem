@@ -1,35 +1,109 @@
 // LICENSE : MIT
 "use strict";
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useEffect, useState } from "react";
+
+const ipcRenderer = require("electron").ipcRenderer;
+
+const isWebURL = (value) => {
+    try {
+        return ["http:", "https:"].includes(new globalThis.URL(value).protocol);
+    } catch (error) {
+        return false;
+    }
+};
 
 export function RelatedItem({ title, URL, isEditing, onClick, onSubmit }) {
     const inputRef = useRef(null);
+    const currentValueRef = useRef("");
+    const pendingRef = useRef(null);
+    const [value, setValue] = useState(URL ? JSON.stringify({ title, URL }) : "");
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState("");
 
     useEffect(() => {
-        if (isEditing && inputRef.current) {
-            inputRef.current.focus();
-        }
+        if (!isEditing) return;
+        const initialValue = URL ? JSON.stringify({ title, URL }) : "";
+        currentValueRef.current = initialValue;
+        setValue(initialValue);
+        setError("");
+        inputRef.current?.focus();
     }, [isEditing]);
 
-    const linkClassName = isEditing ? "hidden" : "";
-    const inputClassName = isEditing ? "RelatedItem-edit" : "RelatedItem-edit hidden";
-    const value = JSON.stringify({
-        title: title,
-        URL: URL
-    });
+    const fetchAndSave = (url) => {
+        if (pendingRef.current?.url === url) return pendingRef.current.promise;
+        setLoading(true);
+        setError("");
+        const promise = ipcRenderer
+            .invoke("fetchRelatedTitle", url)
+            .then((fetchedTitle) => {
+                if (currentValueRef.current === url) {
+                    onSubmit({ title: fetchedTitle, URL: url });
+                }
+            })
+            .catch(() => {
+                if (currentValueRef.current === url) {
+                    setError("タイトルを取得できませんでした。JSONでタイトルを入力してください。");
+                }
+            })
+            .finally(() => {
+                if (pendingRef.current?.promise === promise) pendingRef.current = null;
+                if (currentValueRef.current === url) setLoading(false);
+            });
+        pendingRef.current = { url, promise };
+        return promise;
+    };
+
+    useEffect(() => {
+        if (!isEditing || !isWebURL(value)) return;
+        const timeout = setTimeout(() => fetchAndSave(value), 700);
+        return () => clearTimeout(timeout);
+    }, [value, isEditing]);
+
+    const handleChange = ({ target }) => {
+        const nextValue = target.value.trim();
+        currentValueRef.current = nextValue;
+        setValue(nextValue);
+        setError("");
+    };
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        const value = inputRef.current.value;
-        onSubmit(value);
+        if (!value) {
+            onSubmit({ title: "", URL: "" });
+        } else if (isWebURL(value)) {
+            fetchAndSave(value);
+        } else {
+            try {
+                const parsed = JSON.parse(value);
+                const editedTitle = parsed.title || parsed.TITLE;
+                const editedURL = parsed.URL || parsed.url;
+                if (!editedTitle || !isWebURL(editedURL)) throw new Error("Invalid related item");
+                onSubmit({ title: editedTitle, URL: editedURL });
+            } catch (parseError) {
+                setError("URL、または title と URL を含むJSONを入力してください。");
+            }
+        }
     };
 
     return (
         <form className="RelatedItem" onSubmit={handleSubmit}>
-            <a href={URL} onClick={onClick} className={linkClassName}>
+            <a href={URL} onClick={onClick} className={isEditing ? "hidden" : ""}>
                 {title}
             </a>
-            <input className={inputClassName} title="Editing" defaultValue={value} ref={inputRef} />
+            {isEditing && (
+                <>
+                    <input
+                        className="RelatedItem-edit"
+                        title="Editing"
+                        placeholder="Related URL or JSON"
+                        value={value}
+                        onChange={handleChange}
+                        ref={inputRef}
+                    />
+                    {loading && <span role="status">タイトルを取得中…</span>}
+                    {error && <span role="alert">{error}</span>}
+                </>
+            )}
         </form>
     );
 }
